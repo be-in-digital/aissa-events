@@ -1,0 +1,219 @@
+"use client";
+
+import { motion } from "motion/react";
+import { ArrowRight } from "lucide-react";
+import { Eyebrow } from "@/components/home/eyebrow";
+import { renderInlineItalic } from "@/lib/sanity/text";
+import { resolveCta } from "@/lib/sanity/cta";
+import type { EvenementPageQueryResult } from "@/sanity.types";
+
+type ALaCarteData = NonNullable<EvenementPageQueryResult>["alacarte"];
+
+const FALLBACK_EYEBROW = "Personnalisez votre événement";
+const FALLBACK_TITLE = "Options _à la carte._";
+const FALLBACK_INTRO =
+  "Vous pouvez ajouter à chaque pack des options ciblées : musique, service, sécurité, brand & contenu. Tarifs nets, facturés au prestataire.";
+
+const FALLBACK_CATEGORIES = [
+  {
+    num: "01",
+    titleStart: "Musique",
+    titleItalic: "& animation",
+    items: [
+      { name: "DJ Aïssa Events (set complet)", price: "À partir de 400 €" },
+      { name: "2 enceintes + régie + micro", price: "150 €" },
+      { name: "Enceinte JBL + micro", price: "100 €" },
+      { name: "Lumière supplémentaire", price: "50 €" },
+      {
+        name: "Mise en ambiance (chanteuse, animations, karaoké)",
+        price: "Sur devis",
+      },
+    ],
+  },
+  {
+    num: "02",
+    titleStart: "Service",
+    titleItalic: "& accueil",
+    items: [
+      { name: "Coordination Jour J", price: "250 € / service" },
+      { name: "Traiteur (buffet, cocktail, repas)", price: "À partir de 30 € / pers." },
+      { name: "Hôte(sse) d'accueil bilingue", price: "100 € / service" },
+      { name: "Serveur", price: "150 € / service" },
+      { name: "Vestiaire dédié", price: "Sur devis" },
+    ],
+  },
+  {
+    num: "03",
+    titleStart: "Sécurité",
+    titleItalic: "& logistique",
+    items: [
+      { name: "Agent de sécurité", price: "130 € / service" },
+      { name: "Maître chien", price: "150 € / service" },
+      { name: "Heure supplémentaire (lieu)", price: "100 €" },
+      { name: "Ménage fin d'événement", price: "100 €" },
+      { name: "PSS / dossier sécurité ERP", price: "Sur devis" },
+    ],
+  },
+  {
+    num: "04",
+    titleStart: "Brand",
+    titleItalic: "& contenu",
+    items: [
+      { name: "Direction artistique brand-aligned", price: "Inclus dans pack" },
+      { name: "Photographe corporate", price: "À partir de 600 €" },
+      { name: "Vidéaste teaser & recap", price: "À partir de 1 200 €" },
+      { name: "Invitations digitales + RSVP", price: "À partir de 350 €" },
+      { name: "Signalétique brandée sur mesure", price: "Sur devis" },
+    ],
+  },
+];
+
+const CATEGORY_LABELS: Record<string, { titleStart: string; titleItalic: string }> = {
+  decoration: { titleStart: "Décoration", titleItalic: "& scénographie" },
+  talent: { titleStart: "Musique", titleItalic: "& animation" },
+  coordination: { titleStart: "Service", titleItalic: "& accueil" },
+  logistique: { titleStart: "Sécurité", titleItalic: "& logistique" },
+  lieu: { titleStart: "Lieu", titleItalic: "& espace" },
+  autre: { titleStart: "Brand", titleItalic: "& contenu" },
+};
+
+export function EvenementALaCarte({ data }: { data?: ALaCarteData }) {
+  if (data?.enabled === false) return null;
+
+  const eyebrow = data?.eyebrow ?? FALLBACK_EYEBROW;
+  const title = data?.title ?? FALLBACK_TITLE;
+  const intro = data?.intro ?? FALLBACK_INTRO;
+  const footerNote = data?.footerNote;
+  const cta = resolveCta(data?.cta ?? null);
+
+  const services = data?.services ?? [];
+  const categoriesFromSanity = services.length
+    ? Object.entries(
+        services.reduce<Record<string, typeof services>>((acc, s) => {
+          const key = s?.category ?? "autre";
+          if (!acc[key]) acc[key] = [];
+          acc[key].push(s);
+          return acc;
+        }, {}),
+      ).map(([key, list], idx) => {
+        const labels = CATEGORY_LABELS[key] ?? CATEGORY_LABELS.autre;
+        return {
+          num: String(idx + 1).padStart(2, "0"),
+          titleStart: labels.titleStart,
+          titleItalic: labels.titleItalic,
+          items: list.map((s) => ({
+            name: s?.title ?? "",
+            price: s?.priceLabel ?? "Sur devis",
+          })),
+        };
+      })
+    : null;
+
+  const categories = categoriesFromSanity ?? FALLBACK_CATEGORIES;
+
+  return (
+    <section className="relative py-28 sm:py-36">
+      <div className="mx-auto max-w-[1440px] px-6 sm:px-14">
+        <motion.div
+          initial={{ opacity: 0, y: 32 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-80px" }}
+          transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1] }}
+          className="mx-auto mb-14 max-w-[700px] text-center"
+        >
+          <div className="mb-6">
+            <Eyebrow align="center">{eyebrow}</Eyebrow>
+          </div>
+          <h2
+            className="font-serif text-[40px] leading-[1] tracking-[-0.03em] sm:text-[56px] lg:text-[72px]"
+            style={{ fontWeight: 300 }}
+          >
+            {renderInlineItalic(title)}
+          </h2>
+          {intro && (
+            <p
+              className="mt-5 font-serif text-[17px] italic text-ink-soft"
+              style={{ fontWeight: 300 }}
+            >
+              {intro}
+            </p>
+          )}
+        </motion.div>
+
+        <div className="grid gap-7 sm:grid-cols-2 lg:grid-cols-4">
+          {categories.map((cat, i) => (
+            <motion.article
+              key={`${cat.num}-${cat.titleStart}`}
+              initial={{ opacity: 0, y: 32 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: "-40px" }}
+              transition={{
+                duration: 0.9,
+                ease: [0.16, 1, 0.3, 1],
+                delay: i * 0.08,
+              }}
+              whileHover={{ y: -6 }}
+              className="rounded-[24px] border border-[var(--rule)] bg-cream-soft p-7 transition-all duration-500 hover:border-bordeaux hover:shadow-[0_30px_80px_rgba(44,31,51,0.08)]"
+            >
+              <p className="mb-2 font-mono text-[9px] uppercase tracking-[0.28em] text-bordeaux">
+                — {cat.num}
+              </p>
+              <h3
+                className="mb-5 border-b border-[var(--rule)] pb-4 font-serif text-[22px] leading-[1.1]"
+                style={{ fontWeight: 400 }}
+              >
+                {cat.titleStart}
+                <br />
+                <em className="italic text-bordeaux">{cat.titleItalic}</em>
+              </h3>
+
+              <ul className="divide-y divide-dashed divide-[var(--rule)]">
+                {cat.items.map((item) => (
+                  <li
+                    key={item.name}
+                    className="flex items-baseline justify-between gap-3 py-3 text-[12.5px] text-ink-soft"
+                  >
+                    <span className="flex-1">{item.name}</span>
+                    <span
+                      className="whitespace-nowrap font-serif text-[14px] italic text-bordeaux"
+                      style={{ fontWeight: 500 }}
+                    >
+                      {item.price}
+                    </span>
+                  </li>
+                ))}
+              </ul>
+            </motion.article>
+          ))}
+        </div>
+
+        {(footerNote || cta) && (
+          <motion.div
+            initial={{ opacity: 0, y: 24 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-40px" }}
+            transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1] }}
+            className="mt-10 flex flex-col items-center gap-3 text-center"
+          >
+            {footerNote && (
+              <p className="max-w-[680px] font-serif text-[14px] italic leading-[1.55] text-muted-ink">
+                {footerNote}
+              </p>
+            )}
+            {cta && (
+              <a
+                href={cta.href}
+                target={cta.external ? "_blank" : undefined}
+                rel={cta.external ? "noopener noreferrer" : undefined}
+                className="group inline-flex items-center gap-2 rounded-full border border-ink px-7 py-3 font-sans text-[12px] font-medium uppercase tracking-[0.22em] text-ink transition-all hover:-translate-y-0.5 hover:bg-ink hover:text-cream"
+              >
+                {cta.label}
+                <ArrowRight className="size-3.5 transition-transform group-hover:translate-x-1" />
+              </a>
+            )}
+          </motion.div>
+        )}
+      </div>
+    </section>
+  );
+}

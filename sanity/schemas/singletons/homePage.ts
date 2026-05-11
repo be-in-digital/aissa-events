@@ -1,0 +1,33 @@
+import { defineType, defineField } from "sanity";
+
+export const homePage = defineType({
+  name: "homePage",
+  title: "Page d'accueil",
+  type: "document",
+  groups: [
+    { name: "hero", title: "1. Hero", default: true },
+    { name: "marquee", title: "2. Bandeau défilant" },
+    { name: "caseStudies", title: "3. Études de cas" },
+    { name: "universes", title: "4. Univers (3 services)" },
+    { name: "process", title: "5. Process (étapes)" },
+    { name: "about", title: "6. À propos" },
+    { name: "testimonials", title: "7. Témoignages" },
+    { name: "faq", title: "8. FAQ" },
+    { name: "contact", title: "9. Contact" },
+    { name: "seo", title: "SEO" },
+  ],
+  fields: [
+    defineField({ name: "hero", title: "Hero (haut de page)", type: "heroHomeSection", group: "hero" }),
+    defineField({ name: "marquee", title: "Bandeau défilant", type: "marqueeSection", group: "marquee" }),
+    defineField({ name: "caseStudies", title: "Études de cas (2 réalisations)", type: "caseStudiesSection", group: "caseStudies" }),
+    defineField({ name: "universes", title: "Trois univers", type: "universesSection", group: "universes" }),
+    defineField({ name: "process", title: "Process (4 étapes)", type: "processSection", group: "process" }),
+    defineField({ name: "about", title: "À propos (Aïssa)", type: "aboutSection", group: "about" }),
+    defineField({ name: "pillars", title: "Piliers (section sombre, optionnelle)", type: "pillarsSection", group: "about" }),
+    defineField({ name: "testimonials", title: "Témoignages", type: "testimonialsSection", group: "testimonials" }),
+    defineField({ name: "faq", title: "FAQ", type: "faqSection", group: "faq" }),
+    defineField({ name: "contact", title: "Contact (form + Calendly)", type: "contactSection", group: "contact" }),
+    defineField({ name: "seo", title: "SEO", type: "seo", group: "seo" }),
+  ],
+  preview: { prepare: () => ({ title: "Page d'accueil" }) },
+});
