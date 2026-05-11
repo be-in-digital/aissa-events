@@ -27,10 +27,11 @@ export async function generateStaticParams() {
     query: allRealisationSlugsQuery,
     tags: ["realisation"],
   });
-  return slugs
+  const params = slugs
     .map((s) => s.slug)
     .filter((s): s is string => Boolean(s))
     .map((slug) => ({ slug }));
+  return params.length > 0 ? params : [{ slug: "__placeholder__" }];
 }
 
 export async function generateMetadata({
