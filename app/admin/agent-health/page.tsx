@@ -1,5 +1,7 @@
+import { Suspense } from "react";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { connection } from "next/server";
 
 import { sanityWriteClient } from "@/lib/sanity/client.server";
 import {
@@ -12,9 +14,6 @@ export const metadata = {
   title: "Santé de l'assistante — Aïssa Events",
   robots: { index: false, follow: false },
 };
-
-// Bypass cache : on veut un statut temps réel
-export const revalidate = 0;
 
 function statusBadge(status: HealthStatus): { color: string; label: string; bg: string } {
   switch (status) {
@@ -52,7 +51,24 @@ interface PageProps {
   searchParams: Promise<{ secret?: string }>;
 }
 
-export default async function AgentHealthPage({ searchParams }: PageProps) {
+export default function AgentHealthPage({ searchParams }: PageProps) {
+  // Cache Components (Next.js 16) : tout ce qui n'est pas mis en cache doit
+  // vivre derrière Suspense. La page est statique, le contenu rend au runtime.
+  return (
+    <Suspense
+      fallback={
+        <main style={{ padding: 32, fontFamily: "system-ui" }}>
+          Chargement…
+        </main>
+      }
+    >
+      <AgentHealthContent searchParams={searchParams} />
+    </Suspense>
+  );
+}
+
+async function AgentHealthContent({ searchParams }: PageProps) {
+  await connection();
   const requiredSecret = process.env.ADMIN_AGENT_HEALTH_SECRET;
   if (!requiredSecret) {
     return (
