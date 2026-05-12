@@ -19,50 +19,31 @@ type Service = {
   cta: string;
 };
 
-const FALLBACK_SERVICES: Service[] = [
-  {
-    href: "/mariage",
-    eyebrow: "Service · Wedding planning",
-    titleStart: "Un mariage",
-    titleItalic: "organisé.",
-    desc: "Aïssa, wedding planner diplômée (Trouve ton expert, 2024), coordonne votre mariage de A à Z ou intervient à la carte. Cérémonie à Espace Events (50 pers.) ou dans un lieu partenaire en Île-de-France pour les grands formats.",
-    tags: ["Organisation complète", "À la carte", "4 thèmes décor"],
-    cta: "Découvrir le wedding planning",
-  },
-  {
-    href: "/evenements-pro",
-    eyebrow: "Service · Événements pro",
-    titleStart: "Un événement",
-    titleItalic: "B2B.",
-    desc: "Soirées clients, afterworks, lancements, séminaires. Pack Ambiance clé en main ou organisation sur mesure — à Espace Events, dans vos locaux ou en lieu partenaire.",
-    tags: ["Pack Ambiance", "Sur mesure", "Hors lieu"],
-    cta: "Découvrir l'offre B2B",
-  },
-];
-
-const FALLBACK_EYEBROW = "Le lieu accueille aussi";
-const FALLBACK_TITLE = "Le lieu, et\n_deux services en plus._";
-const FALLBACK_INTRO =
-  "Au-delà de la location, on organise aussi votre mariage ou votre événement pro — à Espace Events, dans vos locaux ou en lieu partenaire. Aïssa et son équipe d'alternants s'adaptent au format.";
-
 export function OtherServices({ data }: { data?: OtherServicesData }) {
   if (data?.enabled === false) return null;
+  if (!data?.title) return null;
+  if (!data.items?.length) return null;
 
-  const eyebrow = data?.eyebrow ?? FALLBACK_EYEBROW;
-  const title = data?.title ?? FALLBACK_TITLE;
-  const intro = data?.intro ?? FALLBACK_INTRO;
+  const eyebrow = data.eyebrow;
+  const title = data.title;
+  const intro = data.intro;
 
-  const services: Service[] = data?.items?.length
-    ? data.items.map((item) => ({
-        href: item.ctaHref ?? "#",
+  const services: Service[] = data.items
+    .map((item): Service | null => {
+      if (!item?.ctaHref || !item?.titleStart) return null;
+      return {
+        href: item.ctaHref,
         eyebrow: item.eyebrow ?? "",
-        titleStart: item.titleStart ?? "",
+        titleStart: item.titleStart,
         titleItalic: item.titleItalic ?? "",
         desc: item.description ?? "",
         tags: item.tags ?? [],
         cta: item.ctaLabel ?? "En savoir plus",
-      }))
-    : FALLBACK_SERVICES;
+      };
+    })
+    .filter((x): x is Service => x !== null);
+
+  if (services.length === 0) return null;
 
   return (
     <section className="relative overflow-hidden bg-ink py-28 text-cream sm:py-36">
@@ -96,10 +77,12 @@ export function OtherServices({ data }: { data?: OtherServicesData }) {
           transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1] }}
           className="mx-auto mb-16 max-w-[720px] text-center"
         >
-          <p className="mb-6 inline-flex items-center justify-center gap-3 font-mono text-[11px] uppercase tracking-[0.28em] text-gold-soft">
-            <span className="size-2 animate-pulse rounded-full bg-gold" />
-            {eyebrow}
-          </p>
+          {eyebrow && (
+            <p className="mb-6 inline-flex items-center justify-center gap-3 font-mono text-[11px] uppercase tracking-[0.28em] text-gold-soft">
+              <span className="size-2 animate-pulse rounded-full bg-gold" />
+              {eyebrow}
+            </p>
+          )}
           <h2
             className="font-serif text-[40px] leading-[1] tracking-[-0.03em] sm:text-[52px] lg:text-[64px]"
             style={{ fontWeight: 300 }}
@@ -197,40 +180,48 @@ function ServiceCard({ service, index }: { service: Service; index: number }) {
           style={{ rotateX, rotateY, transformStyle: "preserve-3d" }}
           className="relative"
         >
-          <p className="mb-6 font-mono text-[11px] uppercase tracking-[0.28em] text-gold-soft">
-            — {service.eyebrow}
-          </p>
+          {service.eyebrow && (
+            <p className="mb-6 font-mono text-[11px] uppercase tracking-[0.28em] text-gold-soft">
+              — {service.eyebrow}
+            </p>
+          )}
 
           <h3
             className="mb-5 font-serif text-[30px] leading-[1.05] tracking-[-0.02em] text-cream sm:text-[34px]"
             style={{ fontWeight: 400 }}
           >
             {service.titleStart}{" "}
-            <em className="italic text-gold-soft">{service.titleItalic}</em>
+            {service.titleItalic && (
+              <em className="italic text-gold-soft">{service.titleItalic}</em>
+            )}
           </h3>
 
-          <p className="max-w-[480px] text-[14px] leading-[1.7] text-cream/70">
-            {service.desc}
-          </p>
+          {service.desc && (
+            <p className="max-w-[480px] text-[14px] leading-[1.7] text-cream/70">
+              {service.desc}
+            </p>
+          )}
 
-          <ul className="mt-7 flex flex-wrap gap-2">
-            {service.tags.map((tag, t) => (
-              <motion.li
-                key={tag}
-                initial={{ opacity: 0, y: 8 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, margin: "-40px" }}
-                transition={{
-                  delay: index * 0.15 + 0.3 + t * 0.08,
-                  duration: 0.5,
-                  ease: [0.16, 1, 0.3, 1],
-                }}
-                className="rounded-full border border-gold-soft/30 bg-gold-soft/[0.04] px-3.5 py-1.5 font-mono text-[10px] uppercase tracking-[0.22em] text-gold-soft transition-all duration-500 group-hover:border-gold-soft/60 group-hover:bg-gold-soft/10"
-              >
-                {tag}
-              </motion.li>
-            ))}
-          </ul>
+          {service.tags.length > 0 && (
+            <ul className="mt-7 flex flex-wrap gap-2">
+              {service.tags.map((tag, t) => (
+                <motion.li
+                  key={tag}
+                  initial={{ opacity: 0, y: 8 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true, margin: "-40px" }}
+                  transition={{
+                    delay: index * 0.15 + 0.3 + t * 0.08,
+                    duration: 0.5,
+                    ease: [0.16, 1, 0.3, 1],
+                  }}
+                  className="rounded-full border border-gold-soft/30 bg-gold-soft/[0.04] px-3.5 py-1.5 font-mono text-[10px] uppercase tracking-[0.22em] text-gold-soft transition-all duration-500 group-hover:border-gold-soft/60 group-hover:bg-gold-soft/10"
+                >
+                  {tag}
+                </motion.li>
+              ))}
+            </ul>
+          )}
 
           <span className="mt-9 inline-flex items-center gap-2 font-mono text-[12px] uppercase tracking-[0.22em] text-gold transition-all duration-500 group-hover:gap-3.5">
             {service.cta}

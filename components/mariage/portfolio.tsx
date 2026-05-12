@@ -11,7 +11,6 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { Eyebrow } from "@/components/home/eyebrow";
-import { MARIAGE_IMAGES } from "@/lib/images";
 import { renderInlineItalic } from "@/lib/sanity/text";
 import { resolveCta } from "@/lib/sanity/cta";
 import { urlForImageString } from "@/lib/sanity/image";
@@ -19,42 +18,39 @@ import type { MariagePageQueryResult } from "@/sanity.types";
 
 type PortfolioData = NonNullable<MariagePageQueryResult>["portfolio"];
 
-const FALLBACK_EYEBROW = "Portfolio · mariages réalisés";
-const FALLBACK_TITLE = "Sept mariages,\n_sept histoires._";
-const FALLBACK_INTRO =
-  "Civils, religieux, henné, laïques. À l'Espace Events, en château, en loft ou en jardin privé. Cliquez sur une réalisation pour voir le contexte du projet.";
+// Pattern de spans pour la grille bento, appliqué de façon cyclique
+const SPAN_PATTERN = [
+  "lg:col-span-2 lg:row-span-2",
+  "lg:col-span-2",
+  "lg:col-span-1",
+  "lg:col-span-1",
+  "lg:col-span-2",
+  "lg:col-span-1",
+  "lg:col-span-1",
+];
 
 export function MariagePortfolio({ data }: { data?: PortfolioData }) {
   const [active, setActive] = useState<number | null>(null);
-  const fallback = MARIAGE_IMAGES.portfolio;
 
   if (data?.enabled === false) return null;
+  if (!data?.items?.length) return null;
 
-  const eyebrow = data?.eyebrow ?? FALLBACK_EYEBROW;
-  const title = data?.title ?? FALLBACK_TITLE;
-  const intro = data?.intro ?? FALLBACK_INTRO;
+  const eyebrow = data?.eyebrow;
+  const title = data?.title;
+  const intro = data?.intro;
   const footerEyebrow = data?.footerEyebrow;
   const footerCta = resolveCta(data?.footerCta ?? null);
 
-  const items = data?.items?.length
-    ? data.items.map((item, idx) => ({
-        title: item?.shortTitle ?? item?.title ?? "",
-        tag: item?.typeLabel ?? item?.type ?? "",
-        description: item?.story ?? "",
-        src: item?.cover?.asset
-          ? urlForImageString(item.cover, { width: 1200, quality: 85 })
-          : fallback[idx % fallback.length].src,
-        alt: item?.cover?.alt || item?.shortTitle || item?.title || "",
-        span: fallback[idx % fallback.length].span,
-      }))
-    : fallback.map((it) => ({
-        title: it.title,
-        tag: it.tag,
-        description: it.description,
-        src: it.src,
-        alt: it.title,
-        span: it.span,
-      }));
+  const items = data.items.map((item, idx) => ({
+    title: item?.shortTitle ?? item?.title ?? "",
+    tag: item?.typeLabel ?? item?.type ?? "",
+    description: item?.story ?? "",
+    src: item?.cover?.asset
+      ? urlForImageString(item.cover, { width: 1200, quality: 85 })
+      : null,
+    alt: item?.cover?.alt || item?.shortTitle || item?.title || "",
+    span: SPAN_PATTERN[idx % SPAN_PATTERN.length],
+  }));
 
   const item = active !== null ? items[active] : null;
 
@@ -72,20 +68,24 @@ export function MariagePortfolio({ data }: { data?: PortfolioData }) {
           className="mb-14 grid items-end gap-10 lg:grid-cols-[1fr_1fr] lg:gap-20"
         >
           <div>
-            <div className="mb-6">
-              <Eyebrow>{eyebrow}</Eyebrow>
-            </div>
-            <h2
-              className="font-serif text-[40px] leading-[1] tracking-[-0.03em] sm:text-[56px] lg:text-[72px]"
-              style={{ fontWeight: 300 }}
-            >
-              {title.split("\n").map((line, i, arr) => (
-                <span key={i}>
-                  {renderInlineItalic(line)}
-                  {i < arr.length - 1 && <br />}
-                </span>
-              ))}
-            </h2>
+            {eyebrow && (
+              <div className="mb-6">
+                <Eyebrow>{eyebrow}</Eyebrow>
+              </div>
+            )}
+            {title && (
+              <h2
+                className="font-serif text-[40px] leading-[1] tracking-[-0.03em] sm:text-[56px] lg:text-[72px]"
+                style={{ fontWeight: 300 }}
+              >
+                {title.split("\n").map((line, i, arr) => (
+                  <span key={i}>
+                    {renderInlineItalic(line)}
+                    {i < arr.length - 1 && <br />}
+                  </span>
+                ))}
+              </h2>
+            )}
           </div>
           {intro && (
             <p
@@ -114,14 +114,16 @@ export function MariagePortfolio({ data }: { data?: PortfolioData }) {
               className={`group relative overflow-hidden rounded-[20px] text-left focus:outline-none focus-visible:ring-2 focus-visible:ring-bordeaux focus-visible:ring-offset-2 focus-visible:ring-offset-cream ${it.span}`}
               aria-label={`Agrandir : ${it.title}`}
             >
-              <Image
-                src={it.src}
-                alt={it.alt}
-                fill
-                sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
-                className="object-cover transition-transform duration-[800ms] ease-out group-hover:scale-[1.05]"
-                style={{ filter: "contrast(1.06) saturate(0.95) sepia(0.05)" }}
-              />
+              {it.src && (
+                <Image
+                  src={it.src}
+                  alt={it.alt}
+                  fill
+                  sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
+                  className="object-cover transition-transform duration-[800ms] ease-out group-hover:scale-[1.05]"
+                  style={{ filter: "contrast(1.06) saturate(0.95) sepia(0.05)" }}
+                />
+              )}
               <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-ink/85 via-ink/20 to-transparent opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
               <div className="pointer-events-none absolute right-4 top-4 inline-flex size-10 items-center justify-center rounded-full bg-cream/90 text-ink opacity-0 backdrop-blur-sm transition-opacity duration-500 group-hover:opacity-100">
                 <Maximize2 className="size-4" />
@@ -180,16 +182,18 @@ export function MariagePortfolio({ data }: { data?: PortfolioData }) {
         >
           {item && (
             <>
-              <div className="relative aspect-[4/3] w-full bg-ink/5">
-                <Image
-                  src={item.src}
-                  alt={item.alt}
-                  fill
-                  sizes="(max-width: 1024px) 100vw, 1024px"
-                  className="object-cover"
-                  priority
-                />
-              </div>
+              {item.src && (
+                <div className="relative aspect-[4/3] w-full bg-ink/5">
+                  <Image
+                    src={item.src}
+                    alt={item.alt}
+                    fill
+                    sizes="(max-width: 1024px) 100vw, 1024px"
+                    className="object-cover"
+                    priority
+                  />
+                </div>
+              )}
               <div className="flex flex-col gap-2 px-8 py-6 sm:px-10 sm:py-8">
                 {item.tag && (
                   <p className="font-mono text-[10px] uppercase tracking-[0.28em] text-bordeaux">

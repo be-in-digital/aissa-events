@@ -5,7 +5,6 @@ import { motion } from "motion/react";
 import { Disc3, Lightbulb, Megaphone, ShieldCheck } from "lucide-react";
 import { PortableText } from "@portabletext/react";
 import { Eyebrow } from "@/components/home/eyebrow";
-import { EVENEMENT_IMAGES } from "@/lib/images";
 import { urlForImageString } from "@/lib/sanity/image";
 import type { SiteSettingsQueryResult } from "@/sanity.types";
 
@@ -35,53 +34,56 @@ const TEAM = [
 ];
 
 export function EvenementFounder({ founder }: { founder?: Founder }) {
+  if (!founder) return null;
+
   const photo = founder?.photo;
   const imageUrl = photo?.asset
     ? urlForImageString(photo, { width: 1200, quality: 85 })
-    : EVENEMENT_IMAGES.founder;
-  const imageAlt =
-    photo?.alt ?? "Aïssa & l'équipe Aïssa Events en production événementielle";
+    : null;
+  const imageAlt = photo?.alt ?? "";
 
   return (
     <section className="relative bg-cream py-28 sm:py-36">
       <div className="mx-auto max-w-[1440px] px-6 sm:px-14">
         <div className="grid items-center gap-14 lg:grid-cols-[5fr_6fr] lg:gap-20">
-          <motion.div
-            initial={{ opacity: 0, scale: 0.96 }}
-            whileInView={{ opacity: 1, scale: 1 }}
-            viewport={{ once: true, margin: "-80px" }}
-            transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}
-            className="relative aspect-[4/5] w-full overflow-hidden rounded-[24px] shadow-[0_30px_80px_rgba(44,31,51,0.12)]"
-          >
-            <Image
-              src={imageUrl}
-              alt={imageAlt}
-              fill
-              sizes="(max-width: 1024px) 100vw, 40vw"
-              className="object-cover"
-              style={{ filter: "contrast(1.06) saturate(0.95) sepia(0.05)" }}
-            />
-            <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-ink/35 via-transparent to-transparent" />
+          {imageUrl && (
             <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.9, delay: 0.4, ease: [0.16, 1, 0.3, 1] }}
-              className="absolute bottom-7 left-7 right-7 flex items-end justify-between gap-4"
+              initial={{ opacity: 0, scale: 0.96 }}
+              whileInView={{ opacity: 1, scale: 1 }}
+              viewport={{ once: true, margin: "-80px" }}
+              transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}
+              className="relative aspect-[4/5] w-full overflow-hidden rounded-[24px] shadow-[0_30px_80px_rgba(44,31,51,0.12)]"
             >
-              <div>
-                <p className="font-script text-[42px] leading-none text-cream">
-                  Aïssa &amp; team
-                </p>
-                <p className="mt-1 font-mono text-[10px] uppercase tracking-[0.28em] text-cream/85">
-                  Direction artistique pro
-                </p>
-              </div>
-              <span className="rounded-full bg-cream/95 px-3 py-1.5 font-mono text-[9px] uppercase tracking-[0.22em] text-bordeaux backdrop-blur-sm">
-                DNA Art Academy
-              </span>
+              <Image
+                src={imageUrl}
+                alt={imageAlt}
+                fill
+                sizes="(max-width: 1024px) 100vw, 40vw"
+                className="object-cover"
+                style={{ filter: "contrast(1.06) saturate(0.95) sepia(0.05)" }}
+              />
+              <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-ink/35 via-transparent to-transparent" />
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.9, delay: 0.4, ease: [0.16, 1, 0.3, 1] }}
+                className="absolute bottom-7 left-7 right-7 flex items-end justify-between gap-4"
+              >
+                <div>
+                  <p className="font-script text-[42px] leading-none text-cream">
+                    Aïssa &amp; team
+                  </p>
+                  <p className="mt-1 font-mono text-[10px] uppercase tracking-[0.28em] text-cream/85">
+                    Direction artistique pro
+                  </p>
+                </div>
+                <span className="rounded-full bg-cream/95 px-3 py-1.5 font-mono text-[9px] uppercase tracking-[0.22em] text-bordeaux backdrop-blur-sm">
+                  DNA Art Academy
+                </span>
+              </motion.div>
             </motion.div>
-          </motion.div>
+          )}
 
           <motion.div
             initial={{ opacity: 0, y: 32 }}
@@ -103,38 +105,11 @@ export function EvenementFounder({ founder }: { founder?: Founder }) {
               événementielle.
             </h2>
 
-            <div className="mt-8 space-y-5 text-[16px] leading-[1.8] text-ink-soft">
-              {founder?.bio && founder.bio.length > 0 ? (
+            {founder?.bio && founder.bio.length > 0 && (
+              <div className="mt-8 space-y-5 text-[16px] leading-[1.8] text-ink-soft">
                 <PortableText value={founder.bio} />
-              ) : (
-                <>
-                  <p>
-                    Aïssa Events est née au sein d&apos;
-                    <strong className="font-medium text-ink">Art Academy</strong>,
-                    au contact direct des artistes et de la production live. Sur un
-                    événement de marque, ça change la lecture du brief : ce
-                    qu&apos;on veut qu&apos;il en reste, comment la salle réagit, ce
-                    que la captation pourra réutiliser ensuite.
-                  </p>
-                  <p>
-                    Aïssa est seule à temps plein, épaulée par deux alternants en
-                    production. Sur les briques spécialisées (sécurité, traiteur,
-                    photo, vidéo, fleurs), nous activons un réseau de partenaires
-                    franciliens dont nous portons la responsabilité contractuelle.
-                    Tarifs négociés, qualité validée sur nos productions précédentes.
-                  </p>
-                  <p>
-                    Aïssa pilote chaque projet du brief au debrief.{" "}
-                    <strong className="font-medium text-ink">
-                      Un seul interlocuteur, un seul fil
-                    </strong>
-                    , c&apos;est ce qui tient en B2B quand les marges d&apos;erreur
-                    sont fines (lancement sous embargo, dirigeant à l&apos;agenda
-                    serré, presse en salle).
-                  </p>
-                </>
-              )}
-            </div>
+              </div>
+            )}
 
             <ul className="mt-10 grid gap-4 sm:grid-cols-2">
               {TEAM.map(({ Icon, label, sub }, i) => (

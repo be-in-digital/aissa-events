@@ -8,16 +8,14 @@ import type { HomePageQueryResult } from "@/sanity.types";
 
 type TestimonialsData = NonNullable<HomePageQueryResult>["testimonials"];
 
-const FALLBACK_EYEBROW = "Avis clients";
-const FALLBACK_TITLE = "Ce qu'ils\nen _disent._";
-
 export function Testimonials({ data }: { data?: TestimonialsData }) {
   if (data?.enabled === false) return null;
   const items = data?.testimonials ?? [];
   if (items.length === 0) return null;
+  if (!data?.title) return null;
 
-  const eyebrow = data?.eyebrow ?? FALLBACK_EYEBROW;
-  const title = data?.title ?? FALLBACK_TITLE;
+  const eyebrow = data?.eyebrow;
+  const title = data.title;
 
   return (
     <section id="testimonials" className="relative py-32 sm:py-40">
@@ -29,9 +27,11 @@ export function Testimonials({ data }: { data?: TestimonialsData }) {
           transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}
           className="mb-20 text-center"
         >
-          <div className="mb-5">
-            <Eyebrow align="center">{eyebrow}</Eyebrow>
-          </div>
+          {eyebrow && (
+            <div className="mb-5">
+              <Eyebrow align="center">{eyebrow}</Eyebrow>
+            </div>
+          )}
           <h2
             className="mx-auto font-serif text-[44px] leading-[0.95] tracking-[-0.03em] sm:text-[60px] lg:text-[88px]"
             style={{ fontWeight: 300 }}

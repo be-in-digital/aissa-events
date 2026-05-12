@@ -13,15 +13,9 @@ import {
 import { Eyebrow } from "@/components/home/eyebrow";
 import { renderInlineItalic } from "@/lib/sanity/text";
 import { urlForImageString } from "@/lib/sanity/image";
-import { ESPACE_IMAGES } from "@/lib/images";
 import type { EspaceEventsPageQueryResult } from "@/sanity.types";
 
 type GalleryData = NonNullable<EspaceEventsPageQueryResult>["gallery"];
-
-const FALLBACK_EYEBROW = "Visite virtuelle";
-const FALLBACK_TITLE = "Le lieu, sous\n_tous ses angles._";
-const FALLBACK_INTRO =
-  "Salle principale 65 m², verrière 25 m², terrasse, cuisine équipée, vestiaires. Cliquez sur une photo pour l'agrandir.";
 
 type GalleryItem = {
   src: string;
@@ -30,8 +24,6 @@ type GalleryItem = {
   description: string;
   span: string;
 };
-
-const FALLBACK_ITEMS: readonly GalleryItem[] = ESPACE_IMAGES.gallery;
 
 const SPANS = [
   "lg:col-span-2 lg:row-span-2",
@@ -48,24 +40,26 @@ export function EspaceGallery({ data }: { data?: GalleryData }) {
   const [active, setActive] = useState<number | null>(null);
 
   if (data?.enabled === false) return null;
+  if (!data?.title) return null;
+  if (!data.images?.length) return null;
 
-  const eyebrow = data?.eyebrow ?? FALLBACK_EYEBROW;
-  const title = data?.title ?? FALLBACK_TITLE;
+  const eyebrow = data.eyebrow;
+  const title = data.title;
 
-  const sanityImages = data?.images ?? [];
-  const useFallback = sanityImages.length === 0;
-
-  const items: readonly GalleryItem[] = useFallback
-    ? FALLBACK_ITEMS
-    : sanityImages.map((img, i) => ({
-        src: img?.asset
-          ? urlForImageString(img, { width: 1200, quality: 85 })
-          : "",
-        title: img?.alt || `Image ${i + 1}`,
-        tag: img?.caption || "",
-        description: img?.caption || "",
+  const items: GalleryItem[] = data.images
+    .map((img, i): GalleryItem | null => {
+      if (!img?.asset) return null;
+      return {
+        src: urlForImageString(img, { width: 1200, quality: 85 }),
+        title: img.alt || `Image ${i + 1}`,
+        tag: img.caption || "",
+        description: img.caption || "",
         span: SPANS[i % SPANS.length],
-      }));
+      };
+    })
+    .filter((x): x is GalleryItem => x !== null);
+
+  if (items.length === 0) return null;
 
   const item = active !== null ? items[active] : null;
 
@@ -80,9 +74,11 @@ export function EspaceGallery({ data }: { data?: GalleryData }) {
           className="mb-14 grid items-end gap-10 lg:grid-cols-[1fr_1fr] lg:gap-20"
         >
           <div>
-            <div className="mb-6">
-              <Eyebrow>{eyebrow}</Eyebrow>
-            </div>
+            {eyebrow && (
+              <div className="mb-6">
+                <Eyebrow>{eyebrow}</Eyebrow>
+              </div>
+            )}
             <h2
               className="font-serif text-[40px] leading-[1] tracking-[-0.03em] sm:text-[52px] lg:text-[68px]"
               style={{ fontWeight: 300 }}
@@ -95,12 +91,6 @@ export function EspaceGallery({ data }: { data?: GalleryData }) {
               ))}
             </h2>
           </div>
-          <p
-            className="max-w-md font-serif text-[17px] italic leading-[1.55] text-ink-soft sm:text-[19px]"
-            style={{ fontWeight: 300 }}
-          >
-            {FALLBACK_INTRO}
-          </p>
         </motion.div>
 
         <div className="grid auto-rows-[240px] grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-5 lg:grid-cols-4 lg:auto-rows-[260px]">
@@ -120,16 +110,14 @@ export function EspaceGallery({ data }: { data?: GalleryData }) {
               className={`group relative overflow-hidden rounded-[20px] text-left focus:outline-none focus-visible:ring-2 focus-visible:ring-bordeaux focus-visible:ring-offset-2 focus-visible:ring-offset-cream ${it.span}`}
               aria-label={`Agrandir : ${it.title}`}
             >
-              {it.src && (
-                <Image
-                  src={it.src}
-                  alt={it.title}
-                  fill
-                  sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
-                  className="object-cover transition-transform duration-[800ms] ease-out group-hover:scale-[1.05]"
-                  style={{ filter: "contrast(1.06) saturate(0.95) sepia(0.05)" }}
-                />
-              )}
+              <Image
+                src={it.src}
+                alt={it.title}
+                fill
+                sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
+                className="object-cover transition-transform duration-[800ms] ease-out group-hover:scale-[1.05]"
+                style={{ filter: "contrast(1.06) saturate(0.95) sepia(0.05)" }}
+              />
               <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-ink/85 via-ink/20 to-transparent opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
               <div className="pointer-events-none absolute right-4 top-4 inline-flex size-10 items-center justify-center rounded-full bg-cream/90 text-ink opacity-0 backdrop-blur-sm transition-opacity duration-500 group-hover:opacity-100">
                 <Maximize2 className="size-4" />
@@ -162,16 +150,14 @@ export function EspaceGallery({ data }: { data?: GalleryData }) {
           {item && (
             <>
               <div className="relative aspect-[4/3] w-full bg-ink/5">
-                {item.src && (
-                  <Image
-                    src={item.src}
-                    alt={item.title}
-                    fill
-                    sizes="(max-width: 1024px) 100vw, 1024px"
-                    className="object-cover"
-                    priority
-                  />
-                )}
+                <Image
+                  src={item.src}
+                  alt={item.title}
+                  fill
+                  sizes="(max-width: 1024px) 100vw, 1024px"
+                  className="object-cover"
+                  priority
+                />
               </div>
               <div className="flex flex-col gap-2 px-8 py-6 sm:px-10 sm:py-8">
                 {item.tag && (

@@ -12,6 +12,7 @@ import {
   HelpCircleIcon,
   TagIcon,
   ClipboardIcon,
+  RobotIcon,
 } from "@sanity/icons";
 import type { StructureResolver } from "sanity/structure";
 
@@ -25,6 +26,7 @@ const SINGLETON_TYPES = new Set<string>([
   "blogPage",
   "mentionsLegales",
   "politiqueConfidentialite",
+  "agentSettings",
 ]);
 
 const HIDDEN_FROM_DEFAULT = new Set<string>([
@@ -218,6 +220,17 @@ export const structure: StructureResolver = (S) =>
             .schemaType("siteSettings")
             .documentId("siteSettings")
             .title("Réglages du site"),
+        ),
+
+      S.listItem()
+        .title("Assistante virtuelle")
+        .icon(RobotIcon)
+        .child(
+          S.editor()
+            .id("agentSettings")
+            .schemaType("agentSettings")
+            .documentId("agentSettings")
+            .title("Assistante virtuelle"),
         ),
 
       // Catch-all

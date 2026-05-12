@@ -11,12 +11,45 @@ const serverSchema = z.object({
   RESEND_TO_EMAIL: z.string().email().default("contact@aissaevents.com"),
 
   HUBSPOT_PRIVATE_APP_TOKEN: z.string().min(1).optional(),
+  HUBSPOT_PORTAL_ID: z.string().min(1).optional(),
+  HUBSPOT_PIPELINE_ID: z.string().min(1).optional(),
 
   MUX_TOKEN_ID: z.string().min(1).optional(),
   MUX_TOKEN_SECRET: z.string().min(1).optional(),
 
   KV_REST_API_URL: z.string().url().optional(),
   KV_REST_API_TOKEN: z.string().min(1).optional(),
+
+  // Meta / WhatsApp Business Cloud API (Phase 2 — agent IA)
+  META_APP_SECRET: z.string().min(1).optional(),
+  META_WEBHOOK_VERIFY_TOKEN: z.string().min(1).optional(),
+  META_ENCRYPTION_KEY: z
+    .string()
+    .regex(/^[0-9a-fA-F]{64}$/, "Doit être 64 caractères hexadécimaux (32 octets)")
+    .optional(),
+  SANITY_REVALIDATE_SECRET: z.string().min(1).optional(),
+
+  // Admin pages (assistante)
+  ADMIN_AGENT_HEALTH_SECRET: z.string().min(8).optional(),
+
+  // Vercel AI Gateway (en local seulement — OIDC en prod)
+  AI_GATEWAY_API_KEY: z.string().min(1).optional(),
+
+  // OpenAI direct (Whisper transcription, AI Gateway ne supporte pas audio)
+  OPENAI_API_KEY: z.string().startsWith("sk-").optional(),
+
+  // Observabilité (Sentry, optionnel)
+  SENTRY_DSN: z.string().url().optional(),
+
+  // Cron secret (Vercel Cron)
+  CRON_SECRET: z.string().min(16).optional(),
+
+  // Instagram Business Account ID (pour le send Insta DM)
+  META_INSTAGRAM_BUSINESS_ACCOUNT_ID: z.string().min(1).optional(),
+
+  // Numéro WhatsApp d'Aïssa pour recevoir les alertes handover (format E.164 sans +).
+  // Ex : "33612345678". Doit être whitelisté en mode dev.
+  AISSA_NOTIFY_PHONE: z.string().regex(/^\d{8,15}$/).optional(),
 });
 
 const clientSchema = z.object({
@@ -28,15 +61,27 @@ const clientSchema = z.object({
     .string()
     .url()
     .default("https://calendly.com/aissaevents/appel-decouverte"),
+
+  // Meta / WhatsApp Business Cloud API (Phase 2 — agent IA)
+  NEXT_PUBLIC_META_APP_ID: z.string().min(1).optional(),
+  NEXT_PUBLIC_META_GRAPH_API_VERSION: z.string().min(1).default("v21.0"),
+  NEXT_PUBLIC_META_EMBEDDED_SIGNUP_CONFIG_ID: z.string().min(1).optional(),
 });
 
-const clientEnv = {
+const clientEnvRaw: Record<string, string | undefined> = {
   NEXT_PUBLIC_SITE_URL: process.env.NEXT_PUBLIC_SITE_URL,
   NEXT_PUBLIC_SANITY_PROJECT_ID: process.env.NEXT_PUBLIC_SANITY_PROJECT_ID,
   NEXT_PUBLIC_SANITY_DATASET: process.env.NEXT_PUBLIC_SANITY_DATASET,
   NEXT_PUBLIC_SANITY_API_VERSION: process.env.NEXT_PUBLIC_SANITY_API_VERSION,
   NEXT_PUBLIC_CALENDLY_URL: process.env.NEXT_PUBLIC_CALENDLY_URL,
+  NEXT_PUBLIC_META_APP_ID: process.env.NEXT_PUBLIC_META_APP_ID,
+  NEXT_PUBLIC_META_GRAPH_API_VERSION: process.env.NEXT_PUBLIC_META_GRAPH_API_VERSION,
+  NEXT_PUBLIC_META_EMBEDDED_SIGNUP_CONFIG_ID: process.env.NEXT_PUBLIC_META_EMBEDDED_SIGNUP_CONFIG_ID,
 };
+
+const clientEnv = Object.fromEntries(
+  Object.entries(clientEnvRaw).filter(([, value]) => value !== ""),
+);
 
 const parsedClient = clientSchema.safeParse(clientEnv);
 

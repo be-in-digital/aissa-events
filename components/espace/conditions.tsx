@@ -7,43 +7,15 @@ import type { EspaceEventsPageQueryResult } from "@/sanity.types";
 
 type ConditionsData = NonNullable<EspaceEventsPageQueryResult>["conditions"];
 
-const FALLBACK_EYEBROW = "Comment réserver";
-const FALLBACK_TITLE = "Quatre étapes,\n_c'est tout._";
-const FALLBACK_INTRO =
-  "Devis 48h, contrat en ligne, acompte 50 %, solde 15 jours avant. La date n'est bloquée qu'à réception de l'acompte.";
-
-const FALLBACK_STEPS = [
-  {
-    title: "Devis personnalisé sous 48h",
-    description:
-      "Appel découverte gratuit (15-30 min) pour cadrer votre format, votre date, votre budget. Devis envoyé par mail dans les 48h.",
-  },
-  {
-    title: "Contrat signé en ligne",
-    description:
-      "Devis validé ? Contrat envoyé par mail, signature électronique, archivage automatique.",
-  },
-  {
-    title: "Acompte 50 % à la réservation",
-    description:
-      "Virement ou CB. La date est bloquée dans l'agenda dès réception. Acompte non remboursable mais reportable une fois sur 12 mois.",
-  },
-  {
-    title: "Solde à régler 15 jours avant",
-    description:
-      "Le solde est dû 15 jours avant l'événement. Pas de paiement le Jour J, pas de mauvaise surprise sur la facture.",
-  },
-];
-
 export function Conditions({ data }: { data?: ConditionsData }) {
   if (data?.enabled === false) return null;
+  if (!data?.title) return null;
+  if (!data.items?.length) return null;
 
-  const eyebrow = data?.eyebrow ?? FALLBACK_EYEBROW;
-  const title = data?.title ?? FALLBACK_TITLE;
-  const intro = data?.intro ?? FALLBACK_INTRO;
-
-  const sanityItems = data?.items ?? [];
-  const items = sanityItems.length > 0 ? sanityItems : FALLBACK_STEPS;
+  const eyebrow = data.eyebrow;
+  const title = data.title;
+  const intro = data.intro;
+  const items = data.items;
 
   return (
     <section className="relative py-28 sm:py-36">
@@ -56,9 +28,11 @@ export function Conditions({ data }: { data?: ConditionsData }) {
             transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1] }}
             className="lg:sticky lg:top-32 lg:self-start"
           >
-            <div className="mb-6">
-              <Eyebrow>{eyebrow}</Eyebrow>
-            </div>
+            {eyebrow && (
+              <div className="mb-6">
+                <Eyebrow>{eyebrow}</Eyebrow>
+              </div>
+            )}
             <h2
               className="font-serif text-[36px] leading-[1] tracking-[-0.03em] sm:text-[48px] lg:text-[56px]"
               style={{ fontWeight: 300 }}
@@ -124,7 +98,7 @@ export function Conditions({ data }: { data?: ConditionsData }) {
           </div>
         </div>
 
-        {data?.footnote && (
+        {data.footnote && (
           <p className="mt-12 text-center font-serif text-[14px] italic text-muted-ink">
             {data.footnote}
           </p>

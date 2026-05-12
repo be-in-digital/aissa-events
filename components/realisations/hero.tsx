@@ -24,17 +24,13 @@ const fadeUp = {
   },
 };
 
-const FALLBACK_EYEBROW = "Portfolio · 2020-2026";
-const FALLBACK_TITLE = "Six ans\nde _projets_\nà Émerainville.";
-const FALLBACK_SUBTITLE =
-  "Mariages multi-cérémonies, lancements de marque, soirées clients, séminaires, anniversaires en petit comité. Une sélection filtrable par univers, plus trois études de cas détaillées plus bas.";
-
 export function RealisationsHero({ data }: { data?: HeroData }) {
   if (data?.enabled === false) return null;
+  if (!data?.title) return null;
 
-  const eyebrow = data?.eyebrow ?? FALLBACK_EYEBROW;
-  const title = data?.title ?? FALLBACK_TITLE;
-  const subtitle = data?.subtitle ?? FALLBACK_SUBTITLE;
+  const eyebrow = data?.eyebrow;
+  const title = data.title;
+  const subtitle = data?.subtitle;
 
   const ctas = (data?.ctas ?? [])
     .map((c) => resolveCta(c))
@@ -64,9 +60,11 @@ export function RealisationsHero({ data }: { data?: HeroData }) {
           className="grid items-end gap-10 lg:grid-cols-[1fr_1fr] lg:gap-20"
         >
           <div>
-            <motion.div variants={fadeUp} className="mb-8">
-              <Eyebrow>{eyebrow}</Eyebrow>
-            </motion.div>
+            {eyebrow && (
+              <motion.div variants={fadeUp} className="mb-8">
+                <Eyebrow>{eyebrow}</Eyebrow>
+              </motion.div>
+            )}
 
             <motion.h1
               variants={fadeUp}

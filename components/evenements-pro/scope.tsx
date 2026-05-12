@@ -13,59 +13,20 @@ type ScopeItem = {
   desc: string;
 };
 
-const FALLBACK_EYEBROW = "Sur-mesure · hors pack";
-const FALLBACK_TITLE = "Tout ou partie\nde votre _événement._";
-const FALLBACK_INTRO =
-  "Vous avez un brief atypique, un format hors pack ou un besoin précis ? Aïssa Events peut intervenir sur l'intégralité de l'organisation ou sur des prestations ciblées.";
-
-const ITEMS: ScopeItem[] = [
-  {
-    num: "01",
-    title: "Recherche & sélection du lieu",
-    desc: "Identification du lieu idéal selon votre brief, votre nombre d'invités, votre image de marque et vos contraintes (accessibilité, sécurité ERP, parking).",
-  },
-  {
-    num: "02",
-    title: "Coordination globale",
-    desc: "Pilotage de A à Z, gestion du planning, supervision du jour J. Un interlocuteur unique de bout en bout.",
-  },
-  {
-    num: "03",
-    title: "Gestion des prestataires",
-    desc: "Sélection, négociation, suivi de tous les intervenants externes (traiteur, fleuriste, captation, sécurité, vestiaires, hôtesses).",
-  },
-  {
-    num: "04",
-    title: "Traiteur & service",
-    desc: "Buffet, cocktail, repas assis. Halal / casher / végé / sans gluten possibles. Tarifs négociés via partenariats récurrents.",
-  },
-  {
-    num: "05",
-    title: "Staff événementiel",
-    desc: "Hôtesses d'accueil bilingues, serveurs, vestiaire, agents de sécurité. Tenue alignée à votre charte si demandé.",
-  },
-  {
-    num: "06",
-    title: "Captation & com post-event",
-    desc: "Photographe corporate + vidéaste teaser/recap pour réutilisation sur LinkedIn, intranet, communication client. Livraison sous 72 h.",
-  },
-];
-
 export function EvenementScope({ data }: { data?: ScopeData }) {
   if (data?.enabled === false) return null;
+  if (!data?.items?.length) return null;
+  if (!data?.title) return null;
 
-  const eyebrow = data?.eyebrow ?? FALLBACK_EYEBROW;
-  const title = data?.title ?? FALLBACK_TITLE;
-  const intro = data?.intro ?? FALLBACK_INTRO;
+  const eyebrow = data?.eyebrow;
+  const title = data.title;
+  const intro = data?.intro;
 
-  const sanityItems = data?.items ?? [];
-  const items: ScopeItem[] = sanityItems.length
-    ? sanityItems.map((it, i) => ({
-        num: String(i + 1).padStart(2, "0"),
-        title: it.title ?? "",
-        desc: it.description ?? "",
-      }))
-    : ITEMS;
+  const items: ScopeItem[] = data.items.map((it, i) => ({
+    num: String(i + 1).padStart(2, "0"),
+    title: it.title ?? "",
+    desc: it.description ?? "",
+  }));
 
   return (
     <section className="relative bg-cream-soft py-28 sm:py-36">
@@ -77,9 +38,11 @@ export function EvenementScope({ data }: { data?: ScopeData }) {
           transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1] }}
           className="mx-auto mb-14 max-w-[760px] text-center"
         >
-          <div className="mb-6">
-            <Eyebrow align="center">{eyebrow}</Eyebrow>
-          </div>
+          {eyebrow && (
+            <div className="mb-6">
+              <Eyebrow align="center">{eyebrow}</Eyebrow>
+            </div>
+          )}
           <h2
             className="font-serif text-[40px] leading-[1] tracking-[-0.03em] sm:text-[56px] lg:text-[72px]"
             style={{ fontWeight: 300 }}

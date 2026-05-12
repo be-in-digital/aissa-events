@@ -7,48 +7,19 @@ import type { MariagePageQueryResult } from "@/sanity.types";
 
 type ConditionsData = NonNullable<MariagePageQueryResult>["conditions"];
 
-const FALLBACK_EYEBROW = "Comment réserver";
-const FALLBACK_TITLE = "Quatre étapes,\nc'est _tout._";
-const FALLBACK_INTRO =
-  "On ne réserve la date qu'à réception de l'acompte. Avant, vous restez libre de comparer, de réfléchir, de revenir vers nous avec d'autres questions.";
-
-const FALLBACK_ITEMS = [
-  {
-    title: "Devis personnalisé sous 48 h",
-    description:
-      "Appel découverte gratuit (30 min), on cadre le projet, on envoie un devis chiffré dans les deux jours ouvrés. Si on a besoin d'infos en plus pour chiffrer, on vous le dit tout de suite.",
-  },
-  {
-    title: "Validation & contrat signé en ligne",
-    description:
-      "Devis OK, contrat envoyé par mail. Signature électronique en quelques minutes, vous gardez une copie. Pas besoin d'imprimer ni de scanner.",
-  },
-  {
-    title: "Acompte 50 % à la réservation",
-    description:
-      "L'acompte verrouille votre date. Tant qu'il n'est pas reçu, on ne refuse pas les autres demandes pour ce jour-là (même si on vous prévient par mail si quelqu'un d'autre a brieffé).",
-  },
-  {
-    title: "Solde à régler 15 jours avant",
-    description:
-      "Le solde tombe deux semaines avant l'événement, par virement ou CB. Si c'est trop court vu votre cycle de paie, on en parle dès la signature et on adapte.",
-  },
-];
-
 export function MariageConditions({ data }: { data?: ConditionsData }) {
   if (data?.enabled === false) return null;
+  if (!data?.items?.length) return null;
 
-  const eyebrow = data?.eyebrow ?? FALLBACK_EYEBROW;
-  const title = data?.title ?? FALLBACK_TITLE;
-  const intro = data?.intro ?? FALLBACK_INTRO;
+  const eyebrow = data?.eyebrow;
+  const title = data?.title;
+  const intro = data?.intro;
   const footnote = data?.footnote;
 
-  const items = data?.items?.length
-    ? data.items.map((item) => ({
-        title: item?.title ?? "",
-        description: item?.description ?? "",
-      }))
-    : FALLBACK_ITEMS;
+  const items = data.items.map((item) => ({
+    title: item?.title ?? "",
+    description: item?.description ?? "",
+  }));
 
   return (
     <section className="relative py-28 sm:py-36">
@@ -61,20 +32,24 @@ export function MariageConditions({ data }: { data?: ConditionsData }) {
             transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1] }}
             className="lg:sticky lg:top-32 lg:self-start"
           >
-            <div className="mb-6">
-              <Eyebrow>{eyebrow}</Eyebrow>
-            </div>
-            <h2
-              className="font-serif text-[36px] leading-[1] tracking-[-0.03em] sm:text-[48px] lg:text-[56px]"
-              style={{ fontWeight: 300 }}
-            >
-              {title.split("\n").map((line, i, arr) => (
-                <span key={i}>
-                  {renderInlineItalic(line)}
-                  {i < arr.length - 1 && <br />}
-                </span>
-              ))}
-            </h2>
+            {eyebrow && (
+              <div className="mb-6">
+                <Eyebrow>{eyebrow}</Eyebrow>
+              </div>
+            )}
+            {title && (
+              <h2
+                className="font-serif text-[36px] leading-[1] tracking-[-0.03em] sm:text-[48px] lg:text-[56px]"
+                style={{ fontWeight: 300 }}
+              >
+                {title.split("\n").map((line, i, arr) => (
+                  <span key={i}>
+                    {renderInlineItalic(line)}
+                    {i < arr.length - 1 && <br />}
+                  </span>
+                ))}
+              </h2>
+            )}
             {intro && (
               <p
                 className="mt-6 max-w-md font-serif text-[17px] italic leading-[1.6] text-ink-soft"

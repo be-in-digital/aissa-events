@@ -11,83 +11,28 @@ import type { MariagePageQueryResult } from "@/sanity.types";
 
 type LieuxData = NonNullable<MariagePageQueryResult>["lieux"];
 
-const FALLBACK_EYEBROW = "Lieu de la cérémonie";
-const FALLBACK_TITLE = "Chez nous, ou _ailleurs._";
-const FALLBACK_INTRO =
-  "Trois options, zéro lieu imposé. Notre salle d'Émerainville (77), un lieu partenaire de notre réseau IDF, ou directement chez vous. On s'adapte au lieu, pas l'inverse.";
-
-const FALLBACK_ITEMS = [
-  {
-    Icon: Home,
-    title: "Espace Events _Émerainville_",
-    description:
-      "Notre salle à 25 min de Paris, jusqu'à 50 personnes. Pack tout inclus dès 1 250 €. Bonne adresse pour un mariage intime ou une cérémonie henné.",
-    highlights: [
-      "Salle 65 m², verrière, terrasse",
-      "Mobilier, sono, lumières, vaisselle inclus",
-      "Cuisine équipée pour traiteur",
-    ],
-    cta: { label: "Découvrir l'Espace Events", href: "/espace-emerainville", external: false },
-    featured: true,
-  },
-  {
-    Icon: Building2,
-    title: "Lieu _partenaire_",
-    description:
-      "Châteaux, domaines, lofts, salles privatisables. On vous propose 2 ou 3 options selon votre projet, votre budget et votre nombre d'invités.",
-    highlights: [
-      "Réseau IDF puis France entière",
-      "Capacité 30 à 300+ personnes",
-      "Repérage technique inclus",
-    ],
-    cta: null,
-    featured: false,
-  },
-  {
-    Icon: MapPin,
-    title: "Chez _vous_",
-    description:
-      "Maison familiale, jardin, lieu déjà réservé. On s'adapte à votre choix et on coordonne sur place. Aucun lieu imposé.",
-    highlights: [
-      "Repérage technique préalable",
-      "Adaptation aux contraintes du lieu",
-      "Logistique pensée au cas par cas",
-    ],
-    cta: null,
-    featured: false,
-  },
-];
-
+// Icônes mappées par index — restent hardcodées car non-stockables dans Sanity
 const ICONS = [Home, Building2, MapPin];
 
 export function MariageLieux({ data }: { data?: LieuxData }) {
   if (data?.enabled === false) return null;
+  if (!data?.items?.length) return null;
 
-  const eyebrow = data?.eyebrow ?? FALLBACK_EYEBROW;
-  const title = data?.title ?? FALLBACK_TITLE;
-  const intro = data?.intro ?? FALLBACK_INTRO;
+  const eyebrow = data?.eyebrow;
+  const title = data?.title;
+  const intro = data?.intro;
 
-  const items = data?.items?.length
-    ? data.items.map((item, idx) => ({
-        Icon: ICONS[idx % ICONS.length],
-        title: item?.title ?? "",
-        description: item?.description ?? "",
-        highlights: item?.highlights ?? [],
-        image: item?.image?.asset
-          ? urlForImageString(item.image, { width: 900, quality: 85 })
-          : null,
-        cta: resolveCta(item?.cta ?? null),
-        featured: idx === 0,
-      }))
-    : FALLBACK_ITEMS.map((it) => ({
-        Icon: it.Icon,
-        title: it.title,
-        description: it.description,
-        highlights: it.highlights,
-        image: null as string | null,
-        cta: it.cta,
-        featured: it.featured,
-      }));
+  const items = data.items.map((item, idx) => ({
+    Icon: ICONS[idx % ICONS.length],
+    title: item?.title ?? "",
+    description: item?.description ?? "",
+    highlights: item?.highlights ?? [],
+    image: item?.image?.asset
+      ? urlForImageString(item.image, { width: 900, quality: 85 })
+      : null,
+    cta: resolveCta(item?.cta ?? null),
+    featured: idx === 0,
+  }));
 
   return (
     <section className="relative py-28 sm:py-36">
@@ -117,18 +62,22 @@ export function MariageLieux({ data }: { data?: LieuxData }) {
             transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1] }}
             className="relative mb-14 max-w-[820px]"
           >
-            <p className="mb-6 inline-flex items-center gap-3 font-mono text-[11px] uppercase tracking-[0.28em] text-gold-soft">
-              <span className="size-2 animate-pulse rounded-full bg-gold" />
-              {eyebrow}
-            </p>
-            <h2
-              className="font-serif text-[40px] leading-[0.95] tracking-[-0.03em] sm:text-[56px] lg:text-[80px]"
-              style={{ fontWeight: 300 }}
-            >
-              {renderInlineItalic(title, {
-                italicClassName: "italic text-gold-soft",
-              })}
-            </h2>
+            {eyebrow && (
+              <p className="mb-6 inline-flex items-center gap-3 font-mono text-[11px] uppercase tracking-[0.28em] text-gold-soft">
+                <span className="size-2 animate-pulse rounded-full bg-gold" />
+                {eyebrow}
+              </p>
+            )}
+            {title && (
+              <h2
+                className="font-serif text-[40px] leading-[0.95] tracking-[-0.03em] sm:text-[56px] lg:text-[80px]"
+                style={{ fontWeight: 300 }}
+              >
+                {renderInlineItalic(title, {
+                  italicClassName: "italic text-gold-soft",
+                })}
+              </h2>
+            )}
             {intro && (
               <p className="mt-6 max-w-[640px] font-serif text-[18px] italic leading-[1.55] text-cream/75">
                 {intro}

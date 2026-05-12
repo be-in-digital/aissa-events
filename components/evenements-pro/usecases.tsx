@@ -14,54 +14,20 @@ type UseCase = {
   desc: string;
 };
 
-const FALLBACK_EYEBROW = "Nos terrains de jeu";
-const FALLBACK_TITLE = "Tous vos formats _pro._";
-const FALLBACK_INTRO =
-  "Quatre formats que nous produisons régulièrement à Émerainville, Paris et en Île-de-France, en pack ou sur devis selon votre brief.";
-
-const USECASES: UseCase[] = [
-  {
-    num: "01",
-    italic: "Soirées",
-    rest: "clients",
-    desc: "Format dîner ou cocktail dînatoire pour 30 à 120 invités. Programmation musicale calée sur votre marque, accueil VIP, hôtesses bilingues sur demande. Brief type : fidéliser un top 50 de prescripteurs.",
-  },
-  {
-    num: "02",
-    italic: "Afterworks",
-    rest: "& cocktails",
-    desc: "Cocktails 17h-21h pour 30 à 80 personnes. Format ponctuel ou rendez-vous mensuel récurrent, à l'Espace Events Émerainville ou dans vos locaux. DJ set, mange-debout, bar partenaire.",
-  },
-  {
-    num: "03",
-    italic: "Lancements",
-    rest: "produits",
-    desc: "Reveal produit, espaces brand, parcours invité, captation photo et vidéo pour réutilisation com. Brief type : 120 prescripteurs presse et influence sur 3 semaines de prep, livrables médias sous 7 jours.",
-  },
-  {
-    num: "04",
-    italic: "Séminaires",
-    rest: "& internes",
-    desc: "Conventions, kick-offs, soirées fin d'année. Plénière, ateliers et soirée orchestrés sur 1 ou 2 jours, 50 à 200 collaborateurs. Coordination logistique, transport, hébergement si multi-jours.",
-  },
-];
-
 export function EvenementUseCases({ data }: { data?: UseCasesData }) {
   if (data?.enabled === false) return null;
+  if (!data?.steps?.length) return null;
+  if (!data?.title) return null;
 
-  const eyebrow = data?.eyebrow ?? FALLBACK_EYEBROW;
-  const title = data?.title ?? FALLBACK_TITLE;
-  const intro = FALLBACK_INTRO;
+  const eyebrow = data?.eyebrow;
+  const title = data.title;
 
-  const sanitySteps = data?.steps ?? [];
-  const usecases: UseCase[] = sanitySteps.length
-    ? sanitySteps.map((s, i) => ({
-        num: String(i + 1).padStart(2, "0"),
-        italic: s.italic ?? "",
-        rest: s.rest ?? "",
-        desc: s.description ?? "",
-      }))
-    : USECASES;
+  const usecases: UseCase[] = data.steps.map((s, i) => ({
+    num: String(i + 1).padStart(2, "0"),
+    italic: s.italic ?? "",
+    rest: s.rest ?? "",
+    desc: s.description ?? "",
+  }));
 
   return (
     <section className="relative py-28 sm:py-36">
@@ -73,9 +39,11 @@ export function EvenementUseCases({ data }: { data?: UseCasesData }) {
           transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1] }}
           className="mx-auto mb-16 max-w-[700px] text-center"
         >
-          <div className="mb-6">
-            <Eyebrow align="center">{eyebrow}</Eyebrow>
-          </div>
+          {eyebrow && (
+            <div className="mb-6">
+              <Eyebrow align="center">{eyebrow}</Eyebrow>
+            </div>
+          )}
           <h2
             className="font-serif text-[40px] leading-[1] tracking-[-0.03em] sm:text-[56px] lg:text-[72px]"
             style={{ fontWeight: 300 }}
@@ -87,14 +55,6 @@ export function EvenementUseCases({ data }: { data?: UseCasesData }) {
               </span>
             ))}
           </h2>
-          {intro && (
-            <p
-              className="mt-5 font-serif text-[17px] italic text-ink-soft"
-              style={{ fontWeight: 300 }}
-            >
-              {intro}
-            </p>
-          )}
         </motion.div>
 
         <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">

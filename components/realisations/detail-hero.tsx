@@ -9,9 +9,6 @@ import { urlForImageString } from "@/lib/sanity/image";
 import { renderInlineItalic } from "@/lib/sanity/text";
 import type { RealisationBySlugQueryResult } from "@/sanity.types";
 
-const FALLBACK_COVER =
-  "https://images.unsplash.com/photo-1519225421980-715cb0215aed?w=1800&q=85";
-
 function formatDate(iso: string | null): string {
   if (!iso) return "";
   return new Date(iso).toLocaleDateString("fr-FR", {
@@ -40,9 +37,11 @@ export function RealisationDetailHero({
 }: {
   realisation: NonNullable<RealisationBySlugQueryResult>;
 }) {
+  if (!realisation.title) return null;
+
   const cover = realisation.cover?.asset
     ? urlForImageString(realisation.cover, { width: 1800 })
-    : FALLBACK_COVER;
+    : null;
   const alt = realisation.cover?.alt || realisation.title || "";
   const typeLabel = realisation.typeLabel ?? realisation.type ?? "Réalisation";
 
@@ -149,24 +148,26 @@ export function RealisationDetailHero({
         </motion.div>
       </div>
 
-      <motion.div
-        initial={{ opacity: 0, scale: 0.97 }}
-        animate={{ opacity: 1, scale: 1 }}
-        transition={{ duration: 1.2, delay: 0.4, ease: [0.16, 1, 0.3, 1] }}
-        className="mx-auto mt-16 max-w-[1320px] px-6 sm:px-14"
-      >
-        <div className="relative aspect-[16/9] w-full overflow-hidden rounded-[24px] shadow-[0_30px_80px_rgba(44,31,51,0.12)]">
-          <Image
-            src={cover}
-            alt={alt}
-            fill
-            priority
-            sizes="(max-width: 1320px) 100vw, 1320px"
-            className="object-cover"
-            style={{ filter: "contrast(1.06) saturate(0.95) sepia(0.05)" }}
-          />
-        </div>
-      </motion.div>
+      {cover && (
+        <motion.div
+          initial={{ opacity: 0, scale: 0.97 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 1.2, delay: 0.4, ease: [0.16, 1, 0.3, 1] }}
+          className="mx-auto mt-16 max-w-[1320px] px-6 sm:px-14"
+        >
+          <div className="relative aspect-[16/9] w-full overflow-hidden rounded-[24px] shadow-[0_30px_80px_rgba(44,31,51,0.12)]">
+            <Image
+              src={cover}
+              alt={alt}
+              fill
+              priority
+              sizes="(max-width: 1320px) 100vw, 1320px"
+              className="object-cover"
+              style={{ filter: "contrast(1.06) saturate(0.95) sepia(0.05)" }}
+            />
+          </div>
+        </motion.div>
+      )}
     </section>
   );
 }

@@ -7,6 +7,7 @@ import {
   Great_Vibes,
 } from "next/font/google";
 import { cn } from "@/lib/utils";
+import { env } from "@/env";
 
 const manrope = Manrope({
   subsets: ["latin"],
@@ -44,9 +45,7 @@ export const metadata: Metadata = {
   },
   description:
     "Agence d'événementiel multi-spécialiste à Émerainville (77). Mariages, célébrations, événements corporate. Espace Events — votre lieu de réception en Seine-et-Marne.",
-  metadataBase: new URL(
-    process.env.NEXT_PUBLIC_SITE_URL ?? "https://aissaevents.com",
-  ),
+  metadataBase: new URL(env.NEXT_PUBLIC_SITE_URL),
 };
 
 export default function RootLayout({

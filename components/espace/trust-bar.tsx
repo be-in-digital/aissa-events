@@ -11,28 +11,7 @@ import type { EspaceEventsPageQueryResult } from "@/sanity.types";
 
 type TrustBarData = NonNullable<EspaceEventsPageQueryResult>["trustBar"];
 
-const FALLBACK_ITEMS = [
-  {
-    Icon: TrainFront,
-    label: "25 min de Paris",
-    sub: "RER E · A4 · Émerainville (77)",
-  },
-  {
-    Icon: Accessibility,
-    label: "Accessible PMR",
-    sub: "Plain-pied · sanitaires PMR",
-  },
-  {
-    Icon: Snowflake,
-    label: "Climatisé",
-    sub: "Chaud / froid · été comme hiver",
-  },
-  {
-    Icon: ParkingCircle,
-    label: "Parking gratuit",
-    sub: "Rue + parkings publics < 200 m",
-  },
-];
+const ICONS = [TrainFront, Accessibility, Snowflake, ParkingCircle];
 
 const containerVariants = {
   hidden: {},
@@ -50,16 +29,22 @@ const itemVariants = {
 
 export function EspaceTrustBar({ data }: { data?: TrustBarData }) {
   if (data?.enabled === false) return null;
+  if (!data?.items?.length) return null;
 
-  const sanityItems = data?.items ?? [];
-  const items =
-    sanityItems.length > 0
-      ? sanityItems.map((item, i) => ({
-          Icon: FALLBACK_ITEMS[i % FALLBACK_ITEMS.length].Icon,
-          label: item?.value ?? FALLBACK_ITEMS[i % FALLBACK_ITEMS.length].label,
-          sub: item?.label ?? FALLBACK_ITEMS[i % FALLBACK_ITEMS.length].sub,
-        }))
-      : FALLBACK_ITEMS;
+  const items = data.items
+    .map((item, i) => {
+      const label = item?.value;
+      const sub = item?.label;
+      if (!label && !sub) return null;
+      return {
+        Icon: ICONS[i % ICONS.length],
+        label,
+        sub,
+      };
+    })
+    .filter((x): x is NonNullable<typeof x> => x !== null);
+
+  if (items.length === 0) return null;
 
   return (
     <section
@@ -91,15 +76,19 @@ export function EspaceTrustBar({ data }: { data?: TrustBarData }) {
                 <Icon className="size-[18px]" strokeWidth={1.5} />
               </span>
               <div className="min-w-0">
-                <p
-                  className="font-mono text-[11px] uppercase leading-[1.3] tracking-[0.2em] text-ink"
-                  style={{ fontWeight: 500 }}
-                >
-                  {label}
-                </p>
-                <p className="mt-1 font-serif text-[13px] italic leading-[1.35] text-muted-ink">
-                  {sub}
-                </p>
+                {label && (
+                  <p
+                    className="font-mono text-[11px] uppercase leading-[1.3] tracking-[0.2em] text-ink"
+                    style={{ fontWeight: 500 }}
+                  >
+                    {label}
+                  </p>
+                )}
+                {sub && (
+                  <p className="mt-1 font-serif text-[13px] italic leading-[1.35] text-muted-ink">
+                    {sub}
+                  </p>
+                )}
               </div>
             </motion.li>
           ))}

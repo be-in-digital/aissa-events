@@ -7,58 +7,20 @@ import type { EvenementPageQueryResult } from "@/sanity.types";
 
 type TimelineData = NonNullable<EvenementPageQueryResult>["timeline"];
 
-const FALLBACK_EYEBROW = "Le déroulé d'un projet pro";
-const FALLBACK_TITLE = "Du brief créatif\nà la _com post-event._";
-const FALLBACK_INTRO =
-  "Cinq étapes balisées sur 3 mois standards. Pour les projets en urgence (4-6 semaines), le calendrier se compresse mais la méthode reste la même.";
-
-const FALLBACK_ITEMS = [
-  {
-    when: "J-3 mois",
-    title: "Brief _& brief créatif_",
-    description:
-      "Atelier de cadrage : objectif, public, image, atmosphère, KPI. Sortie : note de direction artistique + budget cadre + calendrier de prod.",
-  },
-  {
-    when: "J-1 mois",
-    title: "Repérage _& production_",
-    description:
-      "Sélection des prestataires, repérage technique sur le lieu, brief des équipes, validation des contenus brand. Tout est calé.",
-  },
-  {
-    when: "J-7",
-    title: "Stress test _& dry run_",
-    description:
-      "Run-through des moments clés (reveal, plénière, soirée), test technique son/lumière, brief sécurité. Aucune surprise jour J.",
-  },
-  {
-    when: "Jour J",
-    title: "Exécution _live_",
-    description:
-      "Aïssa et l'équipe sur place du montage au démontage. Coordination prestataires, gestion VIP, pilotage timing, plan B en cas d'aléa.",
-  },
-  {
-    when: "J+3",
-    title: "Debrief _& livrables_",
-    description:
-      "Recap visuel (photos / vidéo teaser / vidéo recap) livré sous 72 h. Debrief client + analyse retour invités si capturé.",
-  },
-];
-
 export function EvenementTimeline({ data }: { data?: TimelineData }) {
   if (data?.enabled === false) return null;
+  if (!data?.items?.length) return null;
+  if (!data?.title) return null;
 
-  const eyebrow = data?.eyebrow ?? FALLBACK_EYEBROW;
-  const title = data?.title ?? FALLBACK_TITLE;
-  const intro = data?.intro ?? FALLBACK_INTRO;
+  const eyebrow = data?.eyebrow;
+  const title = data.title;
+  const intro = data?.intro;
 
-  const items = data?.items?.length
-    ? data.items.map((item) => ({
-        when: item?.when ?? "",
-        title: item?.title ?? "",
-        description: item?.description ?? "",
-      }))
-    : FALLBACK_ITEMS;
+  const items = data.items.map((item) => ({
+    when: item?.when ?? "",
+    title: item?.title ?? "",
+    description: item?.description ?? "",
+  }));
 
   return (
     <section className="relative bg-cream py-28 sm:py-36">
@@ -70,9 +32,11 @@ export function EvenementTimeline({ data }: { data?: TimelineData }) {
           transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1] }}
           className="mx-auto mb-16 max-w-[760px] text-center"
         >
-          <div className="mb-6">
-            <Eyebrow align="center">{eyebrow}</Eyebrow>
-          </div>
+          {eyebrow && (
+            <div className="mb-6">
+              <Eyebrow align="center">{eyebrow}</Eyebrow>
+            </div>
+          )}
           <h2
             className="font-serif text-[40px] leading-[1] tracking-[-0.03em] sm:text-[56px] lg:text-[72px]"
             style={{ fontWeight: 300 }}

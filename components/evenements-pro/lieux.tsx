@@ -12,84 +12,29 @@ import type { EvenementPageQueryResult } from "@/sanity.types";
 
 type LieuxData = NonNullable<EvenementPageQueryResult>["lieux"];
 
-const FALLBACK_EYEBROW = "Le lieu";
-const FALLBACK_TITLE = "Chez nous, ou _chez vous._";
-const FALLBACK_INTRO =
-  "Deux options. Soit vous venez chez nous à Émerainville (25 min de Paris, RER E), soit nous nous déplaçons : vos locaux, un partenaire que nous identifions, ou le lieu de votre choix.";
-
-const FALLBACK_ITEMS = [
-  {
-    Icon: Home,
-    title: "Espace Events, _Émerainville_",
-    description:
-      "Notre lieu modulable de 65 m², adapté aux afterworks, cocktails, réunions clients ou showcases jusqu'à 50 personnes.",
-    highlights: [
-      "Salle principale spacieuse & lumineuse",
-      "Verrière 25 m² (espace cosy ou buffet)",
-      "Terrasse extérieure aménagée",
-      "Cuisine équipée pour traiteur",
-      "25 min de Paris · RER E · A4",
-    ],
-    cta: {
-      label: "Voir tous les tarifs lieu",
-      href: "/espace-emerainville",
-      external: false,
-    },
-    featured: true,
-  },
-  {
-    Icon: Building2,
-    title: "Vos locaux ou _lieu partenaire_",
-    description:
-      "L'événement peut également se dérouler dans vos locaux, dans un lieu partenaire que nous identifions, ou tout endroit que vous avez choisi.",
-    highlights: [
-      "Recherche & sélection du lieu",
-      "Repérage technique préalable",
-      "Coordination logistique complète",
-      "Adaptation à votre contexte (sécurité, réseau, ERP)",
-      "Gestion sur place le jour J",
-    ],
-    cta: {
-      label: "Décrire mon projet",
-      href: "/#contact",
-      external: false,
-    },
-    featured: false,
-  },
-];
-
 const ICONS = [Home, Building2];
 
 export function EvenementLieux({ data }: { data?: LieuxData }) {
   if (data?.enabled === false) return null;
+  if (!data?.items?.length) return null;
+  if (!data?.title) return null;
 
-  const eyebrow = data?.eyebrow ?? FALLBACK_EYEBROW;
-  const title = data?.title ?? FALLBACK_TITLE;
-  const intro = data?.intro ?? FALLBACK_INTRO;
+  const eyebrow = data?.eyebrow;
+  const title = data.title;
+  const intro = data?.intro;
 
-  const items = data?.items?.length
-    ? data.items.map((item, idx) => ({
-        Icon: ICONS[idx % ICONS.length],
-        title: item?.title ?? "",
-        description: item?.description ?? "",
-        highlights: item?.highlights ?? [],
-        image: item?.image?.asset
-          ? urlForImageString(item.image, { width: 900, quality: 85 })
-          : null,
-        imageAlt: item?.image?.alt || item?.title || "",
-        cta: resolveCta(item?.cta ?? null),
-        featured: idx === 0,
-      }))
-    : FALLBACK_ITEMS.map((it) => ({
-        Icon: it.Icon,
-        title: it.title,
-        description: it.description,
-        highlights: it.highlights,
-        image: null as string | null,
-        imageAlt: it.title,
-        cta: it.cta,
-        featured: it.featured,
-      }));
+  const items = data.items.map((item, idx) => ({
+    Icon: ICONS[idx % ICONS.length],
+    title: item?.title ?? "",
+    description: item?.description ?? "",
+    highlights: item?.highlights ?? [],
+    image: item?.image?.asset
+      ? urlForImageString(item.image, { width: 900, quality: 85 })
+      : null,
+    imageAlt: item?.image?.alt || item?.title || "",
+    cta: resolveCta(item?.cta ?? null),
+    featured: idx === 0,
+  }));
 
   return (
     <section className="relative py-28 sm:py-36">
@@ -101,9 +46,11 @@ export function EvenementLieux({ data }: { data?: LieuxData }) {
           transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1] }}
           className="mx-auto mb-14 max-w-[760px] text-center"
         >
-          <div className="mb-6">
-            <Eyebrow>{eyebrow}</Eyebrow>
-          </div>
+          {eyebrow && (
+            <div className="mb-6">
+              <Eyebrow>{eyebrow}</Eyebrow>
+            </div>
+          )}
           <h2
             className="font-serif text-[40px] leading-[1] tracking-[-0.03em] sm:text-[56px] lg:text-[72px]"
             style={{ fontWeight: 300 }}

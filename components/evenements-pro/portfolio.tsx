@@ -11,7 +11,6 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { Eyebrow } from "@/components/home/eyebrow";
-import { EVENEMENT_IMAGES } from "@/lib/images";
 import { renderInlineItalic } from "@/lib/sanity/text";
 import { resolveCta } from "@/lib/sanity/cta";
 import { urlForImageString } from "@/lib/sanity/image";
@@ -19,42 +18,44 @@ import type { EvenementPageQueryResult } from "@/sanity.types";
 
 type PortfolioData = NonNullable<EvenementPageQueryResult>["portfolio"];
 
-const FALLBACK_EYEBROW = "Portfolio · événements pros réalisés";
-const FALLBACK_TITLE = "Sept formats,\n_une méthode._";
-const FALLBACK_INTRO =
-  "Lancements DTC, soirées clients, séminaires, afterworks récurrents. Un aperçu de productions B2B livrées en Île-de-France. Cliquez sur une vignette pour le contexte (brief, format, budget cadre).";
+const SPAN_BY_INDEX = [
+  "lg:col-span-2 lg:row-span-2",
+  "lg:col-span-2",
+  "lg:col-span-1",
+  "lg:col-span-1",
+  "lg:col-span-2",
+  "lg:col-span-1",
+  "lg:col-span-1",
+];
 
 export function EvenementPortfolio({ data }: { data?: PortfolioData }) {
   const [active, setActive] = useState<number | null>(null);
-  const fallback = EVENEMENT_IMAGES.portfolio;
 
   if (data?.enabled === false) return null;
+  if (!data?.items?.length) return null;
+  if (!data?.title) return null;
 
-  const eyebrow = data?.eyebrow ?? FALLBACK_EYEBROW;
-  const title = data?.title ?? FALLBACK_TITLE;
-  const intro = data?.intro ?? FALLBACK_INTRO;
+  const eyebrow = data?.eyebrow;
+  const title = data.title;
+  const intro = data?.intro;
   const footerEyebrow = data?.footerEyebrow;
   const footerCta = resolveCta(data?.footerCta ?? null);
 
-  const items = data?.items?.length
-    ? data.items.map((item, idx) => ({
+  const items = data.items
+    .map((item, idx) => {
+      if (!item?.cover?.asset) return null;
+      return {
         title: item?.shortTitle ?? item?.title ?? "",
         tag: item?.typeLabel ?? item?.type ?? "",
         description: item?.story ?? "",
-        src: item?.cover?.asset
-          ? urlForImageString(item.cover, { width: 1200, quality: 85 })
-          : fallback[idx % fallback.length].src,
+        src: urlForImageString(item.cover, { width: 1200, quality: 85 }),
         alt: item?.cover?.alt || item?.shortTitle || item?.title || "",
-        span: fallback[idx % fallback.length].span,
-      }))
-    : fallback.map((it) => ({
-        title: it.title,
-        tag: it.tag,
-        description: it.description,
-        src: it.src,
-        alt: it.title,
-        span: it.span,
-      }));
+        span: SPAN_BY_INDEX[idx % SPAN_BY_INDEX.length],
+      };
+    })
+    .filter((it): it is NonNullable<typeof it> => it !== null);
+
+  if (!items.length) return null;
 
   const item = active !== null ? items[active] : null;
 
@@ -72,9 +73,11 @@ export function EvenementPortfolio({ data }: { data?: PortfolioData }) {
           className="mb-14 grid items-end gap-10 lg:grid-cols-[1fr_1fr] lg:gap-20"
         >
           <div>
-            <div className="mb-6">
-              <Eyebrow>{eyebrow}</Eyebrow>
-            </div>
+            {eyebrow && (
+              <div className="mb-6">
+                <Eyebrow>{eyebrow}</Eyebrow>
+              </div>
+            )}
             <h2
               className="font-serif text-[40px] leading-[1] tracking-[-0.03em] sm:text-[56px] lg:text-[72px]"
               style={{ fontWeight: 300 }}

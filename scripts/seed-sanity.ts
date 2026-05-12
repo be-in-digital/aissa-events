@@ -1,5 +1,6 @@
 /**
- * Script de seed Sanity. Pousse tout le contenu initial du site dans Sanity.
+ * Script de seed Sanity. Pousse tout le contenu initial du site dans Sanity,
+ * y compris les images (uploadées automatiquement depuis le catalogue).
  *
  * Prérequis : SANITY_API_WRITE_TOKEN dans .env.local
  *   1. Allez sur https://www.sanity.io/manage
@@ -8,11 +9,15 @@
  *   4. Copiez le token dans .env.local : SANITY_API_WRITE_TOKEN=sk...
  *
  * Usage : pnpm seed
+ *
+ * Les images sont uploadées une fois et cachées dans `.sanity-image-cache.json`
+ * (gitignored). Supprimer ce fichier pour forcer un ré-upload.
  */
 import { config as loadEnv } from "dotenv";
 loadEnv({ path: ".env.local" });
 loadEnv({ path: ".env" });
 import { createClient } from "@sanity/client";
+import { uploadAllImages, resolveImagePlaceholders } from "./upload-images";
 import {
   siteSettingsDoc,
   homePageDoc,
@@ -60,7 +65,12 @@ const client = createClient({
 async function seed() {
   console.log(`\n→ Seeding Sanity dataset "${dataset}" (project ${projectId})\n`);
 
-  // 1. Documents qui peuvent être référencés (créés en premier pour les refs)
+  // 1. Upload toutes les images (avec cache local)
+  console.log("  🖼  Upload des images");
+  const images = await uploadAllImages(client);
+  console.log();
+
+  // 2. Documents qui peuvent être référencés (créés en premier pour les refs)
   const collections = [
     { label: "Réalisations", docs: realisationDocs },
     { label: "Témoignages", docs: testimonialDocs },
@@ -72,12 +82,13 @@ async function seed() {
   for (const { label, docs } of collections) {
     console.log(`  📄 ${label} (${docs.length})`);
     for (const doc of docs) {
-      await client.createOrReplace(doc as never);
+      const resolved = resolveImagePlaceholders(doc, images);
+      await client.createOrReplace(resolved as never);
       console.log(`     ✓ ${doc._id}`);
     }
   }
 
-  // 2. Singletons
+  // 3. Singletons
   const singletons = [
     { label: "Réglages du site", doc: siteSettingsDoc },
     { label: "Page Accueil", doc: homePageDoc },
@@ -92,7 +103,8 @@ async function seed() {
 
   for (const { label, doc } of singletons) {
     console.log(`\n  ⚙ ${label}`);
-    await client.createOrReplace(doc as never);
+    const resolved = resolveImagePlaceholders(doc, images);
+    await client.createOrReplace(resolved as never);
     console.log(`     ✓ ${doc._id}`);
   }
 

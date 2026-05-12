@@ -14,20 +14,6 @@ import type { HomePageQueryResult, SiteSettingsQueryResult } from "@/sanity.type
 
 type ContactData = NonNullable<HomePageQueryResult>["contact"];
 
-const FALLBACK_EYEBROW = "Parlons de votre projet";
-const FALLBACK_TITLE = "Parlez-nous de\nvotre _projet._";
-const FALLBACK_INTRO =
-  "Que vous ayez un brief précis ou juste une date en tête, on en discute. Un appel de 30 minutes, sans engagement, pour cadrer votre besoin et voir si on est sur la même longueur d'onde. Aïssa répond sous 48h ouvrées.";
-
-const FALLBACK_EVENT_TYPES = [
-  "Mariage / Cérémonie",
-  "Événement professionnel",
-  "Anniversaire",
-  "EVJF / EVG",
-  "Baby shower / Baptême",
-  "Autre célébration",
-];
-
 export function ContactSection({
   data,
   calendlyUrl,
@@ -43,27 +29,22 @@ export function ContactSection({
   );
 
   if (data?.enabled === false) return null;
+  if (!data?.title) return null;
 
-  const eyebrow = data?.eyebrow ?? FALLBACK_EYEBROW;
-  const title = data?.title ?? FALLBACK_TITLE;
-  const intro = data?.intro ?? FALLBACK_INTRO;
-  const calendlyEyebrow = data?.calendlyEyebrow ?? "— Le plus rapide";
-  const calendlyTitle =
-    data?.calendlyTitle ?? "Réservez un appel découverte de 30 minutes";
-  const calendlyDescription =
-    data?.calendlyDescription ??
-    "Gratuit, sans engagement. Pour cadrer votre projet et voir si on est aligné.";
-  const calendlyButtonLabel = data?.calendlyButtonLabel ?? "Choisir un créneau";
+  const eyebrow = data?.eyebrow;
+  const title = data.title;
+  const intro = data?.intro;
+  const calendlyEyebrow = data?.calendlyEyebrow;
+  const calendlyTitle = data?.calendlyTitle;
+  const calendlyDescription = data?.calendlyDescription;
+  const calendlyButtonLabel = data?.calendlyButtonLabel;
 
-  const formEyebrow = data?.formEyebrow ?? "— Ou écrivez-nous";
-  const formTitle = data?.formTitle ?? "Décrivez votre projet";
-  const formEventTypes = data?.formEventTypes?.length
-    ? data.formEventTypes
-    : FALLBACK_EVENT_TYPES;
-  const formSubmitLabel = data?.formSubmitLabel ?? "Envoyer mon projet";
-  const formSuccessTitle = data?.formSuccessTitle ?? "Merci !";
-  const formSuccessMessage =
-    data?.formSuccessMessage ?? "Aïssa répond sous 48h ouvrées.";
+  const formEyebrow = data?.formEyebrow;
+  const formTitle = data?.formTitle;
+  const formEventTypes = data?.formEventTypes ?? [];
+  const formSubmitLabel = data?.formSubmitLabel;
+  const formSuccessTitle = data?.formSuccessTitle;
+  const formSuccessMessage = data?.formSuccessMessage;
 
   // Build meta from siteSettings
   const phoneDisplay = settings?.phone;
@@ -124,9 +105,11 @@ export function ContactSection({
           transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}
           className="mx-auto mb-20 max-w-3xl text-center"
         >
-          <div className="mb-6">
-            <Eyebrow align="center">{eyebrow}</Eyebrow>
-          </div>
+          {eyebrow && (
+            <div className="mb-6">
+              <Eyebrow align="center">{eyebrow}</Eyebrow>
+            </div>
+          )}
           <h2
             className="mb-8 font-serif text-[40px] leading-[0.95] tracking-[-0.03em] sm:text-[56px] lg:text-[72px]"
             style={{ fontWeight: 300 }}
@@ -138,9 +121,11 @@ export function ContactSection({
               </span>
             ))}
           </h2>
-          <p className="mx-auto max-w-xl text-[16px] leading-[1.75] text-ink-soft">
-            {intro}
-          </p>
+          {intro && (
+            <p className="mx-auto max-w-xl text-[16px] leading-[1.75] text-ink-soft">
+              {intro}
+            </p>
+          )}
         </motion.div>
 
         <div className="grid gap-12 lg:grid-cols-2 lg:gap-16">
@@ -151,29 +136,35 @@ export function ContactSection({
             transition={{ duration: 1, ease: [0.16, 1, 0.3, 1], delay: 0.1 }}
           >
             <div className="mb-10 rounded-3xl bg-ink p-10 text-cream">
-              <p className="mb-4 font-mono text-[10px] uppercase tracking-[0.28em] text-gold-soft">
-                {calendlyEyebrow}
-              </p>
-              <h3
-                className="mb-2 font-serif text-[28px] italic leading-[1.3]"
-                style={{ fontWeight: 400 }}
-              >
-                {calendlyTitle}
-              </h3>
+              {calendlyEyebrow && (
+                <p className="mb-4 font-mono text-[10px] uppercase tracking-[0.28em] text-gold-soft">
+                  {calendlyEyebrow}
+                </p>
+              )}
+              {calendlyTitle && (
+                <h3
+                  className="mb-2 font-serif text-[28px] italic leading-[1.3]"
+                  style={{ fontWeight: 400 }}
+                >
+                  {calendlyTitle}
+                </h3>
+              )}
               {calendlyDescription && (
                 <p className="mb-7 text-[13px] text-cream/70">
                   {calendlyDescription}
                 </p>
               )}
-              <a
-                href={calendlyUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="group inline-flex w-full items-center justify-center gap-2 rounded-full bg-gold px-7 py-4 font-sans text-[12px] font-medium uppercase tracking-[0.2em] text-ink transition-all hover:-translate-y-0.5 hover:bg-gold-soft"
-              >
-                {calendlyButtonLabel}
-                <ArrowRight className="size-4 transition-transform group-hover:translate-x-1" />
-              </a>
+              {calendlyButtonLabel && (
+                <a
+                  href={calendlyUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="group inline-flex w-full items-center justify-center gap-2 rounded-full bg-gold px-7 py-4 font-sans text-[12px] font-medium uppercase tracking-[0.2em] text-ink transition-all hover:-translate-y-0.5 hover:bg-gold-soft"
+                >
+                  {calendlyButtonLabel}
+                  <ArrowRight className="size-4 transition-transform group-hover:translate-x-1" />
+                </a>
+              )}
             </div>
 
             {meta.length > 0 && (
@@ -225,17 +216,23 @@ export function ContactSection({
             transition={{ duration: 1, ease: [0.16, 1, 0.3, 1], delay: 0.15 }}
             className="rounded-3xl border border-[var(--rule)] bg-cream-soft p-8 sm:p-12"
           >
-            <div className="mb-8 border-b border-[var(--rule)] pb-6">
-              <p className="mb-3 font-mono text-[10px] uppercase tracking-[0.28em] text-bordeaux">
-                {formEyebrow}
-              </p>
-              <p
-                className="font-serif text-[24px] italic leading-[1.2]"
-                style={{ fontWeight: 400 }}
-              >
-                {formTitle}
-              </p>
-            </div>
+            {(formEyebrow || formTitle) && (
+              <div className="mb-8 border-b border-[var(--rule)] pb-6">
+                {formEyebrow && (
+                  <p className="mb-3 font-mono text-[10px] uppercase tracking-[0.28em] text-bordeaux">
+                    {formEyebrow}
+                  </p>
+                )}
+                {formTitle && (
+                  <p
+                    className="font-serif text-[24px] italic leading-[1.2]"
+                    style={{ fontWeight: 400 }}
+                  >
+                    {formTitle}
+                  </p>
+                )}
+              </div>
+            )}
 
             {isSuccess ? (
               <div
@@ -243,10 +240,14 @@ export function ContactSection({
                 aria-live="polite"
                 className="rounded-2xl border border-[var(--rule)] bg-cream p-10 text-center"
               >
-                <p className="mb-3 font-script text-[44px] text-bordeaux">
-                  {formSuccessTitle}
-                </p>
-                <p className="text-[15px] text-ink-soft">{formSuccessMessage}</p>
+                {formSuccessTitle && (
+                  <p className="mb-3 font-script text-[44px] text-bordeaux">
+                    {formSuccessTitle}
+                  </p>
+                )}
+                {formSuccessMessage && (
+                  <p className="text-[15px] text-ink-soft">{formSuccessMessage}</p>
+                )}
               </div>
             ) : (
               <form action={formAction} noValidate className="space-y-6">

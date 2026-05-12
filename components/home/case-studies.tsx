@@ -11,16 +11,13 @@ import type { HomePageQueryResult } from "@/sanity.types";
 
 type CaseStudiesData = NonNullable<HomePageQueryResult>["caseStudies"];
 
-const FALLBACK_TITLE = "Deux projets,\n_deux briefs._";
-const FALLBACK_INTRO =
-  "Deux exemples concrets de projets que nous avons accompagnés. Le brief reçu, ce qui a été décidé, comment ça s'est passé.";
-
 export function CaseStudies({ data }: { data?: CaseStudiesData }) {
   if (data?.enabled === false || !data?.items?.length) return null;
+  if (!data?.title) return null;
 
-  const eyebrow = data?.eyebrow ?? "Études de cas";
-  const title = data?.title ?? FALLBACK_TITLE;
-  const intro = data?.intro ?? FALLBACK_INTRO;
+  const eyebrow = data?.eyebrow;
+  const title = data.title;
+  const intro = data?.intro;
   const footerEyebrow = data?.footerEyebrow;
   const footerCta = resolveCta(data?.footerCta ?? null);
 
@@ -34,9 +31,11 @@ export function CaseStudies({ data }: { data?: CaseStudiesData }) {
           transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}
           className="mb-24 max-w-[1100px]"
         >
-          <div className="mb-7">
-            <Eyebrow>{eyebrow}</Eyebrow>
-          </div>
+          {eyebrow && (
+            <div className="mb-7">
+              <Eyebrow>{eyebrow}</Eyebrow>
+            </div>
+          )}
           <h2
             className="font-serif text-[44px] leading-[0.95] tracking-[-0.03em] sm:text-[60px] lg:text-[88px]"
             style={{ fontWeight: 300 }}

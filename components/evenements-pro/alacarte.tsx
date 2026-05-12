@@ -9,65 +9,6 @@ import type { EvenementPageQueryResult } from "@/sanity.types";
 
 type ALaCarteData = NonNullable<EvenementPageQueryResult>["alacarte"];
 
-const FALLBACK_EYEBROW = "Personnalisez votre événement";
-const FALLBACK_TITLE = "Options _à la carte._";
-const FALLBACK_INTRO =
-  "Vous pouvez ajouter à chaque pack des options ciblées : musique, service, sécurité, brand & contenu. Tarifs nets, facturés au prestataire.";
-
-const FALLBACK_CATEGORIES = [
-  {
-    num: "01",
-    titleStart: "Musique",
-    titleItalic: "& animation",
-    items: [
-      { name: "DJ Aïssa Events (set complet)", price: "À partir de 400 €" },
-      { name: "2 enceintes + régie + micro", price: "150 €" },
-      { name: "Enceinte JBL + micro", price: "100 €" },
-      { name: "Lumière supplémentaire", price: "50 €" },
-      {
-        name: "Mise en ambiance (chanteuse, animations, karaoké)",
-        price: "Sur devis",
-      },
-    ],
-  },
-  {
-    num: "02",
-    titleStart: "Service",
-    titleItalic: "& accueil",
-    items: [
-      { name: "Coordination Jour J", price: "250 € / service" },
-      { name: "Traiteur (buffet, cocktail, repas)", price: "À partir de 30 € / pers." },
-      { name: "Hôte(sse) d'accueil bilingue", price: "100 € / service" },
-      { name: "Serveur", price: "150 € / service" },
-      { name: "Vestiaire dédié", price: "Sur devis" },
-    ],
-  },
-  {
-    num: "03",
-    titleStart: "Sécurité",
-    titleItalic: "& logistique",
-    items: [
-      { name: "Agent de sécurité", price: "130 € / service" },
-      { name: "Maître chien", price: "150 € / service" },
-      { name: "Heure supplémentaire (lieu)", price: "100 €" },
-      { name: "Ménage fin d'événement", price: "100 €" },
-      { name: "PSS / dossier sécurité ERP", price: "Sur devis" },
-    ],
-  },
-  {
-    num: "04",
-    titleStart: "Brand",
-    titleItalic: "& contenu",
-    items: [
-      { name: "Direction artistique brand-aligned", price: "Inclus dans pack" },
-      { name: "Photographe corporate", price: "À partir de 600 €" },
-      { name: "Vidéaste teaser & recap", price: "À partir de 1 200 €" },
-      { name: "Invitations digitales + RSVP", price: "À partir de 350 €" },
-      { name: "Signalétique brandée sur mesure", price: "Sur devis" },
-    ],
-  },
-];
-
 const CATEGORY_LABELS: Record<string, { titleStart: string; titleItalic: string }> = {
   decoration: { titleStart: "Décoration", titleItalic: "& scénographie" },
   talent: { titleStart: "Musique", titleItalic: "& animation" },
@@ -79,37 +20,35 @@ const CATEGORY_LABELS: Record<string, { titleStart: string; titleItalic: string 
 
 export function EvenementALaCarte({ data }: { data?: ALaCarteData }) {
   if (data?.enabled === false) return null;
+  if (!data?.services?.length) return null;
+  if (!data?.title) return null;
 
-  const eyebrow = data?.eyebrow ?? FALLBACK_EYEBROW;
-  const title = data?.title ?? FALLBACK_TITLE;
-  const intro = data?.intro ?? FALLBACK_INTRO;
+  const eyebrow = data?.eyebrow;
+  const title = data.title;
+  const intro = data?.intro;
   const footerNote = data?.footerNote;
   const cta = resolveCta(data?.cta ?? null);
 
-  const services = data?.services ?? [];
-  const categoriesFromSanity = services.length
-    ? Object.entries(
-        services.reduce<Record<string, typeof services>>((acc, s) => {
-          const key = s?.category ?? "autre";
-          if (!acc[key]) acc[key] = [];
-          acc[key].push(s);
-          return acc;
-        }, {}),
-      ).map(([key, list], idx) => {
-        const labels = CATEGORY_LABELS[key] ?? CATEGORY_LABELS.autre;
-        return {
-          num: String(idx + 1).padStart(2, "0"),
-          titleStart: labels.titleStart,
-          titleItalic: labels.titleItalic,
-          items: list.map((s) => ({
-            name: s?.title ?? "",
-            price: s?.priceLabel ?? "Sur devis",
-          })),
-        };
-      })
-    : null;
-
-  const categories = categoriesFromSanity ?? FALLBACK_CATEGORIES;
+  const services = data.services;
+  const categories = Object.entries(
+    services.reduce<Record<string, typeof services>>((acc, s) => {
+      const key = s?.category ?? "autre";
+      if (!acc[key]) acc[key] = [];
+      acc[key].push(s);
+      return acc;
+    }, {}),
+  ).map(([key, list], idx) => {
+    const labels = CATEGORY_LABELS[key] ?? CATEGORY_LABELS.autre;
+    return {
+      num: String(idx + 1).padStart(2, "0"),
+      titleStart: labels.titleStart,
+      titleItalic: labels.titleItalic,
+      items: list.map((s) => ({
+        name: s?.title ?? "",
+        price: s?.priceLabel ?? "Sur devis",
+      })),
+    };
+  });
 
   return (
     <section className="relative py-28 sm:py-36">
@@ -121,9 +60,11 @@ export function EvenementALaCarte({ data }: { data?: ALaCarteData }) {
           transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1] }}
           className="mx-auto mb-14 max-w-[700px] text-center"
         >
-          <div className="mb-6">
-            <Eyebrow align="center">{eyebrow}</Eyebrow>
-          </div>
+          {eyebrow && (
+            <div className="mb-6">
+              <Eyebrow align="center">{eyebrow}</Eyebrow>
+            </div>
+          )}
           <h2
             className="font-serif text-[40px] leading-[1] tracking-[-0.03em] sm:text-[56px] lg:text-[72px]"
             style={{ fontWeight: 300 }}
