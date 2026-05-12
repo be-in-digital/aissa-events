@@ -46,3 +46,6 @@ next-env.d.ts
 /sanity/extract.json
 /sanity.types.ts
 .gstack/
+
+# Sanity image cache (local seed only)
+.sanity-image-cache.json

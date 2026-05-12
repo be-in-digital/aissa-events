@@ -6,28 +6,8 @@ import type { MariagePageQueryResult } from "@/sanity.types";
 
 type TrustBarData = NonNullable<MariagePageQueryResult>["trustBar"];
 
-const FALLBACK_ITEMS = [
-  {
-    Icon: GraduationCap,
-    label: "Wedding planner diplômée",
-    sub: "Formation certifiante · 6 ans en activité",
-  },
-  {
-    Icon: Heart,
-    label: "+60 mariages depuis 2020",
-    sub: "Civils, religieux, laïques, henné",
-  },
-  {
-    Icon: Sparkles,
-    label: "Multi-cérémonies",
-    sub: "Henné, civil, religieux et fête sur 1 brief",
-  },
-  {
-    Icon: MapPin,
-    label: "Émerainville (77) · IDF",
-    sub: "Île-de-France toute l'année, France au-delà",
-  },
-];
+// Icônes mappées par index — restent hardcodées car non-stockables dans Sanity
+const ICONS = [GraduationCap, Heart, Sparkles, MapPin];
 
 const containerVariants = {
   hidden: {},
@@ -45,17 +25,13 @@ const itemVariants = {
 
 export function MariageTrustBar({ data }: { data?: TrustBarData }) {
   if (data?.enabled === false) return null;
+  if (!data?.items?.length) return null;
 
-  // Items custom depuis Sanity (sans icônes), sinon fallback hardcodé avec icônes
-  const sanityItems = data?.items ?? [];
-  const items =
-    sanityItems.length > 0
-      ? sanityItems.map((item, i) => ({
-          Icon: FALLBACK_ITEMS[i % FALLBACK_ITEMS.length].Icon,
-          label: item?.value ?? "",
-          sub: item?.label ?? "",
-        }))
-      : FALLBACK_ITEMS;
+  const items = data.items.map((item, i) => ({
+    Icon: ICONS[i % ICONS.length],
+    label: item?.value ?? "",
+    sub: item?.label ?? "",
+  }));
 
   return (
     <section

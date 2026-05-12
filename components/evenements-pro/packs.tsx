@@ -3,7 +3,6 @@
 import { motion } from "motion/react";
 import { Check, Star } from "lucide-react";
 import { Eyebrow } from "@/components/home/eyebrow";
-import { buildCalendlyUrl } from "@/lib/calendly";
 import { resolveCta } from "@/lib/sanity/cta";
 import { renderInlineItalic } from "@/lib/sanity/text";
 import type { EvenementPageQueryResult } from "@/sanity.types";
@@ -22,136 +21,41 @@ type Pack = {
   features: string[];
   ctaLabel: string;
   ctaHref: string;
+  ctaExternal: boolean;
 };
-
-const FALLBACK_EYEBROW = "Solutions clé en main";
-const FALLBACK_TITLE = "Trois packs, _trois formats._";
-const FALLBACK_INTRO =
-  "Du cocktail 30 personnes au lancement 200 personnes. Chaque pack inclut direction artistique, production et coordination jour J. Vous gardez la main sur les variantes (lieu, durée, prestataires en sus).";
-
-const FALLBACK_PACKS: [Pack, Pack, Pack] = [
-  {
-    num: "Pack 01",
-    name: "Afterwork",
-    tagline:
-      "Format cocktail, 3-4 h. Idéal afterworks clients, vernissages, soirées partenaires.",
-    priceLabel: "1 750 €",
-    priceFrom: "30 à 50 pers.",
-    capacity: "Espace Events ou hors lieu",
-    features: [
-      "Direction artistique brand-aligned",
-      "DJ Aïssa Events (set 3 h)",
-      "Mise en lumière d'ambiance",
-      "Décoration scénographique",
-      "Coordination jour J",
-    ],
-    ctaLabel: "Réserver le Pack Afterwork",
-    ctaHref: buildCalendlyUrl({
-      source: "evenement",
-      content: "pack-afterwork",
-    }),
-  },
-  {
-    num: "Pack 02",
-    name: "Séminaire",
-    tagline:
-      "Plénière + cocktail + soirée, 1 jour. Conventions, kick-offs, soirées de fin d'année.",
-    priceLabel: "Dès 4 000 €",
-    priceFrom: "50 à 150 pers.",
-    capacity: "Hors lieu (vos locaux ou partenaire)",
-    featured: true,
-    badge: "Le plus demandé",
-    features: [
-      "Tout le Pack Afterwork, plus :",
-      "Régie son & lumière scène plénière",
-      "Captation vidéo recap (post-event)",
-      "Hôtesses d'accueil bilingues",
-      "Coord. prestataires (traiteur, sécu)",
-      "Mise en scène brand sur mesure",
-    ],
-    ctaLabel: "Réserver le Pack Séminaire",
-    ctaHref: buildCalendlyUrl({
-      source: "evenement",
-      content: "pack-seminaire",
-    }),
-  },
-  {
-    num: "Pack 03",
-    name: "Lancement",
-    tagline:
-      "Reveal produit + cocktail + soirée. Lancements collection, marques, contenus brand.",
-    priceLabel: "Dès 6 000 €",
-    priceFrom: "80 à 200 pers.",
-    capacity: "Lieu signature ou vos locaux",
-    features: [
-      "Tout le Pack Séminaire, plus :",
-      "Scénographie reveal sur mesure",
-      "Photographe corporate",
-      "Vidéaste teaser & recap",
-      "Direction artistique étendue (com)",
-      "Sécurité & gestion VIP",
-    ],
-    ctaLabel: "Réserver le Pack Lancement",
-    ctaHref: buildCalendlyUrl({
-      source: "evenement",
-      content: "pack-lancement",
-    }),
-  },
-];
-
-const EXAMPLES = [
-  {
-    title: "Afterwork client · 30 pers.",
-    sub: "Espace Events · 4 h cocktail debout · DJ + déco",
-    price: "1 750 €",
-    note: "Pack Afterwork",
-  },
-  {
-    title: "Séminaire annuel · 80 pers.",
-    sub: "Domaine partenaire · plénière + cocktail + dîner + soirée",
-    price: "≈ 5 000 €",
-    note: "Pack Séminaire + traiteur en sus",
-  },
-  {
-    title: "Lancement collection · 150 pers.",
-    sub: "Showroom privatisé · reveal + cocktail + DJ set",
-    price: "≈ 10 000 €",
-    note: "Pack Lancement",
-  },
-];
 
 export function EvenementPacks({ data }: { data?: PacksData }) {
   if (data?.enabled === false) return null;
+  if (!data?.packs?.length) return null;
+  if (!data?.title) return null;
 
-  const eyebrow = data?.eyebrow ?? FALLBACK_EYEBROW;
-  const title = data?.title ?? FALLBACK_TITLE;
-  const intro = data?.intro ?? FALLBACK_INTRO;
+  const eyebrow = data?.eyebrow;
+  const title = data.title;
+  const intro = data?.intro;
 
-  const sanityPacks = data?.packs ?? [];
-  const packs: Pack[] = sanityPacks.length
-    ? sanityPacks.map((p, i) => {
-        const cta = resolveCta(p.cta ?? null);
-        const priceLabel = p.priceLabel ?? (p.priceFrom ? `${p.priceFrom} €` : "Sur devis");
-        return {
-          num: `Pack ${String(i + 1).padStart(2, "0")}`,
-          name: p.title ?? "",
-          tagline: p.tagline ?? "",
-          priceLabel,
-          priceFrom: p.tagline ?? "",
-          capacity: "",
-          featured: p.featured ?? false,
-          badge: p.featured ? "Le plus demandé" : undefined,
-          features: (p.includedItems ?? []).map((label) => label),
-          ctaLabel: cta?.label ?? "Demander un devis",
-          ctaHref:
-            cta?.href ??
-            buildCalendlyUrl({
-              source: "evenement",
-              content: `pack-${(p.title ?? "").toLowerCase().replace(/\s+/g, "-")}`,
-            }),
-        };
-      })
-    : FALLBACK_PACKS;
+  const packs: Pack[] = data.packs
+    .map((p, i): Pack | null => {
+      const cta = resolveCta(p.cta ?? null);
+      if (!cta) return null;
+      const priceLabel = p.priceLabel ?? (p.priceFrom ? `${p.priceFrom} €` : "Sur devis");
+      return {
+        num: `Pack ${String(i + 1).padStart(2, "0")}`,
+        name: p.title ?? "",
+        tagline: p.tagline ?? "",
+        priceLabel,
+        priceFrom: p.tagline ?? "",
+        capacity: "",
+        featured: p.featured ?? false,
+        badge: p.featured ? "Le plus demandé" : undefined,
+        features: (p.includedItems ?? []).map((label) => label),
+        ctaLabel: cta.label,
+        ctaHref: cta.href,
+        ctaExternal: cta.external,
+      };
+    })
+    .filter((p): p is Pack => p !== null);
+
+  if (!packs.length) return null;
 
   return (
     <section id="packs-pro" className="relative bg-cream-soft py-28 sm:py-36">
@@ -163,9 +67,11 @@ export function EvenementPacks({ data }: { data?: PacksData }) {
           transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1] }}
           className="mx-auto mb-14 max-w-[820px] text-center"
         >
-          <div className="mb-6">
-            <Eyebrow align="center">{eyebrow}</Eyebrow>
-          </div>
+          {eyebrow && (
+            <div className="mb-6">
+              <Eyebrow align="center">{eyebrow}</Eyebrow>
+            </div>
+          )}
           <h2
             className="font-serif text-[44px] leading-[0.95] tracking-[-0.03em] sm:text-[64px] lg:text-[80px]"
             style={{ fontWeight: 300 }}
@@ -319,8 +225,8 @@ export function EvenementPacks({ data }: { data?: PacksData }) {
               <div className="px-9 pb-9">
                 <a
                   href={p.ctaHref}
-                  target="_blank"
-                  rel="noopener noreferrer"
+                  target={p.ctaExternal ? "_blank" : undefined}
+                  rel={p.ctaExternal ? "noopener noreferrer" : undefined}
                   className={`block rounded-full px-6 py-4 text-center font-sans text-[11px] font-medium uppercase tracking-[0.2em] transition-colors ${
                     p.featured
                       ? "bg-gold text-ink hover:bg-gold-soft"
@@ -333,60 +239,6 @@ export function EvenementPacks({ data }: { data?: PacksData }) {
             </motion.article>
           ))}
         </div>
-
-        <motion.div
-          initial={{ opacity: 0, y: 24 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "-40px" }}
-          transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1], delay: 0.15 }}
-          className="mt-16"
-        >
-          <p className="mb-6 inline-flex items-center gap-3 font-mono text-[11px] uppercase tracking-[0.28em] text-bordeaux">
-            <span className="size-2 animate-pulse rounded-full bg-bordeaux" />
-            Repères tarifaires · 3 cas concrets
-          </p>
-          <div className="grid gap-4 sm:grid-cols-3">
-            {EXAMPLES.map((ex, i) => (
-              <motion.div
-                key={ex.title}
-                initial={{ opacity: 0, y: 16 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, margin: "-40px" }}
-                transition={{
-                  duration: 0.7,
-                  delay: 0.25 + i * 0.08,
-                  ease: [0.16, 1, 0.3, 1],
-                }}
-                className="rounded-[20px] border border-[var(--rule)] bg-cream p-6 transition-colors hover:border-bordeaux/40"
-              >
-                <p
-                  className="font-serif text-[18px] italic leading-[1.2] text-ink"
-                  style={{ fontWeight: 500 }}
-                >
-                  {ex.title}
-                </p>
-                <p className="mt-1.5 text-[13px] leading-[1.55] text-ink-soft">
-                  {ex.sub}
-                </p>
-                <div className="mt-4 flex items-baseline justify-between gap-3 border-t border-[var(--rule-soft)] pt-3">
-                  <span className="font-mono text-[10px] uppercase tracking-[0.22em] text-muted-ink">
-                    {ex.note}
-                  </span>
-                  <span
-                    className="whitespace-nowrap font-serif text-[20px] italic text-bordeaux"
-                    style={{ fontWeight: 500 }}
-                  >
-                    {ex.price}
-                  </span>
-                </div>
-              </motion.div>
-            ))}
-          </div>
-          <p className="mt-5 max-w-[720px] font-serif text-[13.5px] leading-[1.55] text-muted-ink">
-            Tarifs indicatifs hors prestataires externes (traiteur, fleuriste,
-            photographe). Le devis final dépend de votre brief, du lieu retenu et du budget plafond fixé en kick-off.
-          </p>
-        </motion.div>
       </div>
     </section>
   );

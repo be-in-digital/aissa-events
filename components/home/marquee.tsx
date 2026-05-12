@@ -2,18 +2,11 @@ import type { HomePageQueryResult } from "@/sanity.types";
 
 type MarqueeData = NonNullable<HomePageQueryResult>["marquee"];
 
-const FALLBACK_ITEMS = [
-  "Mariages & cérémonies",
-  "Événements professionnels",
-  "Anniversaires & célébrations",
-  "Direction artistique",
-  "Scénographie sur mesure",
-  "DJ & live performances",
-];
-
 export function Marquee({ data }: { data?: MarqueeData }) {
   if (data?.enabled === false) return null;
-  const items = data?.items?.length ? data.items : FALLBACK_ITEMS;
+  if (!data?.items?.length) return null;
+
+  const items = data.items;
   const loop = [...items, ...items];
 
   return (

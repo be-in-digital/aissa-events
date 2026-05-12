@@ -58,6 +58,7 @@ import {
   mentionsLegales,
   politiqueConfidentialite,
 } from "./singletons/legalPages";
+import { agentSettings } from "./singletons/agentSettings";
 
 export const schemaTypes: SchemaTypeDefinition[] = [
   // Objects de base
@@ -114,4 +115,5 @@ export const schemaTypes: SchemaTypeDefinition[] = [
   blogPage,
   mentionsLegales,
   politiqueConfidentialite,
+  agentSettings,
 ];

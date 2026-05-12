@@ -13,7 +13,6 @@ import {
 import { Eyebrow } from "@/components/home/eyebrow";
 import { renderInlineItalic } from "@/lib/sanity/text";
 import { urlForImageString } from "@/lib/sanity/image";
-import { REALISATIONS_IMAGES } from "@/lib/images";
 import type {
   RealisationsListQueryResult,
   RealisationsPageQueryResult,
@@ -22,19 +21,6 @@ import type {
 type Filter = string;
 
 type FilterDef = { value: Filter; label: string; accent?: "sage" };
-
-const FALLBACK_FILTERS: FilterDef[] = [
-  { value: "all", label: "Tous" },
-  { value: "mariage", label: "Mariages" },
-  { value: "pro", label: "Événements pros" },
-  { value: "espace", label: "Espace Events" },
-  { value: "outdoor", label: "Plein air", accent: "sage" },
-];
-
-const FALLBACK_EYEBROW = "Galerie filtrable";
-const FALLBACK_TITLE = "Tout, en un\n_coup d'œil._";
-const FALLBACK_INTRO =
-  "Cliquez sur une réalisation pour découvrir le contexte et la scénographie. Filtrez par univers pour zoomer sur ce qui vous ressemble.";
 
 const SPANS = [
   "lg:col-span-2 lg:row-span-2",
@@ -71,40 +57,29 @@ export function RealisationsGallery({ data, realisations }: Props) {
   const [filter, setFilter] = useState<Filter>("all");
   const [active, setActive] = useState<number | null>(null);
 
-  const eyebrow = data?.galleryEyebrow ?? FALLBACK_EYEBROW;
-  const title = data?.galleryTitle ?? FALLBACK_TITLE;
+  const eyebrow = data?.galleryEyebrow;
+  const title = data?.galleryTitle;
 
   const sanityFilters = data?.filters ?? [];
-  const filters: FilterDef[] =
-    sanityFilters.length > 0
-      ? sanityFilters.map((f) => ({
-          value: f?.value ?? "all",
-          label: f?.label ?? "",
-        }))
-      : FALLBACK_FILTERS;
+  const filters: FilterDef[] = sanityFilters
+    .map((f) => ({
+      value: f?.value ?? "",
+      label: f?.label ?? "",
+    }))
+    .filter((f): f is FilterDef => Boolean(f.value) && Boolean(f.label));
 
   const items: GalleryItem[] = useMemo(() => {
-    if (realisations && realisations.length > 0) {
-      return realisations.map((r, i) => ({
-        id: r._id,
-        src: r.cover?.asset
-          ? urlForImageString(r.cover, { width: 1200, quality: 85 })
-          : "",
-        title: r.shortTitle ?? r.title ?? "",
-        tag: r.typeLabel ?? r.type ?? "",
-        description: r.italicSubtitle ?? r.location ?? "",
-        span: SPANS[i % SPANS.length],
-        universe: mapTypeToUniverse(r.type),
-      }));
-    }
-    return REALISATIONS_IMAGES.gallery.map((it, i) => ({
-      id: `fallback-${i}`,
-      src: it.src,
-      title: it.title,
-      tag: it.tag,
-      description: it.description,
-      span: it.span,
-      universe: it.universe,
+    if (!realisations || realisations.length === 0) return [];
+    return realisations.map((r, i) => ({
+      id: r._id,
+      src: r.cover?.asset
+        ? urlForImageString(r.cover, { width: 1200, quality: 85 })
+        : "",
+      title: r.shortTitle ?? r.title ?? "",
+      tag: r.typeLabel ?? r.type ?? "",
+      description: r.italicSubtitle ?? r.location ?? "",
+      span: SPANS[i % SPANS.length],
+      universe: mapTypeToUniverse(r.type),
     }));
   }, [realisations]);
 
@@ -124,6 +99,9 @@ export function RealisationsGallery({ data, realisations }: Props) {
     return c;
   }, [items, filters]);
 
+  if (items.length === 0) return null;
+  if (!title) return null;
+
   return (
     <section id="galerie" className="relative bg-cream py-24 sm:py-32">
       <div className="mx-auto max-w-[1440px] px-6 sm:px-14">
@@ -132,78 +110,74 @@ export function RealisationsGallery({ data, realisations }: Props) {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-80px" }}
           transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1] }}
-          className="mb-10 grid items-end gap-10 lg:grid-cols-[1fr_1fr] lg:gap-20"
+          className="mb-10"
         >
-          <div>
+          {eyebrow && (
             <div className="mb-6">
               <Eyebrow>{eyebrow}</Eyebrow>
             </div>
-            <h2
-              className="font-serif text-[40px] leading-[1] tracking-[-0.03em] sm:text-[52px] lg:text-[64px]"
-              style={{ fontWeight: 300 }}
-            >
-              {title.split("\n").map((line, i, arr) => (
-                <span key={i}>
-                  {renderInlineItalic(line)}
-                  {i < arr.length - 1 && <br />}
-                </span>
-              ))}
-            </h2>
-          </div>
-          <p
-            className="max-w-md font-serif text-[17px] italic leading-[1.55] text-ink-soft sm:text-[19px]"
+          )}
+          <h2
+            className="font-serif text-[40px] leading-[1] tracking-[-0.03em] sm:text-[52px] lg:text-[64px]"
             style={{ fontWeight: 300 }}
           >
-            {FALLBACK_INTRO}
-          </p>
+            {title.split("\n").map((line, i, arr) => (
+              <span key={i}>
+                {renderInlineItalic(line)}
+                {i < arr.length - 1 && <br />}
+              </span>
+            ))}
+          </h2>
         </motion.div>
 
-        <motion.div
-          initial={{ opacity: 0, y: 12 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "-40px" }}
-          transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
-          className="mb-10 flex flex-wrap items-center gap-2 sm:gap-3"
-          role="tablist"
-          aria-label="Filtrer les réalisations"
-        >
-          {filters.map((f) => {
-            const isActive = filter === f.value;
-            const isSage = f.accent === "sage";
-            const count = counts[f.value] ?? 0;
-            return (
-              <button
-                key={f.value}
-                type="button"
-                role="tab"
-                aria-selected={isActive}
-                onClick={() => setFilter(f.value)}
-                className={`group inline-flex items-center gap-2 rounded-full border px-4 py-2.5 font-mono text-[10.5px] uppercase tracking-[0.22em] transition-all duration-300 sm:px-5 sm:py-3 ${
-                  isActive
-                    ? isSage
-                      ? "border-sage bg-sage text-cream"
-                      : "border-bordeaux bg-bordeaux text-cream"
-                    : isSage
-                      ? "border-[var(--rule)] bg-cream-soft text-ink-soft hover:border-sage/40 hover:text-sage"
-                      : "border-[var(--rule)] bg-cream-soft text-ink-soft hover:border-bordeaux/40 hover:text-ink"
-                }`}
-              >
-                {f.label}
-                <span
-                  className={`rounded-full px-2 py-0.5 font-sans text-[10px] tabular-nums leading-none transition-colors ${
+        {filters.length > 0 && (
+          <motion.div
+            initial={{ opacity: 0, y: 12 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-40px" }}
+            transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
+            className="mb-10 flex flex-wrap items-center gap-2 sm:gap-3"
+            role="tablist"
+            aria-label="Filtrer les réalisations"
+          >
+            {filters.map((f) => {
+              const isActive = filter === f.value;
+              const isSage = f.accent === "sage";
+              const count = counts[f.value] ?? 0;
+              return (
+                <button
+                  key={f.value}
+                  type="button"
+                  role="tab"
+                  aria-selected={isActive}
+                  onClick={() => setFilter(f.value)}
+                  className={`group inline-flex items-center gap-2 rounded-full border px-4 py-2.5 font-mono text-[10.5px] uppercase tracking-[0.22em] transition-all duration-300 sm:px-5 sm:py-3 ${
                     isActive
-                      ? "bg-cream/20 text-cream"
+                      ? isSage
+                        ? "border-sage bg-sage text-cream"
+                        : "border-bordeaux bg-bordeaux text-cream"
                       : isSage
-                        ? "bg-cream text-muted-ink group-hover:text-sage"
-                        : "bg-cream text-muted-ink group-hover:text-bordeaux"
+                        ? "border-[var(--rule)] bg-cream-soft text-ink-soft hover:border-sage/40 hover:text-sage"
+                        : "border-[var(--rule)] bg-cream-soft text-ink-soft hover:border-bordeaux/40 hover:text-ink"
                   }`}
                 >
-                  {count}
-                </span>
-              </button>
-            );
-          })}
-        </motion.div>
+                  {f.label}
+                  <span
+                    className={`rounded-full px-2 py-0.5 font-sans text-[10px] tabular-nums leading-none transition-colors ${
+                      isActive
+                        ? "bg-cream/20 text-cream"
+                        : isSage
+                          ? "bg-cream text-muted-ink group-hover:text-sage"
+                          : "bg-cream text-muted-ink group-hover:text-bordeaux"
+                    }`}
+                  >
+                    {count}
+                  </span>
+                </button>
+              );
+            })}
+          </motion.div>
+        )}
 
         <motion.div
           layout

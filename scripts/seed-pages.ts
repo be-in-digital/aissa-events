@@ -3,6 +3,7 @@
  * Toutes les valeurs hardcodées (FALLBACK_*) extraites des composants sont retranscrites ici.
  * Les images Unsplash hardcodées ne sont PAS reprises (la cliente uploadera depuis Sanity).
  */
+import { imageRef } from "./image-catalog";
 
 // ============================================================================
 // MARIAGE PAGE
@@ -17,6 +18,7 @@ export const mariagePageDoc = {
     title: "Wedding\nplanning en _IDF._",
     subtitle:
       "Mariages civils, henné, fiançailles, cérémonies religieuses ou laïques. Organisation complète ou coordination à la carte. Dans notre lieu à Émerainville (77), chez vous, ou dans un lieu partenaire.",
+    image: imageRef("mariage-hero"),
     ctas: [
       { _type: "cta", _key: "h1", label: "Réserver un appel", type: "anchor", anchor: "contact", variant: "primary" },
       { _type: "cta", _key: "h2", label: "Voir les formules", type: "anchor", anchor: "packs", variant: "secondary" },
@@ -37,6 +39,7 @@ export const mariagePageDoc = {
     enabled: true,
     eyebrow: "Notre approche",
     title: "Un mariage,\n_cent décisions._",
+    image: imageRef("mariage-intro"),
     body: [
       {
         _type: "block",
@@ -105,6 +108,7 @@ export const mariagePageDoc = {
         name: "Chic",
         description:
           "Vaisselle dorée, lignes nettes, palette ivoire et bordeaux. Le format qui marche partout, du dîner de 30 personnes au mariage de 200. Notre best-seller, et aussi le moins risqué quand vous hésitez.",
+        image: imageRef("theme-chic"),
       },
       {
         _key: "th2",
@@ -113,18 +117,21 @@ export const mariagePageDoc = {
           "Fleurs séchées, bois brut, lin froissé, tons doux. Pensé pour les cérémonies en jardin ou en plein air. Attention si vous êtes plus de 80 invités : ça demande beaucoup de place et beaucoup de bougies.",
         accentColor: "sage",
         tags: ["Végétal"],
+        image: imageRef("theme-boheme"),
       },
       {
         _key: "th3",
         name: "Orientale",
         description:
           "Lanternes dorées, tissus drapés au plafond, bougeoirs en laiton, tapis bas. Parfait pour les henné, les pré-mariages, les fiançailles. On a fini par acheter notre propre stock parce que la location revenait trop cher.",
+        image: imageRef("theme-orientale"),
       },
       {
         _key: "th4",
         name: "Afro Chic",
         description:
           "Ocre, doré, terracotta, motifs wax. Une déco qui revendique les codes africains sans tomber dans le bric-à-brac touristique. On bosse avec une scénographe qui vit entre Paris et Abidjan, c'est elle qui calibre.",
+        image: imageRef("theme-afro"),
       },
     ],
   },
@@ -142,6 +149,7 @@ export const mariagePageDoc = {
         description:
           "Mairie, vin d'honneur, repas. On prend le relais à la sortie du bureau du maire (souvent en retard, jamais grave) et on tient jusqu'à la fin de la soirée. Coordination, scéno, prestataires.",
         highlights: ["Vin d'honneur", "Cocktail", "Repas servi"],
+        image: imageRef("ceremonie-civil"),
       },
       {
         _key: "c2",
@@ -149,6 +157,7 @@ export const mariagePageDoc = {
         description:
           "Musulmane, chrétienne, juive, mixte. Mise en relation avec l'officiant qui correspond (on connaît ceux qui acceptent les cérémonies inter-confessions, c'est rare), déco aux codes, traiteur halal, casher ou végé. Pas de couac sur les rituels qu'on ne connaît pas.",
         highlights: ["Halal · Casher", "Officiant", "Tradition"],
+        image: imageRef("ceremonie-religieux"),
       },
       {
         _key: "c3",
@@ -156,6 +165,7 @@ export const mariagePageDoc = {
         description:
           "Soirée henné, fiançailles, pré-mariage oriental. Lanternes, drapés, bougies au sol, mise en scène des mariés sur estrade. Le plus souvent la veille du civil : il faut prévoir le sommeil de la mariée derrière, on en a vu défaillir au cocktail.",
         highlights: ["Oriental", "Drapés", "Lanternes"],
+        image: imageRef("ceremonie-henne"),
       },
       {
         _key: "c4",
@@ -163,6 +173,7 @@ export const mariagePageDoc = {
         description:
           "Cérémonie laïque en jardin, baptême civil, renouvellement de vœux, fiançailles. Officiant·e laïque, déroulé écrit avec vous (vraiment avec vous, pas un template), plan B météo prêt à dégainer. En IDF, on apprend vite à toujours avoir un plan B.",
         highlights: ["Laïque", "Plein air", "Jardin"],
+        image: imageRef("ceremonie-fete"),
       },
     ],
   },
@@ -284,6 +295,12 @@ export const mariagePageDoc = {
     enabled: true,
     eyebrow: "Galerie",
     title: "Quelques images",
+    images: [
+      { _key: "g1", ...imageRef("gallery-mariage-1") },
+      { _key: "g2", ...imageRef("gallery-mariage-2") },
+      { _key: "g3", ...imageRef("gallery-mariage-3") },
+      { _key: "g4", ...imageRef("gallery-mariage-4") },
+    ],
   },
   portfolio: {
     _type: "caseStudiesSection",
@@ -377,6 +394,7 @@ export const evenementPageDoc = {
     title: "Quand l'image\ndevient _expérience._",
     subtitle:
       "Soirées clients, afterworks, lancements produits, séminaires. Dans notre Espace Events à Émerainville (77) ou chez vous, partout en Île-de-France.",
+    image: imageRef("evenement-hero"),
     ctas: [
       { _type: "cta", _key: "h1", label: "Réserver un appel", type: "anchor", anchor: "contact", variant: "primary" },
       { _type: "cta", _key: "h2", label: "Voir les packs", type: "anchor", anchor: "packs", variant: "secondary" },
@@ -397,6 +415,7 @@ export const evenementPageDoc = {
     enabled: true,
     eyebrow: "Notre approche pro",
     title: "Un événement\npro qui _marque._",
+    image: imageRef("evenement-intro"),
     body: [
       {
         _type: "block",
@@ -615,6 +634,10 @@ export const evenementPageDoc = {
     enabled: true,
     eyebrow: "Galerie",
     title: "Quelques images",
+    images: [
+      { _key: "g1", ...imageRef("gallery-pro-1") },
+      { _key: "g2", ...imageRef("gallery-pro-2") },
+    ],
   },
   portfolio: {
     _type: "caseStudiesSection",
@@ -719,6 +742,7 @@ export const espaceEventsPageDoc = {
     title: "Notre salle\n_à Émerainville_\n(77).",
     subtitle:
       "65 m² jusqu'à 50 personnes assises (60 debout). Verrière 25 m², terrasse, cuisine équipée, parking gratuit. Pour mariages civils, henné, baptêmes, anniversaires, baby showers, cocktails pro — en pack tout compris ou en location seule à partir de 350 €.",
+    image: imageRef("espace-hero"),
     ctas: [
       { _type: "cta", _key: "h1", label: "Réserver une visite", type: "calendly", variant: "primary" },
       { _type: "cta", _key: "h2", label: "Voir les packs", type: "anchor", anchor: "packs", variant: "secondary" },
@@ -741,6 +765,7 @@ export const espaceEventsPageDoc = {
     title: "Capacités & équipements",
     intro:
       "Notre salle de 65 m² s'aménage selon votre format : cocktail debout, dîner assis ou cérémonie en rangs. Tout l'équipement de base est inclus.",
+    image: imageRef("espace-venue"),
     capacities: [
       { _key: "cp1", configuration: "Cocktail debout", guestCount: "Jusqu'à 60 personnes" },
       { _key: "cp2", configuration: "Dîner assis", guestCount: "Jusqu'à 50 personnes" },
@@ -763,6 +788,7 @@ export const espaceEventsPageDoc = {
     enabled: true,
     eyebrow: "Le lieu",
     title: "Notre maison\nà _Émerainville._",
+    image: imageRef("espace-intro"),
     body: [
       {
         _type: "block",
@@ -905,6 +931,14 @@ export const espaceEventsPageDoc = {
     enabled: true,
     eyebrow: "Galerie de la salle",
     title: "Quelques images",
+    images: [
+      { _key: "g1", ...imageRef("espace-gallery-1") },
+      { _key: "g2", ...imageRef("espace-gallery-2") },
+      { _key: "g3", ...imageRef("espace-gallery-3") },
+      { _key: "g4", ...imageRef("espace-gallery-4") },
+      { _key: "g5", ...imageRef("espace-gallery-5") },
+      { _key: "g6", ...imageRef("espace-gallery-6") },
+    ],
   },
   testimonials: {
     _type: "testimonialsSection",
@@ -1019,6 +1053,7 @@ export const realisationsPageDoc = {
     title: "Six ans\nde _projets_\nà Émerainville.",
     subtitle:
       "Mariages multi-cérémonies, lancements de marque, soirées clients, séminaires, anniversaires en petit comité. Une sélection filtrable par univers, plus trois études de cas détaillées plus bas.",
+    image: imageRef("home-hero"),
   },
   trustBar: {
     _type: "trustBarSection",

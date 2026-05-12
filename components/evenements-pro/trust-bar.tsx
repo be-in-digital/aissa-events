@@ -6,28 +6,7 @@ import type { EvenementPageQueryResult } from "@/sanity.types";
 
 type TrustBarData = NonNullable<EvenementPageQueryResult>["trustBar"];
 
-const FALLBACK_ITEMS = [
-  {
-    Icon: Sparkles,
-    label: "Formation Art Academy",
-    sub: "Direction artistique pro",
-  },
-  {
-    Icon: Briefcase,
-    label: "30+ événements pro",
-    sub: "Afterworks · lancements · séminaires",
-  },
-  {
-    Icon: Music2,
-    label: "Équipe interne + partenaires",
-    sub: "DJ · scéno · production · staff",
-  },
-  {
-    Icon: TrainFront,
-    label: "Île-de-France",
-    sub: "Émerainville (77) · Paris · 25 min RER E",
-  },
-];
+const ICONS = [Sparkles, Briefcase, Music2, TrainFront];
 
 const containerVariants = {
   hidden: {},
@@ -45,16 +24,13 @@ const itemVariants = {
 
 export function EvenementTrustBar({ data }: { data?: TrustBarData }) {
   if (data?.enabled === false) return null;
+  if (!data?.items?.length) return null;
 
-  const sanityItems = data?.items ?? [];
-  const items =
-    sanityItems.length > 0
-      ? sanityItems.map((item, i) => ({
-          Icon: FALLBACK_ITEMS[i % FALLBACK_ITEMS.length].Icon,
-          label: item?.value ?? "",
-          sub: item?.label ?? "",
-        }))
-      : FALLBACK_ITEMS;
+  const items = data.items.map((item, i) => ({
+    Icon: ICONS[i % ICONS.length],
+    label: item?.value ?? "",
+    sub: item?.label ?? "",
+  }));
 
   return (
     <section

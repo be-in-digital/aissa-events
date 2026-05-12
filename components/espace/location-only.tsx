@@ -9,39 +9,28 @@ type LocationOnlyData = NonNullable<EspaceEventsPageQueryResult>["locationOnly"]
 
 type Row = { day: string; hours: string; hoursNote?: string; price: string };
 
-const FALLBACK_ROWS: Row[] = [
-  { day: "Lundi — Jeudi", hours: "18h – 22h", price: "350 €" },
-  { day: "Vendredi", hours: "17h – 5h", price: "620 €" },
-  { day: "Samedi", hours: "12h – 3h ou 15h – 5h (12h)", price: "790 €" },
-  { day: "Dimanche", hours: "10h – 20h ou 12h – 22h", price: "590 €" },
-  {
-    day: "Jour férié",
-    hours: "15h – 5h",
-    hoursNote: "1 000 € le 31/12",
-    price: "900 €",
-  },
-];
-
-const FALLBACK_EYEBROW = "Location seule";
-const FALLBACK_TITLE = "Juste _la salle._";
-const FALLBACK_INTRO =
-  "Vous arrivez avec vos prestataires (traiteur, DJ, déco) ? Location seule à partir de 350 €. Cuisine équipée, sono et mobilier disponibles en option.";
-
 export function LocationOnly({ data }: { data?: LocationOnlyData }) {
   if (data?.enabled === false) return null;
+  if (!data?.title) return null;
+  if (!data.rows?.length) return null;
 
-  const eyebrow = data?.eyebrow ?? FALLBACK_EYEBROW;
-  const title = data?.title ?? FALLBACK_TITLE;
-  const intro = data?.intro ?? FALLBACK_INTRO;
+  const eyebrow = data.eyebrow;
+  const title = data.title;
+  const intro = data.intro;
 
-  const rows: Row[] = data?.rows?.length
-    ? data.rows.map((r) => ({
-        day: r.day ?? "",
+  const rows: Row[] = data.rows
+    .map((r): Row | null => {
+      if (!r?.day) return null;
+      return {
+        day: r.day,
         hours: r.hours ?? "",
         hoursNote: r.hoursNote ?? undefined,
         price: r.price ?? "",
-      }))
-    : FALLBACK_ROWS;
+      };
+    })
+    .filter((x): x is Row => x !== null);
+
+  if (rows.length === 0) return null;
 
   return (
     <section className="relative bg-cream-soft py-24 sm:py-32">
@@ -53,9 +42,11 @@ export function LocationOnly({ data }: { data?: LocationOnlyData }) {
           transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1] }}
           className="mx-auto mb-12 max-w-[700px] text-center"
         >
-          <div className="mb-6">
-            <Eyebrow align="center">{eyebrow}</Eyebrow>
-          </div>
+          {eyebrow && (
+            <div className="mb-6">
+              <Eyebrow align="center">{eyebrow}</Eyebrow>
+            </div>
+          )}
           <h2
             className="font-serif text-[36px] leading-[1] tracking-[-0.03em] sm:text-[48px] lg:text-[56px]"
             style={{ fontWeight: 300 }}

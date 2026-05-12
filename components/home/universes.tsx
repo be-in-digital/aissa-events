@@ -11,16 +11,13 @@ import type { HomePageQueryResult } from "@/sanity.types";
 
 type UniversesData = NonNullable<HomePageQueryResult>["universes"];
 
-const FALLBACK_TITLE = "Trois services,\nun même _métier._";
-const FALLBACK_INTRO =
-  "Aïssa Events propose trois services qui se complètent : la location de notre lieu à Émerainville, l'organisation d'événements pro (en Pack ou sur mesure), et le wedding planning partout en Île-de-France. Chaque service a son tarif et ses inclusions sur le devis.";
-
 export function Universes({ data }: { data?: UniversesData }) {
   if (data?.enabled === false || !data?.items?.length) return null;
+  if (!data?.title) return null;
 
-  const eyebrow = data?.eyebrow ?? "1 lieu · 3 services · Émerainville (77)";
-  const title = data?.title ?? FALLBACK_TITLE;
-  const intro = data?.intro ?? FALLBACK_INTRO;
+  const eyebrow = data?.eyebrow;
+  const title = data.title;
+  const intro = data?.intro;
 
   return (
     <section id="universes" className="relative bg-cream-soft py-32 sm:py-40">
@@ -33,9 +30,11 @@ export function Universes({ data }: { data?: UniversesData }) {
           className="mb-20 grid items-end gap-12 lg:grid-cols-2 lg:gap-20"
         >
           <div>
-            <p className="mb-6 font-mono text-[11px] uppercase tracking-[0.28em] text-bordeaux">
-              {eyebrow}
-            </p>
+            {eyebrow && (
+              <p className="mb-6 font-mono text-[11px] uppercase tracking-[0.28em] text-bordeaux">
+                {eyebrow}
+              </p>
+            )}
             <h2
               className="font-serif text-[44px] leading-[0.95] tracking-[-0.03em] sm:text-[60px] lg:text-[88px]"
               style={{ fontWeight: 300 }}

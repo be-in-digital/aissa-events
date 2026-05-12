@@ -7,64 +7,19 @@ import type { MariagePageQueryResult } from "@/sanity.types";
 
 type TimelineData = NonNullable<MariagePageQueryResult>["timeline"];
 
-const FALLBACK_EYEBROW = "Comment se déroule un mariage avec nous";
-const FALLBACK_TITLE = "Six étapes,\ndu brief à la _fin de la fête._";
-const FALLBACK_INTRO =
-  "Du premier mail jusqu'au moment où on rend les clés du lieu au gardien à 3h du mat'. Sans flou sur qui fait quoi, ni quand.";
-
-const FALLBACK_ITEMS = [
-  {
-    when: "J-9 à J-3 mois",
-    title: "Préparation _et design_",
-    description:
-      "Brief, chasse du lieu, prestataires, scénographie. Un Google Sheet partagé (rien de plus, les outils sophistiqués finissent toujours abandonnés) qu'on met à jour ensemble. Point mensuel d'une heure ; entre deux, on s'envoie ce qu'il faut par WhatsApp.",
-  },
-  {
-    when: "J-1 / Veille",
-    title: "Henné _et pré-mariage_",
-    description:
-      "Installation de l'espace henné, accueil des proches, déco orientale, ambiance famille. On monte pendant que vous riez avec vos cousines, c'est le but.",
-  },
-  {
-    when: "Jour J · Matin",
-    title: "Préparatifs _et cérémonie civile_",
-    description:
-      "Coiffure, maquillage, premières photos. Direction la mairie (avec le créneau à respecter, parce qu'ils ne nous attendent pas) puis retour vers le lieu.",
-  },
-  {
-    when: "Jour J · Après-midi",
-    title: "Cérémonie _religieuse ou laïque_",
-    description:
-      "Accompagnement de l'officiant, placement des invités, photos de groupe (la partie qu'on déteste tous mais qu'il faut faire). Rituels respectés à la lettre. Le timing, on le tient en coulisses.",
-  },
-  {
-    when: "Jour J · Soirée",
-    title: "Cocktail _et vin d'honneur_",
-    description:
-      "Buffet, DJ ou orchestre, animations photo. Vous parlez à vos invités, on surveille l'heure et on signale au DJ quand il faut basculer en repas.",
-  },
-  {
-    when: "Jour J · Nuit",
-    title: "Repas _et fête_",
-    description:
-      "Service à table, discours (et témoin imprévu qui demande le micro à 23h45, ça arrive), ouverture de bal, piste pleine. Aïssa et l'équipe restent jusqu'au démontage. Vous, vous rentrez vous coucher.",
-  },
-];
-
 export function MariageTimeline({ data }: { data?: TimelineData }) {
   if (data?.enabled === false) return null;
+  if (!data?.items?.length) return null;
 
-  const eyebrow = data?.eyebrow ?? FALLBACK_EYEBROW;
-  const title = data?.title ?? FALLBACK_TITLE;
-  const intro = data?.intro ?? FALLBACK_INTRO;
+  const eyebrow = data?.eyebrow;
+  const title = data?.title;
+  const intro = data?.intro;
 
-  const items = data?.items?.length
-    ? data.items.map((item) => ({
-        when: item?.when ?? "",
-        title: item?.title ?? "",
-        description: item?.description ?? "",
-      }))
-    : FALLBACK_ITEMS;
+  const items = data.items.map((item) => ({
+    when: item?.when ?? "",
+    title: item?.title ?? "",
+    description: item?.description ?? "",
+  }));
 
   return (
     <section className="relative bg-cream py-28 sm:py-36">
@@ -76,20 +31,24 @@ export function MariageTimeline({ data }: { data?: TimelineData }) {
           transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1] }}
           className="mx-auto mb-16 max-w-[760px] text-center"
         >
-          <div className="mb-6">
-            <Eyebrow align="center">{eyebrow}</Eyebrow>
-          </div>
-          <h2
-            className="font-serif text-[40px] leading-[1] tracking-[-0.03em] sm:text-[56px] lg:text-[72px]"
-            style={{ fontWeight: 300 }}
-          >
-            {title.split("\n").map((line, i, arr) => (
-              <span key={i}>
-                {renderInlineItalic(line)}
-                {i < arr.length - 1 && <br />}
-              </span>
-            ))}
-          </h2>
+          {eyebrow && (
+            <div className="mb-6">
+              <Eyebrow align="center">{eyebrow}</Eyebrow>
+            </div>
+          )}
+          {title && (
+            <h2
+              className="font-serif text-[40px] leading-[1] tracking-[-0.03em] sm:text-[56px] lg:text-[72px]"
+              style={{ fontWeight: 300 }}
+            >
+              {title.split("\n").map((line, i, arr) => (
+                <span key={i}>
+                  {renderInlineItalic(line)}
+                  {i < arr.length - 1 && <br />}
+                </span>
+              ))}
+            </h2>
+          )}
           {intro && (
             <p
               className="mt-5 font-serif text-[17px] italic text-ink-soft"

@@ -10,18 +10,14 @@ import type { HomePageQueryResult } from "@/sanity.types";
 
 type FaqData = NonNullable<HomePageQueryResult>["faq"];
 
-const FALLBACK_EYEBROW = "Questions fréquentes";
-const FALLBACK_TITLE = "Tout ce que vous\n_vouliez savoir._";
-const FALLBACK_INTRO =
-  "Une autre question ? Réservez un appel de 30 minutes. On y répond directement, et c'est souvent comme ça que les projets démarrent.";
-
 export function Faq({ data }: { data?: FaqData }) {
   if (data?.enabled === false) return null;
   const items = data?.items ?? [];
   if (items.length === 0) return null;
+  if (!data?.title) return null;
 
-  const eyebrow = data?.eyebrow ?? FALLBACK_EYEBROW;
-  const title = data?.title ?? FALLBACK_TITLE;
+  const eyebrow = data?.eyebrow;
+  const title = data.title;
 
   return (
     <section id="faq" className="relative bg-cream-soft py-32 sm:py-40">
@@ -31,30 +27,24 @@ export function Faq({ data }: { data?: FaqData }) {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-80px" }}
           transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}
-          className="mb-16 grid items-end gap-10 lg:grid-cols-[1fr_1fr] lg:gap-20"
+          className="mb-16"
         >
-          <div>
+          {eyebrow && (
             <div className="mb-6">
               <Eyebrow>{eyebrow}</Eyebrow>
             </div>
-            <h2
-              className="font-serif text-[44px] leading-[0.95] tracking-[-0.03em] sm:text-[60px] lg:text-[76px]"
-              style={{ fontWeight: 300 }}
-            >
-              {title.split("\n").map((line, i, arr) => (
-                <span key={i}>
-                  {renderInlineItalic(line)}
-                  {i < arr.length - 1 && <br />}
-                </span>
-              ))}
-            </h2>
-          </div>
-          <p
-            className="max-w-md font-serif text-[18px] italic leading-[1.55] text-ink-soft sm:text-[19px]"
+          )}
+          <h2
+            className="font-serif text-[44px] leading-[0.95] tracking-[-0.03em] sm:text-[60px] lg:text-[76px]"
             style={{ fontWeight: 300 }}
           >
-            {FALLBACK_INTRO}
-          </p>
+            {title.split("\n").map((line, i, arr) => (
+              <span key={i}>
+                {renderInlineItalic(line)}
+                {i < arr.length - 1 && <br />}
+              </span>
+            ))}
+          </h2>
         </motion.div>
 
         <motion.div

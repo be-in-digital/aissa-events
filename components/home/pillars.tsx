@@ -6,36 +6,13 @@ import type { HomePageQueryResult } from "@/sanity.types";
 
 type PillarsData = NonNullable<HomePageQueryResult>["pillars"];
 
-const FALLBACK_PILLARS = [
-  {
-    title: "ADN",
-    italic: "Musical",
-    description:
-      "DJ, artistes live, playlists curatées. La bande-son d'une soirée n'est jamais un détail : elle décide du moment où vos invités quittent leur table, et de l'heure à laquelle ils rentrent.",
-  },
-  {
-    title: "Vision",
-    italic: "Artistique",
-    description:
-      "Décor, lumière, fleurs, signalétique. Une scénographie tient debout quand tous ces éléments répondent à la même intention. Notre rôle : choisir, marier, et savoir dire non quand un détail ne sert pas l'ensemble.",
-  },
-  {
-    title: "Organisation",
-    italic: "Sereine",
-    description:
-      "Une coordinatrice référente, un réseau de partenaires testés depuis six ans (fleuristes, traiteurs, photographes, DJ). Rétroplanning tenu à la minute, plan B prévu pour ce qui peut déraper. Vous arrivez le jour J, vous profitez.",
-  },
-];
-
-const FALLBACK_QUOTE = "Le jour J, vous _profitez._\nLe reste, c'est notre métier.";
-const FALLBACK_AUTHOR = "— Aïssa, Fondatrice";
-
 export function Pillars({ data }: { data?: PillarsData }) {
   if (data?.enabled === false) return null;
+  if (!data?.items?.length) return null;
 
-  const items = data?.items?.length ? data.items : FALLBACK_PILLARS;
-  const quote = data?.quote ?? FALLBACK_QUOTE;
-  const quoteAuthor = data?.quoteAuthor ?? FALLBACK_AUTHOR;
+  const items = data.items;
+  const quote = data?.quote;
+  const quoteAuthor = data?.quoteAuthor;
 
   return (
     <section className="relative overflow-hidden bg-ink py-32 text-cream sm:py-40">
@@ -49,24 +26,30 @@ export function Pillars({ data }: { data?: PillarsData }) {
       />
 
       <div className="relative z-[2] mx-auto max-w-[1440px] px-6 sm:px-14">
-        <motion.div
-          initial={{ opacity: 0, y: 32 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "-80px" }}
-          transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}
-        >
-          <p
-            className="mx-auto mb-6 max-w-[1100px] text-center font-serif text-[28px] italic leading-[1.2] tracking-[-0.02em] sm:text-[44px] lg:text-[60px]"
-            style={{ fontWeight: 300 }}
+        {(quote || quoteAuthor) && (
+          <motion.div
+            initial={{ opacity: 0, y: 32 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-80px" }}
+            transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}
           >
-            «{" "}
-            {renderMultilineWithItalic(quote)}
-            {" »"}
-          </p>
-          <p className="mb-24 text-center font-mono text-[10px] uppercase tracking-[0.32em] text-cream/55">
-            {quoteAuthor}
-          </p>
-        </motion.div>
+            {quote && (
+              <p
+                className="mx-auto mb-6 max-w-[1100px] text-center font-serif text-[28px] italic leading-[1.2] tracking-[-0.02em] sm:text-[44px] lg:text-[60px]"
+                style={{ fontWeight: 300 }}
+              >
+                «{" "}
+                {renderMultilineWithItalic(quote)}
+                {" »"}
+              </p>
+            )}
+            {quoteAuthor && (
+              <p className="mb-24 text-center font-mono text-[10px] uppercase tracking-[0.32em] text-cream/55">
+                {quoteAuthor}
+              </p>
+            )}
+          </motion.div>
+        )}
 
         <div className="grid grid-cols-1 border-y border-cream/15 lg:grid-cols-3">
           {items.map((p, i) => (

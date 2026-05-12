@@ -4,25 +4,24 @@ import Image from "next/image";
 import { motion } from "motion/react";
 import { useState } from "react";
 import { ArrowRight, Check } from "lucide-react";
-import { HOME_IMAGES } from "@/lib/images";
 
 const CATALOGUES = [
   {
     title: "Mariages",
     subtitle: "Wedding planning · 2026",
-    cover: HOME_IMAGES.catalogues.mariage,
+    cover: "/images/catalogues/mariage.png",
     rotate: "-3deg",
   },
   {
     title: "Ambiance",
     subtitle: "Événements pro · 2026",
-    cover: HOME_IMAGES.catalogues.ambiance,
+    cover: "/images/catalogues/ambiance.png",
     rotate: "1.5deg",
   },
   {
     title: "Espace Events",
     subtitle: "Le lieu · 2026",
-    cover: HOME_IMAGES.catalogues.espace,
+    cover: "/images/catalogues/espace-events.png",
     rotate: "4deg",
   },
 ];

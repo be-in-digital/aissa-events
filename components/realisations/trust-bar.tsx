@@ -5,13 +5,6 @@ import type { RealisationsPageQueryResult } from "@/sanity.types";
 
 type TrustBarData = NonNullable<RealisationsPageQueryResult>["trustBar"];
 
-const FALLBACK_STATS = [
-  { strong: "60+", label: "Mariages orchestrés" },
-  { strong: "30+", label: "Événements pros" },
-  { strong: "6 ans", label: "Depuis 2020" },
-  { strong: "77 · IDF", label: "Émerainville & au-delà" },
-];
-
 const containerVariants = {
   hidden: {},
   visible: { transition: { staggerChildren: 0.1, delayChildren: 0.1 } },
@@ -28,15 +21,16 @@ const itemVariants = {
 
 export function RealisationsTrustBar({ data }: { data?: TrustBarData }) {
   if (data?.enabled === false) return null;
+  if (!data?.items?.length) return null;
 
-  const sanityItems = data?.items ?? [];
-  const stats =
-    sanityItems.length > 0
-      ? sanityItems.map((item, i) => ({
-          strong: item?.value ?? FALLBACK_STATS[i % FALLBACK_STATS.length].strong,
-          label: item?.label ?? FALLBACK_STATS[i % FALLBACK_STATS.length].label,
-        }))
-      : FALLBACK_STATS;
+  const stats = data.items
+    .map((item) => ({ strong: item?.value, label: item?.label }))
+    .filter(
+      (s): s is { strong: string; label: string } =>
+        Boolean(s.strong) && Boolean(s.label),
+    );
+
+  if (stats.length === 0) return null;
 
   return (
     <section aria-label="Chiffres clés" className="relative pb-16 sm:pb-20">

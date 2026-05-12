@@ -1,7 +1,12 @@
 /**
  * Données de seed pour Sanity. Tout le contenu actuel du site, prêt à être poussé.
  * Utilisé par scripts/seed-sanity.ts.
+ *
+ * Pour les images : on utilise des placeholders `imageRef("key")` qui sont
+ * résolus en `imageWithAlt` au moment du push par `resolveImagePlaceholders()`.
+ * Voir scripts/image-catalog.ts pour la liste des clés disponibles.
  */
+import { imageRef } from "./image-catalog";
 
 // ============================================================================
 // SITE SETTINGS
@@ -11,10 +16,12 @@ export const siteSettingsDoc = {
   _type: "siteSettings",
   siteName: "Aïssa Events",
   tagline: "The Perfect Timing",
+  defaultOgImage: imageRef("og-default"),
   founder: {
     name: "Aïssa",
     role: "Fondatrice & Directrice Artistique",
     signatureName: "Aïssa",
+    photo: imageRef("home-about-founder", "Aïssa, fondatrice d'Aïssa Events"),
     bio: [
       {
         _type: "block",
@@ -135,6 +142,7 @@ export const homePageDoc = {
     title: "Mariages et événements à _votre image._",
     subtitle:
       "Wedding planning, soirées pro, célébrations privées. Dans notre lieu à Émerainville (77) ou chez vous, partout en Île-de-France.",
+    image: imageRef("home-hero"),
     ctas: [
       { _type: "cta", _key: "c1", label: "Réserver un appel", type: "anchor", anchor: "contact", variant: "primary" },
       { _type: "cta", _key: "c2", label: "Découvrir l'univers", type: "anchor", anchor: "universes", variant: "secondary" },
@@ -198,6 +206,7 @@ export const homePageDoc = {
           "Mariages civils, henné, baptêmes, anniversaires, baby showers, EVJF : on prend tous ces formats. Trois options : cérémonies assises (Pack Célébration), fêtes debout (Pack Festivité), ou location seule si vous voulez vos propres prestataires.",
         tags: ["Le lieu", "Pack Célébration", "Pack Festivité", "Location seule"],
         price: { label: "Location seule", value: "350 €", note: "Packs tout compris dès 1 000 €" },
+        image: imageRef("universe-espace"),
         primaryCta: { _type: "cta", label: "Découvrir le lieu", type: "internal", internalPath: "/espace-emerainville", variant: "primary" },
         secondaryCta: { _type: "cta", label: "Réserver une visite", type: "anchor", anchor: "contact", variant: "secondary" },
       },
@@ -211,6 +220,7 @@ export const homePageDoc = {
           "Deux formats : Pack Ambiance (clé en main) ou sur mesure (lieu + DJ + traiteur coordonnés ensemble). On gère la scéno, la musique et la logistique pour que vos équipes restent disponibles pour vos invités.",
         tags: ["Pack Ambiance", "Sur mesure", "DJ & traiteur", "Lieu inclus"],
         price: { label: "À partir de", value: "1 750 €", note: "Pack Ambiance Signature" },
+        image: imageRef("universe-pro"),
         primaryCta: { _type: "cta", label: "Voir les formules", type: "internal", internalPath: "/evenements-pro", variant: "primary" },
         secondaryCta: { _type: "cta", label: "Réserver un appel", type: "anchor", anchor: "contact", variant: "secondary" },
       },
@@ -224,6 +234,7 @@ export const homePageDoc = {
           "Deux formats : organisation complète (4 thèmes proposés : Orientale, Afro chic, Bohème, Chic) ou À la carte (coordination jour J seule). Wedding planner diplômée, scénographie adaptée à votre brief, et notre réseau de partenaires éprouvés depuis six ans.",
         tags: ["Complète A → Z", "À la carte", "4 thèmes proposés", "55 € / table"],
         price: { label: "À partir de", value: "1 250 €", note: "Espace Events ou ailleurs" },
+        image: imageRef("universe-mariage"),
         primaryCta: { _type: "cta", label: "Voir les formules", type: "internal", internalPath: "/mariage", variant: "primary" },
         secondaryCta: { _type: "cta", label: "Réserver un appel", type: "anchor", anchor: "contact", variant: "secondary" },
       },
@@ -270,6 +281,7 @@ export const homePageDoc = {
     enabled: true,
     eyebrow: "À propos d'Aïssa",
     title: "Wedding planner\nà _Émerainville_\ndepuis 2020.",
+    image: imageRef("home-about-founder"),
   },
   pillars: {
     _type: "pillarsSection",
@@ -374,6 +386,12 @@ export const realisationDocs = [
     alignment: "left",
     tags: ["mariage", "afro chic", "180 invités"],
     featured: true,
+    cover: imageRef("realisation-sarah-david-cover"),
+    moodBoard: [
+      { _key: "mb1", ...imageRef("realisation-sarah-david-mood-1") },
+      { _key: "mb2", ...imageRef("realisation-sarah-david-mood-2") },
+      { _key: "mb3", ...imageRef("realisation-sarah-david-mood-3") },
+    ],
   },
   {
     _id: "realisation-cote-sud",
@@ -404,6 +422,12 @@ export const realisationDocs = [
     alignment: "right",
     tags: ["corporate", "lancement", "Paris"],
     featured: true,
+    cover: imageRef("realisation-cote-sud-cover"),
+    moodBoard: [
+      { _key: "mb1", ...imageRef("realisation-cote-sud-mood-1") },
+      { _key: "mb2", ...imageRef("realisation-cote-sud-mood-2") },
+      { _key: "mb3", ...imageRef("realisation-cote-sud-mood-3") },
+    ],
   },
 ];
 

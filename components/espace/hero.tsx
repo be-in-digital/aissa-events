@@ -26,29 +26,22 @@ const fadeUp = {
   },
 };
 
-const FALLBACK_EYEBROW = "Le lieu · Émerainville (77)";
-const FALLBACK_TITLE = "Notre salle\n_à Émerainville_\n(77).";
-const FALLBACK_SUBTITLE =
-  "65 m² jusqu'à 50 personnes assises (60 debout). Verrière 25 m², terrasse, cuisine équipée, parking gratuit. Pour mariages civils, henné, baptêmes, anniversaires, baby showers, cocktails pro — en pack tout compris ou en location seule à partir de 350 €.";
-const FALLBACK_IMAGE =
-  "https://images.unsplash.com/photo-1530103862676-de8c9debad1d?w=1100&q=85";
-const FALLBACK_IMAGE_ALT = "Espace Events Émerainville — décor de célébration";
-
 export function EspaceHero({ data }: { data?: HeroData }) {
   if (data?.enabled === false) return null;
+  if (!data?.title) return null;
 
-  const eyebrow = data?.eyebrow ?? FALLBACK_EYEBROW;
-  const title = data?.title ?? FALLBACK_TITLE;
-  const subtitle = data?.subtitle ?? FALLBACK_SUBTITLE;
+  const eyebrow = data.eyebrow;
+  const title = data.title;
+  const subtitle = data.subtitle;
 
-  const ctas = (data?.ctas ?? [])
+  const ctas = (data.ctas ?? [])
     .map((c) => resolveCta(c))
     .filter((c): c is NonNullable<typeof c> => c !== null);
 
-  const imageUrl = data?.image?.asset
+  const imageUrl = data.image?.asset
     ? urlForImageString(data.image, { width: 1100, quality: 85 })
-    : FALLBACK_IMAGE;
-  const imageAlt = data?.image?.alt || FALLBACK_IMAGE_ALT;
+    : null;
+  const imageAlt = data.image?.alt || "";
 
   return (
     <section className="relative pt-24 pb-24 sm:pt-28 sm:pb-28">
@@ -74,9 +67,11 @@ export function EspaceHero({ data }: { data?: HeroData }) {
           className="grid items-center gap-14 lg:grid-cols-2 lg:gap-20"
         >
           <div>
-            <motion.div variants={fadeUp} className="mb-8">
-              <Eyebrow>{eyebrow}</Eyebrow>
-            </motion.div>
+            {eyebrow && (
+              <motion.div variants={fadeUp} className="mb-8">
+                <Eyebrow>{eyebrow}</Eyebrow>
+              </motion.div>
+            )}
 
             <motion.h1
               variants={fadeUp}
@@ -136,23 +131,25 @@ export function EspaceHero({ data }: { data?: HeroData }) {
             )}
           </div>
 
-          <motion.div
-            initial={{ opacity: 0, scale: 0.96 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 1.2, delay: 0.4, ease: [0.16, 1, 0.3, 1] }}
-            className="relative aspect-[4/5] w-full overflow-hidden rounded-[20px] shadow-[0_30px_80px_rgba(44,31,51,0.15)]"
-          >
-            <Image
-              src={imageUrl}
-              alt={imageAlt}
-              fill
-              priority
-              sizes="(max-width: 1024px) 100vw, 50vw"
-              className="object-cover"
-              style={{ filter: "contrast(1.06) saturate(0.95) sepia(0.05)" }}
-            />
-            <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-ink/30" />
-          </motion.div>
+          {imageUrl && (
+            <motion.div
+              initial={{ opacity: 0, scale: 0.96 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 1.2, delay: 0.4, ease: [0.16, 1, 0.3, 1] }}
+              className="relative aspect-[4/5] w-full overflow-hidden rounded-[20px] shadow-[0_30px_80px_rgba(44,31,51,0.15)]"
+            >
+              <Image
+                src={imageUrl}
+                alt={imageAlt}
+                fill
+                priority
+                sizes="(max-width: 1024px) 100vw, 50vw"
+                className="object-cover"
+                style={{ filter: "contrast(1.06) saturate(0.95) sepia(0.05)" }}
+              />
+              <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-ink/30" />
+            </motion.div>
+          )}
         </motion.div>
       </div>
     </section>

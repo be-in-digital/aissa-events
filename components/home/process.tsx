@@ -9,47 +9,15 @@ import type { HomePageQueryResult } from "@/sanity.types";
 
 type ProcessData = NonNullable<HomePageQueryResult>["process"];
 
-const FALLBACK_STEPS = [
-  {
-    italic: "Vous prenez",
-    rest: "rendez-vous",
-    description:
-      "15 minutes en visio ou téléphone, à votre rythme. Réservez le créneau qui vous convient.",
-  },
-  {
-    italic: "On échange",
-    rest: "sur votre projet",
-    description:
-      "Vos envies, votre vision, votre date, votre budget. On comprend votre projet en profondeur.",
-  },
-  {
-    italic: "On vous propose",
-    rest: "une solution",
-    description:
-      "Un devis clair sous 7 jours, sans engagement. Mood board et planning inclus.",
-  },
-  {
-    italic: "On organise",
-    rest: "votre événement",
-    description:
-      "Du brief signé jusqu'à la coordination du jour J. Vous arrivez le matin, vous ne touchez à rien.",
-  },
-];
-
-const FALLBACK_TITLE = "Du premier _échange_\nau jour de votre événement.";
-
 export function Process({ data }: { data?: ProcessData }) {
   if (data?.enabled === false) return null;
+  if (!data?.steps?.length) return null;
+  if (!data?.title) return null;
 
-  const eyebrow = data?.eyebrow ?? "Comment ça se passe";
-  const title = data?.title ?? FALLBACK_TITLE;
-  const steps = data?.steps?.length ? data.steps : FALLBACK_STEPS;
-  const cta = resolveCta(data?.cta ?? null) ?? {
-    label: "Prendre rendez-vous",
-    href: "#contact",
-    external: false,
-    variant: "primary" as const,
-  };
+  const eyebrow = data?.eyebrow;
+  const title = data.title;
+  const steps = data.steps;
+  const cta = resolveCta(data?.cta ?? null);
 
   return (
     <section className="relative py-32 sm:py-40">
@@ -61,9 +29,11 @@ export function Process({ data }: { data?: ProcessData }) {
           transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}
           className="mb-20 text-center"
         >
-          <div className="mb-7">
-            <Eyebrow align="center">{eyebrow}</Eyebrow>
-          </div>
+          {eyebrow && (
+            <div className="mb-7">
+              <Eyebrow align="center">{eyebrow}</Eyebrow>
+            </div>
+          )}
           <h2
             className="mx-auto max-w-[1100px] font-serif text-[40px] leading-[1.05] tracking-[-0.025em] sm:text-[58px] lg:text-[76px]"
             style={{ fontWeight: 300 }}

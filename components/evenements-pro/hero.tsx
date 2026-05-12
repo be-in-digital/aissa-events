@@ -5,7 +5,6 @@ import Link from "next/link";
 import { motion } from "motion/react";
 import { ArrowRight } from "lucide-react";
 import { Eyebrow } from "@/components/home/eyebrow";
-import { EVENEMENT_IMAGES } from "@/lib/images";
 import { renderInlineItalic } from "@/lib/sanity/text";
 import { resolveCta } from "@/lib/sanity/cta";
 import { urlForImageString } from "@/lib/sanity/image";
@@ -27,24 +26,13 @@ const fadeUp = {
   },
 };
 
-const FALLBACK_EYEBROW = "Univers 03 · Événements Pro";
-const FALLBACK_TITLE = "Quand l'image\ndevient _expérience._";
-const FALLBACK_SUBTITLE =
-  "Soirées clients, afterworks, lancements produits, séminaires. Dans notre Espace Events à Émerainville (77) ou chez vous, partout en Île-de-France.";
-const FALLBACK_META = [
-  { value: "1 750 €", label: "Pack Ambiance" },
-  { value: "50 pers.", label: "Espace Events" },
-  { value: "30+ pros", label: "Événements livrés" },
-];
-const FALLBACK_IMAGE_ALT =
-  "DJ set lors d'un événement professionnel orchestré par Aïssa Events";
-
 export function EvenementHero({ data }: { data?: HeroData }) {
   if (data?.enabled === false) return null;
+  if (!data?.title) return null;
 
-  const eyebrow = data?.eyebrow ?? FALLBACK_EYEBROW;
-  const title = data?.title ?? FALLBACK_TITLE;
-  const subtitle = data?.subtitle ?? FALLBACK_SUBTITLE;
+  const eyebrow = data?.eyebrow;
+  const title = data.title;
+  const subtitle = data?.subtitle;
 
   const ctas = (data?.ctas ?? [])
     .map((c) => resolveCta(c))
@@ -52,8 +40,8 @@ export function EvenementHero({ data }: { data?: HeroData }) {
 
   const imageUrl = data?.image?.asset
     ? urlForImageString(data.image, { width: 1200, quality: 85 })
-    : EVENEMENT_IMAGES.hero;
-  const imageAlt = data?.image?.alt || FALLBACK_IMAGE_ALT;
+    : null;
+  const imageAlt = data?.image?.alt || "";
 
   return (
     <section className="relative pt-24 pb-24 sm:pt-28 sm:pb-28">
@@ -79,9 +67,11 @@ export function EvenementHero({ data }: { data?: HeroData }) {
           className="grid items-center gap-14 lg:grid-cols-2 lg:gap-20"
         >
           <div>
-            <motion.div variants={fadeUp} className="mb-8">
-              <Eyebrow>{eyebrow}</Eyebrow>
-            </motion.div>
+            {eyebrow && (
+              <motion.div variants={fadeUp} className="mb-8">
+                <Eyebrow>{eyebrow}</Eyebrow>
+              </motion.div>
+            )}
 
             <motion.h1
               variants={fadeUp}
@@ -137,42 +127,27 @@ export function EvenementHero({ data }: { data?: HeroData }) {
                 })}
               </motion.div>
             )}
-
-            <motion.div
-              variants={fadeUp}
-              className="mt-12 grid gap-x-10 gap-y-6 border-t border-[var(--rule)] pt-8 sm:flex sm:flex-wrap"
-            >
-              {FALLBACK_META.map((item) => (
-                <div
-                  key={item.label}
-                  className="font-mono text-[12px] uppercase tracking-[0.18em] text-muted-ink"
-                >
-                  <strong className="mb-1 block whitespace-nowrap font-serif text-[24px] font-normal italic tracking-[-0.02em] normal-case text-bordeaux">
-                    {item.value}
-                  </strong>
-                  {item.label}
-                </div>
-              ))}
-            </motion.div>
           </div>
 
-          <motion.div
-            initial={{ opacity: 0, scale: 0.96 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 1.2, delay: 0.4, ease: [0.16, 1, 0.3, 1] }}
-            className="relative aspect-[4/5] w-full overflow-hidden rounded-[20px] shadow-[0_30px_80px_rgba(44,31,51,0.15)]"
-          >
-            <Image
-              src={imageUrl}
-              alt={imageAlt}
-              fill
-              priority
-              sizes="(max-width: 1024px) 100vw, 50vw"
-              className="object-cover"
-              style={{ filter: "contrast(1.06) saturate(0.95) sepia(0.05)" }}
-            />
-            <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-ink/30" />
-          </motion.div>
+          {imageUrl && (
+            <motion.div
+              initial={{ opacity: 0, scale: 0.96 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 1.2, delay: 0.4, ease: [0.16, 1, 0.3, 1] }}
+              className="relative aspect-[4/5] w-full overflow-hidden rounded-[20px] shadow-[0_30px_80px_rgba(44,31,51,0.15)]"
+            >
+              <Image
+                src={imageUrl}
+                alt={imageAlt}
+                fill
+                priority
+                sizes="(max-width: 1024px) 100vw, 50vw"
+                className="object-cover"
+                style={{ filter: "contrast(1.06) saturate(0.95) sepia(0.05)" }}
+              />
+              <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-ink/30" />
+            </motion.div>
+          )}
         </motion.div>
       </div>
     </section>

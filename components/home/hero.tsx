@@ -25,17 +25,13 @@ const fadeUp = {
   },
 };
 
-const FALLBACK_IMAGE =
-  "https://images.unsplash.com/photo-1519741497674-611481863552?w=1200&q=85";
-
 export function Hero({ data }: { data?: HeroData }) {
   if (data?.enabled === false) return null;
+  if (!data?.title) return null;
 
-  const eyebrow = data?.eyebrow ?? "Wedding Planner · Émerainville 77 · Depuis 2020";
-  const title = data?.title ?? "Mariages et événements à _votre image._";
-  const subtitle =
-    data?.subtitle ??
-    "Wedding planning, soirées pro, célébrations privées. Dans notre lieu à Émerainville (77) ou chez vous, partout en Île-de-France.";
+  const eyebrow = data?.eyebrow;
+  const title = data.title;
+  const subtitle = data?.subtitle;
 
   const ctas = (data?.ctas ?? [])
     .map((c) => resolveCta(c))
@@ -43,9 +39,8 @@ export function Hero({ data }: { data?: HeroData }) {
 
   const imageUrl = data?.image?.asset
     ? urlForImageString(data.image, { width: 1200, quality: 85 })
-    : FALLBACK_IMAGE;
-  const imageAlt =
-    data?.image?.alt ?? "Mariage organisé par Aïssa Events à Émerainville";
+    : null;
+  const imageAlt = data?.image?.alt ?? "";
 
   const stats = data?.stats ?? [];
   const quoteBadge = data?.quoteBadge;
@@ -60,9 +55,11 @@ export function Hero({ data }: { data?: HeroData }) {
           className="grid items-center gap-16 lg:grid-cols-[1.1fr_1fr] lg:gap-20"
         >
           <div>
-            <motion.div variants={fadeUp} className="mb-8">
-              <Eyebrow>{eyebrow}</Eyebrow>
-            </motion.div>
+            {eyebrow && (
+              <motion.div variants={fadeUp} className="mb-8">
+                <Eyebrow>{eyebrow}</Eyebrow>
+              </motion.div>
+            )}
 
             <motion.h1
               variants={fadeUp}
@@ -133,43 +130,47 @@ export function Hero({ data }: { data?: HeroData }) {
             )}
           </div>
 
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 1.2, delay: 0.4, ease: "easeOut" }}
-            className="relative h-[70vh] max-h-[720px] min-h-[480px]"
-          >
-            <div className="absolute inset-0 overflow-hidden rounded-[20px] shadow-[0_30px_80px_rgba(44,31,51,0.15)]">
-              <Image
-                src={imageUrl}
-                alt={imageAlt}
-                fill
-                priority
-                sizes="(max-width: 1024px) 100vw, 50vw"
-                className="object-cover"
-                style={{ filter: "contrast(1.06) saturate(0.95) sepia(0.05)" }}
-              />
-              <div className="pointer-events-none absolute inset-0 rounded-[20px] bg-gradient-to-b from-transparent via-transparent to-ink/25" />
-            </div>
+          {(imageUrl || quoteBadge?.quote) && (
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 1.2, delay: 0.4, ease: "easeOut" }}
+              className="relative h-[70vh] max-h-[720px] min-h-[480px]"
+            >
+              {imageUrl && (
+                <div className="absolute inset-0 overflow-hidden rounded-[20px] shadow-[0_30px_80px_rgba(44,31,51,0.15)]">
+                  <Image
+                    src={imageUrl}
+                    alt={imageAlt}
+                    fill
+                    priority
+                    sizes="(max-width: 1024px) 100vw, 50vw"
+                    className="object-cover"
+                    style={{ filter: "contrast(1.06) saturate(0.95) sepia(0.05)" }}
+                  />
+                  <div className="pointer-events-none absolute inset-0 rounded-[20px] bg-gradient-to-b from-transparent via-transparent to-ink/25" />
+                </div>
+              )}
 
-            {quoteBadge?.quote && (
-              <motion.div
-                initial={{ opacity: 0, y: 30 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 1, delay: 1.2, ease: [0.16, 1, 0.3, 1] }}
-                className="absolute -bottom-10 -left-6 w-[280px] rounded-3xl border border-[var(--rule)] bg-cream px-7 py-6 shadow-[0_30px_80px_rgba(44,31,51,0.12)] sm:-left-10"
-              >
-                {quoteBadge.label && (
-                  <p className="mb-3 font-mono text-[9px] uppercase tracking-[0.22em] text-bordeaux">
-                    {quoteBadge.label}
+              {quoteBadge?.quote && (
+                <motion.div
+                  initial={{ opacity: 0, y: 30 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 1, delay: 1.2, ease: [0.16, 1, 0.3, 1] }}
+                  className="absolute -bottom-10 -left-6 w-[280px] rounded-3xl border border-[var(--rule)] bg-cream px-7 py-6 shadow-[0_30px_80px_rgba(44,31,51,0.12)] sm:-left-10"
+                >
+                  {quoteBadge.label && (
+                    <p className="mb-3 font-mono text-[9px] uppercase tracking-[0.22em] text-bordeaux">
+                      {quoteBadge.label}
+                    </p>
+                  )}
+                  <p className="font-serif text-[17px] italic leading-snug text-ink">
+                    « {quoteBadge.quote} »
                   </p>
-                )}
-                <p className="font-serif text-[17px] italic leading-snug text-ink">
-                  « {quoteBadge.quote} »
-                </p>
-              </motion.div>
-            )}
-          </motion.div>
+                </motion.div>
+              )}
+            </motion.div>
+          )}
         </motion.div>
       </div>
     </section>
