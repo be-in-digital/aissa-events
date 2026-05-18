@@ -7,6 +7,7 @@ import { availabilityLineSync } from "@/lib/availability";
 import { renderInlineItalic } from "@/lib/sanity/text";
 import { resolveCta, type ResolvedCta } from "@/lib/sanity/cta";
 import { openAvailabilityDialog } from "@/components/availability/dialog";
+import { CountUp } from "@/components/site/count-up";
 import type { EspaceEventsPageQueryResult } from "@/sanity.types";
 
 /**
@@ -93,7 +94,7 @@ export function NotYetDecided({
             <div>
               <p className="mb-3 inline-flex items-center gap-2 font-mono text-[10px] uppercase tracking-[0.22em] text-bordeaux">
                 <span className="size-1.5 animate-pulse rounded-full bg-bordeaux" />
-                {availabilityLabel ?? availabilityLineSync()}
+                <CountUp value={availabilityLabel ?? availabilityLineSync()} />
               </p>
               <div className="flex flex-col gap-3">
                 {ctas.map((cta, i) => {

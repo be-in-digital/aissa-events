@@ -5,9 +5,11 @@ import Link from "next/link";
 import { motion } from "motion/react";
 import { ArrowRight } from "lucide-react";
 import { Eyebrow } from "@/components/home/eyebrow";
-import { renderInlineItalic } from "@/lib/sanity/text";
 import { resolveCta } from "@/lib/sanity/cta";
 import { urlForImageString } from "@/lib/sanity/image";
+import { KineticTitle } from "@/components/site/kinetic-title";
+import { Magnetic } from "@/components/site/magnetic";
+import { Parallax } from "@/components/site/parallax";
 import type { EspaceEventsPageQueryResult } from "@/sanity.types";
 
 type HeroData = NonNullable<EspaceEventsPageQueryResult>["hero"];
@@ -73,20 +75,15 @@ export function EspaceHero({ data }: { data?: HeroData }) {
               </motion.div>
             )}
 
-            <motion.h1
-              variants={fadeUp}
+            <h1
               className="font-serif text-[56px] leading-[0.92] tracking-[-0.04em] text-ink sm:text-[80px] lg:text-[120px]"
               style={{ fontWeight: 300 }}
             >
-              {title.split("\n").map((line, i, arr) => (
-                <span key={i}>
-                  {renderInlineItalic(line, {
-                    italicClassName: "font-normal italic text-bordeaux",
-                  })}
-                  {i < arr.length - 1 && <br />}
-                </span>
-              ))}
-            </motion.h1>
+              <KineticTitle
+                text={title}
+                italicClassName="font-normal italic text-bordeaux"
+              />
+            </h1>
 
             {subtitle && (
               <motion.p
@@ -109,22 +106,31 @@ export function EspaceHero({ data }: { data?: HeroData }) {
                     cta.variant !== "secondary" &&
                     cta.variant !== "ghost";
                   return (
-                    <a
+                    <Magnetic
                       key={cta.href + cta.label}
-                      href={cta.href}
-                      target={cta.external ? "_blank" : undefined}
-                      rel={cta.external ? "noopener noreferrer" : undefined}
-                      className={
+                      strength={isPrimary ? 0.22 : 0.16}
+                      rippleColor={
                         isPrimary
-                          ? "group inline-flex items-center gap-2 rounded-full bg-bordeaux px-7 py-4 font-sans text-[12px] font-medium uppercase tracking-[0.18em] text-cream transition-all hover:-translate-y-0.5 hover:bg-bordeaux-deep hover:shadow-[0_12px_32px_rgba(61,37,73,0.3)]"
-                          : "inline-flex items-center gap-2 rounded-full border border-ink px-7 py-4 font-sans text-[12px] font-medium uppercase tracking-[0.18em] text-ink transition-all hover:-translate-y-0.5 hover:bg-ink hover:text-cream"
+                          ? "rgba(253, 247, 235, 0.55)"
+                          : "rgba(44, 31, 51, 0.18)"
                       }
                     >
-                      {cta.label}
-                      {isPrimary && (
-                        <ArrowRight className="size-4 transition-transform group-hover:translate-x-1" />
-                      )}
-                    </a>
+                      <a
+                        href={cta.href}
+                        target={cta.external ? "_blank" : undefined}
+                        rel={cta.external ? "noopener noreferrer" : undefined}
+                        className={
+                          isPrimary
+                            ? "group inline-flex items-center gap-2 rounded-full bg-bordeaux px-7 py-4 font-sans text-[12px] font-medium uppercase tracking-[0.18em] text-cream transition-colors hover:bg-bordeaux-deep hover:shadow-[0_18px_42px_rgba(61,37,73,0.32)]"
+                            : "inline-flex items-center gap-2 rounded-full border border-ink px-7 py-4 font-sans text-[12px] font-medium uppercase tracking-[0.18em] text-ink transition-colors hover:bg-ink hover:text-cream"
+                        }
+                      >
+                        {cta.label}
+                        {isPrimary && (
+                          <ArrowRight className="size-4 transition-transform group-hover:translate-x-1" />
+                        )}
+                      </a>
+                    </Magnetic>
                   );
                 })}
               </motion.div>
@@ -138,15 +144,17 @@ export function EspaceHero({ data }: { data?: HeroData }) {
               transition={{ duration: 1.2, delay: 0.4, ease: [0.16, 1, 0.3, 1] }}
               className="relative aspect-[4/5] w-full overflow-hidden rounded-[20px] shadow-[0_30px_80px_rgba(44,31,51,0.15)]"
             >
-              <Image
-                src={imageUrl}
-                alt={imageAlt}
-                fill
-                priority
-                sizes="(max-width: 1024px) 100vw, 50vw"
-                className="object-cover"
-                style={{ filter: "contrast(1.06) saturate(0.95) sepia(0.05)" }}
-              />
+              <Parallax className="absolute inset-0" speed={0.08} zoom={0.04}>
+                <Image
+                  src={imageUrl}
+                  alt={imageAlt}
+                  fill
+                  priority
+                  sizes="(max-width: 1024px) 100vw, 50vw"
+                  className="object-cover"
+                  style={{ filter: "contrast(1.06) saturate(0.95) sepia(0.05)" }}
+                />
+              </Parallax>
               <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-ink/30" />
             </motion.div>
           )}
