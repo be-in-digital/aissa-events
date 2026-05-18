@@ -35,6 +35,7 @@ import {
   contactSection,
   locationPricingSection,
   crossServicesSection,
+  leadMagnetSection,
 } from "./objects/page-sections";
 
 // Documents (collections)
@@ -59,6 +60,7 @@ import {
   politiqueConfidentialite,
 } from "./singletons/legalPages";
 import { agentSettings } from "./singletons/agentSettings";
+import { availability } from "./singletons/availability";
 
 export const schemaTypes: SchemaTypeDefinition[] = [
   // Objects de base
@@ -95,6 +97,7 @@ export const schemaTypes: SchemaTypeDefinition[] = [
   contactSection,
   locationPricingSection,
   crossServicesSection,
+  leadMagnetSection,
 
   // Documents
   pack,
@@ -116,4 +119,5 @@ export const schemaTypes: SchemaTypeDefinition[] = [
   mentionsLegales,
   politiqueConfidentialite,
   agentSettings,
+  availability,
 ];

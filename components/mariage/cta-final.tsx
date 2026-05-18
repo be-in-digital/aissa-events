@@ -1,121 +1,141 @@
 "use client";
 
-import { motion } from "motion/react";
+import { MotionConfig, motion } from "motion/react";
 import Link from "next/link";
 import { ArrowRight, Phone } from "lucide-react";
 import { renderInlineItalic } from "@/lib/sanity/text";
 import { resolveCta } from "@/lib/sanity/cta";
+import { buildCalendlyUrl } from "@/lib/calendly";
 import type { MariagePageQueryResult } from "@/sanity.types";
 
 type FinalCtaData = NonNullable<MariagePageQueryResult>["finalCta"];
 
+const FALLBACK_TITLE = "Transformons votre vision en\n_moment inoubliable._";
+const FALLBACK_DESCRIPTION =
+  "Échange découverte de 30 minutes, gratuit et sans engagement. Aïssa vous répond personnellement sous 48 h.";
+
+const FALLBACK_CTAS = [
+  {
+    label: "Prendre rendez-vous",
+    href: buildCalendlyUrl({ source: "mariage", content: "cta-final" }),
+    external: true,
+    variant: "primary" as const,
+  },
+  {
+    label: "Écrire un message",
+    href: "/contact",
+    external: false,
+    variant: "secondary" as const,
+  },
+];
+
 export function MariageCtaFinal({ data }: { data?: FinalCtaData }) {
   if (data?.enabled === false) return null;
-  if (!data?.title) return null;
 
-  const title = data.title;
-  const description = data?.description;
+  const title = data?.title ?? FALLBACK_TITLE;
+  const description = data?.description ?? FALLBACK_DESCRIPTION;
 
-  const ctas = (data?.ctas ?? [])
+  const sanityCtas = (data?.ctas ?? [])
     .map((c) => resolveCta(c))
     .filter((c): c is NonNullable<typeof c> => c !== null);
-
-  if (!ctas.length) return null;
+  const ctas = sanityCtas.length ? sanityCtas : FALLBACK_CTAS;
 
   return (
-    <section className="relative bg-cream-soft py-28 sm:py-36">
-      <div className="mx-auto max-w-[1440px] px-6 sm:px-14">
-        <motion.div
-          initial={{ opacity: 0, y: 32 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "-80px" }}
-          transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}
-          className="relative overflow-hidden rounded-[28px] bg-ink px-10 py-20 text-center text-cream sm:px-16 sm:py-24 lg:py-28"
-        >
+    <MotionConfig reducedMotion="user">
+      <section className="relative bg-cream-soft py-28 sm:py-36">
+        <div className="mx-auto max-w-[1440px] px-6 sm:px-14">
           <motion.div
-            aria-hidden
-            animate={{ backgroundPosition: ["0% 50%", "100% 50%", "0% 50%"] }}
-            transition={{ duration: 16, repeat: Infinity, ease: "linear" }}
-            className="pointer-events-none absolute inset-0"
-            style={{
-              background:
-                "radial-gradient(circle at 30% 50%, rgba(61, 37, 73, 0.5) 0%, transparent 50%), radial-gradient(circle at 70% 50%, rgba(184, 146, 78, 0.22) 0%, transparent 50%)",
-              backgroundSize: "200% 100%",
-            }}
-          />
+            initial={{ opacity: 0, y: 32 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-80px" }}
+            transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}
+            className="relative overflow-hidden rounded-[28px] bg-ink px-10 py-20 text-center text-cream sm:px-16 sm:py-24 lg:py-28"
+          >
+            <motion.div
+              aria-hidden
+              animate={{ backgroundPosition: ["0% 50%", "100% 50%", "0% 50%"] }}
+              transition={{ duration: 16, repeat: Infinity, ease: "linear" }}
+              className="pointer-events-none absolute inset-0"
+              style={{
+                background:
+                  "radial-gradient(circle at 30% 50%, rgba(61, 37, 73, 0.5) 0%, transparent 50%), radial-gradient(circle at 70% 50%, rgba(184, 146, 78, 0.22) 0%, transparent 50%)",
+                backgroundSize: "200% 100%",
+              }}
+            />
 
-          <div className="relative">
-            <h2
-              className="mx-auto max-w-[860px] font-serif text-[40px] leading-[1] tracking-[-0.03em] sm:text-[60px] lg:text-[80px]"
-              style={{ fontWeight: 300 }}
-            >
-              {title.split("\n").map((line, i, arr) => (
-                <span key={i}>
-                  {renderInlineItalic(line, {
-                    italicClassName: "italic text-gold-soft",
-                  })}
-                  {i < arr.length - 1 && <br />}
-                </span>
-              ))}
-            </h2>
-            {description && (
-              <p className="mx-auto mt-7 max-w-[620px] font-serif text-[18px] italic leading-[1.6] text-cream/75">
-                {description}
-              </p>
-            )}
+            <div className="relative">
+              <h2
+                className="mx-auto max-w-[860px] font-serif text-[40px] leading-[1] tracking-[-0.03em] sm:text-[60px] lg:text-[80px]"
+                style={{ fontWeight: 300 }}
+              >
+                {title.split("\n").map((line, i, arr) => (
+                  <span key={i}>
+                    {renderInlineItalic(line, {
+                      italicClassName: "italic text-gold-soft",
+                    })}
+                    {i < arr.length - 1 && <br />}
+                  </span>
+                ))}
+              </h2>
+              {description && (
+                <p className="mx-auto mt-7 max-w-[620px] font-serif text-[18px] italic leading-[1.6] text-cream/75">
+                  {description}
+                </p>
+              )}
 
-            <div className="mt-10 flex flex-wrap items-center justify-center gap-4">
-              {ctas.map((cta, i) => {
-                const isPrimary =
-                  i === 0 && cta.variant !== "secondary" && cta.variant !== "ghost";
-                if (cta.external) {
+              <div className="mt-10 flex flex-wrap items-center justify-center gap-4">
+                {ctas.map((cta, i) => {
+                  const isPrimary =
+                    i === 0 && cta.variant !== "secondary" && cta.variant !== "ghost";
+                  if (cta.external) {
+                    return (
+                      <a
+                        key={cta.href + cta.label}
+                        href={cta.href}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className={
+                          isPrimary
+                            ? "group inline-flex items-center gap-2 rounded-full bg-gold px-7 py-4 font-sans text-[12px] font-medium uppercase tracking-[0.2em] text-ink transition-all hover:-translate-y-0.5 hover:bg-gold-soft hover:shadow-[0_12px_32px_rgba(184,146,78,0.35)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold focus-visible:ring-offset-2 focus-visible:ring-offset-ink"
+                            : "inline-flex items-center gap-2 rounded-full border border-cream px-7 py-4 font-sans text-[12px] font-medium uppercase tracking-[0.2em] text-cream transition-all hover:-translate-y-0.5 hover:bg-cream hover:text-ink focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cream focus-visible:ring-offset-2 focus-visible:ring-offset-ink"
+                        }
+                      >
+                        {cta.label}
+                        {isPrimary && (
+                          <ArrowRight className="size-3.5 transition-transform group-hover:translate-x-1" />
+                        )}
+                      </a>
+                    );
+                  }
                   return (
-                    <a
+                    <Link
                       key={cta.href + cta.label}
                       href={cta.href}
-                      target="_blank"
-                      rel="noopener noreferrer"
                       className={
                         isPrimary
-                          ? "group inline-flex items-center gap-2 rounded-full bg-gold px-7 py-4 font-sans text-[12px] font-medium uppercase tracking-[0.2em] text-ink transition-all hover:-translate-y-0.5 hover:bg-gold-soft hover:shadow-[0_12px_32px_rgba(184,146,78,0.35)]"
-                          : "inline-flex items-center gap-2 rounded-full border border-cream px-7 py-4 font-sans text-[12px] font-medium uppercase tracking-[0.2em] text-cream transition-all hover:-translate-y-0.5 hover:bg-cream hover:text-ink"
+                          ? "group inline-flex items-center gap-2 rounded-full bg-gold px-7 py-4 font-sans text-[12px] font-medium uppercase tracking-[0.2em] text-ink transition-all hover:-translate-y-0.5 hover:bg-gold-soft hover:shadow-[0_12px_32px_rgba(184,146,78,0.35)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold focus-visible:ring-offset-2 focus-visible:ring-offset-ink"
+                          : "inline-flex items-center gap-2 rounded-full border border-cream px-7 py-4 font-sans text-[12px] font-medium uppercase tracking-[0.2em] text-cream transition-all hover:-translate-y-0.5 hover:bg-cream hover:text-ink focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cream focus-visible:ring-offset-2 focus-visible:ring-offset-ink"
                       }
                     >
                       {cta.label}
                       {isPrimary && (
                         <ArrowRight className="size-3.5 transition-transform group-hover:translate-x-1" />
                       )}
-                    </a>
+                    </Link>
                   );
-                }
-                return (
-                  <Link
-                    key={cta.href + cta.label}
-                    href={cta.href}
-                    className={
-                      isPrimary
-                        ? "group inline-flex items-center gap-2 rounded-full bg-gold px-7 py-4 font-sans text-[12px] font-medium uppercase tracking-[0.2em] text-ink transition-all hover:-translate-y-0.5 hover:bg-gold-soft hover:shadow-[0_12px_32px_rgba(184,146,78,0.35)]"
-                        : "inline-flex items-center gap-2 rounded-full border border-cream px-7 py-4 font-sans text-[12px] font-medium uppercase tracking-[0.2em] text-cream transition-all hover:-translate-y-0.5 hover:bg-cream hover:text-ink"
-                    }
-                  >
-                    {cta.label}
-                    {isPrimary && (
-                      <ArrowRight className="size-3.5 transition-transform group-hover:translate-x-1" />
-                    )}
-                  </Link>
-                );
-              })}
-              <a
-                href="tel:+33661948859"
-                className="inline-flex items-center gap-2 font-mono text-[11px] uppercase tracking-[0.22em] text-cream/70 transition-colors hover:text-cream"
-              >
-                <Phone className="size-3.5" strokeWidth={1.5} />
-                06 61 94 88 59
-              </a>
+                })}
+                <a
+                  href="tel:+33661948859"
+                  className="inline-flex items-center gap-2 rounded-sm font-mono text-[11px] uppercase tracking-[0.22em] text-cream/70 transition-colors hover:text-cream focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cream focus-visible:ring-offset-2 focus-visible:ring-offset-ink"
+                >
+                  <Phone className="size-3.5" strokeWidth={1.5} />
+                  06 61 94 88 59
+                </a>
+              </div>
             </div>
-          </div>
-        </motion.div>
-      </div>
-    </section>
+          </motion.div>
+        </div>
+      </section>
+    </MotionConfig>
   );
 }

@@ -3,14 +3,35 @@
 import Link from "next/link";
 import { motion } from "motion/react";
 import { ArrowUpRight, Calendar, Eye } from "lucide-react";
-import { availabilityLine } from "@/lib/availability";
+import { availabilityLineSync } from "@/lib/availability";
 import { renderInlineItalic } from "@/lib/sanity/text";
-import { resolveCta } from "@/lib/sanity/cta";
+import { resolveCta, type ResolvedCta } from "@/lib/sanity/cta";
+import { openAvailabilityDialog } from "@/components/availability/dialog";
 import type { EspaceEventsPageQueryResult } from "@/sanity.types";
+
+/**
+ * Reconnaît un CTA destiné à ouvrir la modale de disponibilités, soit par son
+ * href (`#disponibilites`, scope page ou cross-page), soit par son label
+ * (cas du seed historique qui pointe vers `/#contact`).
+ */
+function isAvailabilityCta(cta: ResolvedCta) {
+  const href = cta.href.toLowerCase();
+  if (href === "#disponibilites" || href.endsWith("/#disponibilites")) {
+    return true;
+  }
+  const label = cta.label.toLowerCase();
+  return label.includes("disponibilit") && label.includes("vérif");
+}
 
 type NotYetDecidedData = NonNullable<EspaceEventsPageQueryResult>["notYetDecided"];
 
-export function NotYetDecided({ data }: { data?: NotYetDecidedData }) {
+export function NotYetDecided({
+  data,
+  availabilityLabel,
+}: {
+  data?: NotYetDecidedData;
+  availabilityLabel?: string;
+}) {
   if (data?.enabled === false) return null;
   if (!data?.title) return null;
 
@@ -72,9 +93,9 @@ export function NotYetDecided({ data }: { data?: NotYetDecidedData }) {
             <div>
               <p className="mb-3 inline-flex items-center gap-2 font-mono text-[10px] uppercase tracking-[0.22em] text-bordeaux">
                 <span className="size-1.5 animate-pulse rounded-full bg-bordeaux" />
-                {availabilityLine()}
+                {availabilityLabel ?? availabilityLineSync()}
               </p>
-              <div className="flex flex-col gap-3 sm:flex-row lg:flex-col lg:gap-3">
+              <div className="flex flex-col gap-3">
                 {ctas.map((cta, i) => {
                   const isPrimary = i === ctas.length - 1;
                   const Icon = isPrimary ? Eye : Calendar;
@@ -87,8 +108,8 @@ export function NotYetDecided({ data }: { data?: NotYetDecidedData }) {
                         rel="noopener noreferrer"
                         className={
                           isPrimary
-                            ? "group inline-flex min-w-[260px] items-center justify-between gap-4 rounded-full bg-bordeaux px-6 py-4 text-cream transition-all duration-500 hover:-translate-y-0.5 hover:bg-bordeaux-deep hover:shadow-[0_14px_40px_rgba(122,46,67,0.20)]"
-                            : "group inline-flex min-w-[260px] items-center justify-between gap-4 rounded-full border border-bordeaux/30 bg-cream px-6 py-4 transition-all duration-500 hover:-translate-y-0.5 hover:border-bordeaux hover:shadow-[0_14px_40px_rgba(122,46,67,0.10)]"
+                            ? "group inline-flex w-full items-center justify-between gap-4 rounded-full bg-bordeaux px-6 py-4 text-cream transition-all duration-500 hover:-translate-y-0.5 hover:bg-bordeaux-deep hover:shadow-[0_14px_40px_rgba(122,46,67,0.20)] sm:w-auto sm:min-w-[300px]"
+                            : "group inline-flex w-full items-center justify-between gap-4 rounded-full border border-bordeaux/30 bg-cream px-6 py-4 transition-all duration-500 hover:-translate-y-0.5 hover:border-bordeaux hover:shadow-[0_14px_40px_rgba(122,46,67,0.10)] sm:w-auto sm:min-w-[300px]"
                         }
                       >
                         <span className="flex items-center gap-3">
@@ -118,14 +139,24 @@ export function NotYetDecided({ data }: { data?: NotYetDecidedData }) {
                       </a>
                     );
                   }
+                  const opensDialog = isAvailabilityCta(cta);
                   return (
                     <Link
                       key={cta.href + cta.label}
-                      href={cta.href}
+                      href={opensDialog ? "#disponibilites" : cta.href}
+                      onClick={
+                        opensDialog
+                          ? () => {
+                              // Léger délai pour laisser le scroll vers la
+                              // section démarrer avant l'ouverture du dialog.
+                              window.setTimeout(openAvailabilityDialog, 200);
+                            }
+                          : undefined
+                      }
                       className={
                         isPrimary
-                          ? "group inline-flex min-w-[260px] items-center justify-between gap-4 rounded-full bg-bordeaux px-6 py-4 text-cream transition-all duration-500 hover:-translate-y-0.5 hover:bg-bordeaux-deep hover:shadow-[0_14px_40px_rgba(122,46,67,0.20)]"
-                          : "group inline-flex min-w-[260px] items-center justify-between gap-4 rounded-full border border-bordeaux/30 bg-cream px-6 py-4 transition-all duration-500 hover:-translate-y-0.5 hover:border-bordeaux hover:shadow-[0_14px_40px_rgba(122,46,67,0.10)]"
+                          ? "group inline-flex w-full items-center justify-between gap-4 rounded-full bg-bordeaux px-6 py-4 text-cream transition-all duration-500 hover:-translate-y-0.5 hover:bg-bordeaux-deep hover:shadow-[0_14px_40px_rgba(122,46,67,0.20)] sm:w-auto sm:min-w-[300px]"
+                          : "group inline-flex w-full items-center justify-between gap-4 rounded-full border border-bordeaux/30 bg-cream px-6 py-4 transition-all duration-500 hover:-translate-y-0.5 hover:border-bordeaux hover:shadow-[0_14px_40px_rgba(122,46,67,0.10)] sm:w-auto sm:min-w-[300px]"
                       }
                     >
                       <span className="flex items-center gap-3">

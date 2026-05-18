@@ -29,9 +29,9 @@ export async function generateMetadata(): Promise<Metadata> {
   return buildMetadata({
     seo: data?.seo,
     fallbackTitle:
-      "Aïssa Events · Wedding Planner & Agence Événementielle à Émerainville (77)",
+      "Aïssa Events · Agence événementielle à Émerainville (77)",
     fallbackDescription:
-      "Wedding planning et agence événementielle à Émerainville (Seine-et-Marne), depuis 2020. Notre lieu (Espace Events) accueille mariages, cérémonies et soirées pro jusqu'à 50 personnes. Pour les autres formats, nous nous déplaçons partout en Île-de-France. Devis sous 48 h.",
+      "Agence événementielle à Émerainville (Seine-et-Marne), depuis 2020. Notre lieu (Espace Events) accueille mariages, baptêmes, anniversaires, henné, événements pros et soirées jusqu'à 50 personnes. Pour les autres formats, nous nous déplaçons partout en Île-de-France. Devis sous 48 h.",
     pathname: "/",
   });
 }

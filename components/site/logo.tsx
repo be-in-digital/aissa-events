@@ -9,30 +9,43 @@ export function Logo({
   tagline?: boolean;
   tone?: "gold" | "cream" | "ink";
 }) {
-  const colorClass =
+  const wordmarkColor =
     tone === "cream"
-      ? "text-cream-soft"
+      ? "text-cream"
       : tone === "ink"
         ? "text-ink"
-        : "text-gold";
+        : "text-[#887666]";
+
+  const taglineColor =
+    tone === "cream"
+      ? "text-cream/80"
+      : tone === "ink"
+        ? "text-ink/80"
+        : "text-ink/90";
 
   return (
     <span
-      className={cn(
-        "inline-flex flex-col leading-none",
-        colorClass,
-        className,
-      )}
+      className={cn("inline-flex flex-col items-center leading-none", className)}
+      aria-label="Aïssa Events — The Perfect Timing"
     >
       <span
-        className="font-serif italic font-normal text-[1.7em]"
-        style={{ letterSpacing: "-0.02em" }}
-        aria-label="Aïssa Events"
+        className={cn("font-normal text-[3em]", wordmarkColor)}
+        style={{
+          fontFamily: "var(--font-logo), cursive",
+          letterSpacing: "0.005em",
+          lineHeight: 1,
+        }}
       >
         Aïssa Events
       </span>
       {tagline && (
-        <span className="mt-1 text-[0.42em] uppercase tracking-[0.42em] font-sans font-normal opacity-90">
+        <span
+          className={cn(
+            "mt-[0.2em] font-sans font-light uppercase text-[0.7em]",
+            taglineColor,
+          )}
+          style={{ letterSpacing: "0.42em" }}
+        >
           The Perfect Timing
         </span>
       )}

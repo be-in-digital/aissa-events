@@ -320,6 +320,24 @@ const stickyCtaSectionFragment = /* groq */ `
   cta{ ${ctaFragment} }
 `;
 
+const leadMagnetSectionFragment = /* groq */ `
+  enabled,
+  eyebrow,
+  title,
+  intro,
+  bullets,
+  emailPlaceholder,
+  submitLabel,
+  successMessage,
+  privacyNote,
+  catalogues[]{
+    title,
+    subtitle,
+    cover{ ${imageFragment} },
+    rotate
+  }
+`;
+
 const locationPricingSectionFragment = /* groq */ `
   enabled,
   eyebrow,
@@ -426,6 +444,7 @@ export const homePageQuery = defineQuery(`
     pillars{ ${pillarsSectionFragment} },
     testimonials{ ${testimonialsSectionFragment} },
     faq{ ${faqSectionFragment} },
+    leadMagnet{ ${leadMagnetSectionFragment} },
     contact{ ${contactSectionFragment} },
     seo
   }
@@ -601,6 +620,7 @@ export const postsListQuery = defineQuery(`
 export const postBySlugQuery = defineQuery(`
   *[_type == "post" && slug.current == $slug][0]{
     _id,
+    _updatedAt,
     title,
     "slug": slug.current,
     excerpt,

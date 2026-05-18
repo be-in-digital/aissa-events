@@ -27,6 +27,7 @@ const SINGLETON_TYPES = new Set<string>([
   "mentionsLegales",
   "politiqueConfidentialite",
   "agentSettings",
+  "availability",
 ]);
 
 const HIDDEN_FROM_DEFAULT = new Set<string>([
@@ -82,7 +83,7 @@ export const structure: StructureResolver = (S) =>
                     .title("Page Événements"),
                 ),
               S.listItem()
-                .title("Espace Émerainville")
+                .title("Espace Events")
                 .icon(PinIcon)
                 .child(
                   S.editor()
@@ -231,6 +232,17 @@ export const structure: StructureResolver = (S) =>
             .schemaType("agentSettings")
             .documentId("agentSettings")
             .title("Assistante virtuelle"),
+        ),
+
+      S.listItem()
+        .title("Disponibilités (calendrier)")
+        .icon(CalendarIcon)
+        .child(
+          S.editor()
+            .id("availability")
+            .schemaType("availability")
+            .documentId("availability")
+            .title("Disponibilités (calendrier)"),
         ),
 
       // Catch-all

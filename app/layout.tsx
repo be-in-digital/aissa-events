@@ -1,13 +1,17 @@
 import type { Metadata } from "next";
+import { Suspense } from "react";
 import "./globals.css";
 import {
   Manrope,
   Fraunces,
   JetBrains_Mono,
   Great_Vibes,
+  Alex_Brush,
 } from "next/font/google";
 import { cn } from "@/lib/utils";
 import { env } from "@/env";
+import { VisualEditingOverlay } from "@/components/sanity/visual-editing";
+import { SanityLiveWrapper } from "@/components/sanity/live-wrapper";
 
 const manrope = Manrope({
   subsets: ["latin"],
@@ -38,6 +42,13 @@ const script = Great_Vibes({
   display: "swap",
 });
 
+const logo = Alex_Brush({
+  subsets: ["latin"],
+  variable: "--font-logo",
+  weight: ["400"],
+  display: "swap",
+});
+
 export const metadata: Metadata = {
   title: {
     default: "Aïssa Events — The Perfect Timing",
@@ -62,10 +73,20 @@ export default function RootLayout({
         fraunces.variable,
         mono.variable,
         script.variable,
+        logo.variable,
       )}
     >
       <body className="min-h-full flex flex-col bg-cream text-ink">
-        {children}
+        {/* Frontière dynamique pour les pages qui fetchent du contenu Sanity.
+            Sous cacheComponents, sanityFetch lit draftMode() + cookies() (donc
+            dynamique) et doit obligatoirement vivre dans un Suspense. */}
+        <Suspense fallback={null}>{children}</Suspense>
+        <Suspense fallback={null}>
+          <SanityLiveWrapper />
+        </Suspense>
+        <Suspense fallback={null}>
+          <VisualEditingOverlay />
+        </Suspense>
       </body>
     </html>
   );

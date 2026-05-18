@@ -74,22 +74,22 @@ export function SiteFooter({ settings }: { settings: SiteSettingsQueryResult }) 
   const contactTitle = settings?.footerContactTitle ?? "Contact";
   const copyright = settings?.footerCopyright ?? "© 2026 Aïssa Events · Tous droits réservés";
 
+  const lgGridCols =
+    columns.length > 0
+      ? `2fr ${columns.map(() => "1fr").join(" ")} 1fr`
+      : "2fr 1fr";
+
   return (
     <footer className="relative overflow-hidden bg-ink text-cream">
-      <div className="mx-auto max-w-[1440px] px-6 pt-20 sm:px-14 sm:pt-24">
+      <div className="mx-auto max-w-[1440px] px-6 pt-16 sm:px-14 sm:pt-24">
         <div
-          className="grid gap-12 border-b border-cream/15 pb-20"
-          style={{
-            gridTemplateColumns:
-              columns.length > 0
-                ? `2fr ${columns.map(() => "1fr").join(" ")} 1fr`
-                : "2fr 1fr",
-          }}
+          className="grid grid-cols-1 gap-10 border-b border-cream/15 pb-14 sm:grid-cols-2 sm:gap-12 sm:pb-20 lg:[grid-template-columns:var(--footer-lg-cols)]"
+          style={{ ["--footer-lg-cols" as string]: lgGridCols }}
         >
-          <div>
-            <Logo tone="gold" className="text-[14px]" />
+          <div className="sm:col-span-2 lg:col-span-1">
+            <Logo tone="cream" className="text-[15px]" />
             {tagline && (
-              <p className="mt-6 max-w-sm text-[14px] leading-[1.7] text-cream/65 whitespace-pre-line">
+              <p className="mt-6 max-w-md text-[14px] leading-[1.7] text-cream/80 whitespace-pre-line">
                 {tagline}
               </p>
             )}
@@ -107,7 +107,7 @@ export function SiteFooter({ settings }: { settings: SiteSettingsQueryResult }) 
                       href={l.href}
                       target={l.external ? "_blank" : undefined}
                       rel={l.external ? "noopener noreferrer" : undefined}
-                      className="text-[14px] text-cream/65 transition-colors hover:text-cream"
+                      className="text-[14px] text-cream/80 transition-colors hover:text-cream"
                     >
                       {l.label}
                     </Link>
@@ -122,7 +122,7 @@ export function SiteFooter({ settings }: { settings: SiteSettingsQueryResult }) 
               {contactTitle}
             </h4>
             {phoneDisplay && (
-              <p className="text-[14px] leading-[1.8] text-cream/65">
+              <p className="text-[14px] leading-[1.8] text-cream/80">
                 <a
                   href={`tel:${phoneHref}`}
                   className="border-b border-cream/30 text-cream transition-colors hover:border-gold-soft"
@@ -132,7 +132,7 @@ export function SiteFooter({ settings }: { settings: SiteSettingsQueryResult }) 
               </p>
             )}
             {email && (
-              <p className="mt-2 text-[14px] leading-[1.8] text-cream/65">
+              <p className="mt-2 text-[14px] leading-[1.8] text-cream/80">
                 <a
                   href={`mailto:${email}`}
                   className="border-b border-cream/30 text-cream transition-colors hover:border-gold-soft"
@@ -142,7 +142,7 @@ export function SiteFooter({ settings }: { settings: SiteSettingsQueryResult }) 
               </p>
             )}
             {addressLines.length > 0 && (
-              <p className="mt-3 text-[14px] leading-[1.8] text-cream/65">
+              <p className="mt-3 text-[14px] leading-[1.8] text-cream/80">
                 {addressLines.map((line, i) => (
                   <span key={line}>
                     {line}
@@ -152,12 +152,12 @@ export function SiteFooter({ settings }: { settings: SiteSettingsQueryResult }) 
               </p>
             )}
             {social.length > 0 && (
-              <p className="mt-4 flex flex-wrap gap-x-2 text-[14px] text-cream/65">
+              <p className="mt-4 flex flex-wrap gap-x-2 text-[14px] text-cream/80">
                 {social.map((s, i) => {
                   if (!s?.url) return null;
                   return (
                     <span key={s.url}>
-                      {i > 0 && <span className="text-cream/40">·</span>}{" "}
+                      {i > 0 && <span className="text-cream/60">·</span>}{" "}
                       <a
                         href={s.url}
                         target="_blank"
@@ -175,8 +175,8 @@ export function SiteFooter({ settings }: { settings: SiteSettingsQueryResult }) 
         </div>
       </div>
 
-      <div className="mx-auto max-w-[1440px] px-6 pb-12 sm:px-14">
-        <div className="flex flex-col gap-3 pt-8 font-mono text-[10px] uppercase tracking-[0.22em] text-cream/40 sm:flex-row sm:items-center sm:justify-between">
+      <div className="mx-auto max-w-[1440px] px-6 pb-10 sm:px-14 sm:pb-12">
+        <div className="flex flex-col gap-4 pt-8 font-mono text-[10px] uppercase tracking-[0.22em] text-cream/70 sm:flex-row sm:items-center sm:justify-between sm:gap-3">
           <span>{copyright}</span>
           <div className="flex flex-wrap items-center gap-x-6 gap-y-2">
             {legalLinks.map((l) => (

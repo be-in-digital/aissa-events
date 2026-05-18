@@ -26,6 +26,7 @@ import { EvenementProcess } from "@/components/evenements-pro/process";
 import { EvenementFaq } from "@/components/evenements-pro/faq";
 import { EvenementCtaFinal } from "@/components/evenements-pro/cta-final";
 import { EvenementStickyCta } from "@/components/evenements-pro/sticky-cta";
+import { AvailabilitySection } from "@/components/availability/section";
 
 const PATH = "/evenements-pro";
 
@@ -72,6 +73,15 @@ export default async function EvenementPage() {
       {/* <EvenementTestimonials /> — à activer dès témoignages décideurs dispo */}
       <EvenementProcess data={data?.process} />
       <EvenementFaq data={data?.faq} />
+      <AvailabilitySection
+        utmSource="evenements-pro"
+        utmContent="calendar-pro"
+        eyebrow="Disponibilités"
+        title="Votre date butoir tient-elle ?"
+        description="L'agenda d'Aïssa pour les événements pro. Cliquez sur votre date cible pour bloquer un appel cadrage — confirmation sous 48 h."
+        nextSlotsEyebrow="Prochaines dates"
+        nextSlotsTitle="Les vendredis et samedis encore libres"
+      />
       <EvenementCtaFinal data={data?.finalCta} />
       <EvenementStickyCta data={data?.stickyCta} />
     </>
@@ -87,7 +97,7 @@ function ProServiceJsonLd() {
       "@type": "LocalBusiness",
       name: "Aïssa Events",
       telephone: "+33661948859",
-      email: "contact@aissaevents.fr",
+      email: "contact@aissaevents.com",
       address: {
         "@type": "PostalAddress",
         streetAddress: "35 Bd de Beaubourg",

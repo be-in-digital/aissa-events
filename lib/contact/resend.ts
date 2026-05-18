@@ -8,15 +8,15 @@ import { buildLeadEmailHtml, buildLeadEmailText } from "./email-template";
  *
  * Variables d'env requises :
  *  - RESEND_API_KEY (commence par "re_")
- *  - RESEND_FROM_EMAIL (un domaine vérifié dans Resend, ex: contact@aissaevents.fr)
- *  - RESEND_TO_EMAIL (destination du lead, ex: contact@aissaevents.fr)
+ *  - RESEND_FROM_EMAIL (un domaine vérifié dans Resend, ex: contact@aissaevents.com)
+ *  - RESEND_TO_EMAIL (destination du lead, ex: contact@aissaevents.com)
  *
  * Si RESEND_API_KEY est manquant, lance une erreur explicite (mode "non configuré").
  */
 export async function sendLeadEmail(data: ContactFormData): Promise<{ id: string } | null> {
   const apiKey = process.env.RESEND_API_KEY;
-  const fromEmail = process.env.RESEND_FROM_EMAIL ?? "contact@aissaevents.fr";
-  const toEmail = process.env.RESEND_TO_EMAIL ?? "contact@aissaevents.fr";
+  const fromEmail = process.env.RESEND_FROM_EMAIL ?? "contact@aissaevents.com";
+  const toEmail = process.env.RESEND_TO_EMAIL ?? "contact@aissaevents.com";
 
   if (!apiKey) {
     throw new Error(

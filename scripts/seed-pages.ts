@@ -853,8 +853,8 @@ export const espaceEventsPageDoc = {
         _type: "cta",
         _key: "nyd-cta-1",
         label: "Vérifier la disponibilité",
-        type: "internal",
-        internalPath: "/#contact",
+        type: "anchor",
+        anchor: "disponibilites",
         variant: "secondary",
       },
       {

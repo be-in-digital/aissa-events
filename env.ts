@@ -32,6 +32,20 @@ const serverSchema = z.object({
   // Admin pages (assistante)
   ADMIN_AGENT_HEALTH_SECRET: z.string().min(8).optional(),
 
+  // Blog AI Generator — secret partagé entre Sanity Studio action et routes /api/admin/blog/*
+  // MVP : valeur identique côté serveur (BLOG_AI_ADMIN_SECRET) et côté client
+  // (NEXT_PUBLIC_BLOG_AI_ADMIN_TOKEN). Trade-off documenté dans .context/blog-ai-generator-design.md.
+  BLOG_AI_ADMIN_SECRET: z.string().min(16).optional(),
+
+  // GPTZero — détecteur IA externe (legacy, non utilisé après refonte mai 2026).
+  GPTZERO_API_KEY: z.string().min(10).optional(),
+
+  // Undetectable.AI — service tiers de paraphrase humanizer.
+  // Couche post-process qui réécrit le texte généré pour passer GPTZero.
+  // Doc : https://help.undetectable.ai/en/article/humanization-api-v2-p28b2n/
+  // Plan Essential ~$15/mois (~10k mots). Sans clé = skip silencieux.
+  UNDETECTABLE_API_KEY: z.string().min(10).optional(),
+
   // Vercel AI Gateway (en local seulement — OIDC en prod)
   AI_GATEWAY_API_KEY: z.string().min(1).optional(),
 
@@ -60,12 +74,15 @@ const clientSchema = z.object({
   NEXT_PUBLIC_CALENDLY_URL: z
     .string()
     .url()
-    .default("https://calendly.com/aissaevents/appel-decouverte"),
+    .default("https://calendly.com/aissaeventscontact"),
 
   // Meta / WhatsApp Business Cloud API (Phase 2 — agent IA)
   NEXT_PUBLIC_META_APP_ID: z.string().min(1).optional(),
   NEXT_PUBLIC_META_GRAPH_API_VERSION: z.string().min(1).default("v21.0"),
   NEXT_PUBLIC_META_EMBEDDED_SIGNUP_CONFIG_ID: z.string().min(1).optional(),
+
+  // Blog AI Generator — token Studio (doit matcher BLOG_AI_ADMIN_SECRET côté serveur)
+  NEXT_PUBLIC_BLOG_AI_ADMIN_TOKEN: z.string().min(16).optional(),
 });
 
 const clientEnvRaw: Record<string, string | undefined> = {
@@ -77,6 +94,7 @@ const clientEnvRaw: Record<string, string | undefined> = {
   NEXT_PUBLIC_META_APP_ID: process.env.NEXT_PUBLIC_META_APP_ID,
   NEXT_PUBLIC_META_GRAPH_API_VERSION: process.env.NEXT_PUBLIC_META_GRAPH_API_VERSION,
   NEXT_PUBLIC_META_EMBEDDED_SIGNUP_CONFIG_ID: process.env.NEXT_PUBLIC_META_EMBEDDED_SIGNUP_CONFIG_ID,
+  NEXT_PUBLIC_BLOG_AI_ADMIN_TOKEN: process.env.NEXT_PUBLIC_BLOG_AI_ADMIN_TOKEN,
 };
 
 const clientEnv = Object.fromEntries(

@@ -1,7 +1,8 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
+import { Suspense } from "react";
 import { buildMetadata } from "@/lib/seo/metadata";
-import { sanityFetch } from "@/lib/sanity/fetch";
+import { sanityFetch, sanityFetchStatic } from "@/lib/sanity/fetch";
 import {
   allPostSlugsQuery,
   blogPageQuery,
@@ -15,6 +16,8 @@ import type {
   PostsListQueryResult,
 } from "@/sanity.types";
 import { safeJsonLd } from "@/lib/seo/json-ld";
+import { urlForImageString } from "@/lib/sanity/image";
+import { env } from "@/env";
 
 import { BlogArticleHero } from "@/components/blog/article-hero";
 import { BlogArticleContent } from "@/components/blog/article-content";
@@ -26,7 +29,7 @@ type RouteProps = {
 };
 
 export async function generateStaticParams() {
-  const slugs = await sanityFetch<AllPostSlugsQueryResult>({
+  const slugs = await sanityFetchStatic<AllPostSlugsQueryResult>({
     query: allPostSlugsQuery,
     tags: ["post"],
   });
@@ -54,11 +57,27 @@ export async function generateMetadata({
     });
   }
 
+  // Fallback OG : cover de l'article si pas d'image SEO dédiée
+  const coverFallback =
+    post.cover && (post.cover as { asset?: unknown }).asset
+      ? {
+          url: urlForImageString(
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            post.cover as any,
+            { width: 1200, height: 630 },
+          ),
+          width: 1200,
+          height: 630,
+          alt: post.cover.alt || post.title || "Aïssa Events",
+        }
+      : undefined;
+
   return buildMetadata({
     seo: post.seo ?? null,
     fallbackTitle: post.title ?? "Aïssa Events",
     fallbackDescription: post.excerpt ?? undefined,
     pathname: `/blog/${slug}`,
+    fallbackImage: coverFallback,
   });
 }
 
@@ -75,6 +94,35 @@ export default async function BlogArticlePage({ params }: RouteProps) {
     notFound();
   }
 
+  return (
+    <>
+      <ArticleJsonLd post={post} slug={slug} />
+      <BreadcrumbJsonLd
+        items={[
+          { name: "Accueil", path: "/" },
+          { name: "Blog", path: "/blog" },
+          {
+            name: post.title ?? "Article",
+            path: `/blog/${slug}`,
+          },
+        ]}
+      />
+      <BlogArticleHero post={post} />
+      <BlogArticleContent post={post} />
+      <Suspense fallback={<RelatedSkeleton />}>
+        <BlogRelatedSection post={post} slug={slug} />
+      </Suspense>
+    </>
+  );
+}
+
+async function BlogRelatedSection({
+  post,
+  slug,
+}: {
+  post: NonNullable<PostBySlugQueryResult>;
+  slug: string;
+}) {
   const [allPosts, blogPage] = await Promise.all([
     sanityFetch<PostsListQueryResult>({
       query: postsListQuery,
@@ -97,32 +145,94 @@ export default async function BlogArticlePage({ params }: RouteProps) {
 
   return (
     <>
-      <ArticleJsonLd post={post} />
-      <BlogArticleHero post={post} />
-      <BlogArticleContent post={post} />
       <BlogArticleCta data={blogPage?.articleCta} />
       {related.length > 0 && <BlogRelated posts={related} />}
     </>
   );
 }
 
-function ArticleJsonLd({ post }: { post: NonNullable<PostBySlugQueryResult> }) {
+function RelatedSkeleton() {
+  return (
+    <div
+      aria-hidden
+      className="mx-auto my-16 h-48 max-w-5xl animate-pulse rounded-2xl bg-neutral-100"
+    />
+  );
+}
+
+function ArticleJsonLd({
+  post,
+  slug,
+}: {
+  post: NonNullable<PostBySlugQueryResult>;
+  slug: string;
+}) {
+  const baseUrl = env.NEXT_PUBLIC_SITE_URL.replace(/\/$/, "");
+  const url = `${baseUrl}/blog/${slug}`;
+
+  const coverUrl =
+    post.cover && (post.cover as { asset?: unknown }).asset
+      ? urlForImageString(
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          post.cover as any,
+          { width: 1200, height: 630 },
+        )
+      : undefined;
+
   const payload = {
     "@context": "https://schema.org",
     "@type": "Article",
     headline: post.title,
     description: post.excerpt,
-    datePublished: post.publishedAt,
+    url,
+    mainEntityOfPage: {
+      "@type": "WebPage",
+      "@id": url,
+    },
+    image: coverUrl ? [coverUrl] : undefined,
+    datePublished: post.publishedAt ?? undefined,
+    dateModified: post._updatedAt ?? post.publishedAt ?? undefined,
     author: {
       "@type": "Organization",
       name: "Aïssa Events",
+      url: baseUrl,
     },
     publisher: {
       "@type": "Organization",
       name: "Aïssa Events",
+      url: baseUrl,
+      logo: {
+        "@type": "ImageObject",
+        url: `${baseUrl}/aissa-events-logo.svg`,
+      },
     },
     articleSection: post.category?.title ?? undefined,
     keywords: post.tags?.join(", "),
+  };
+
+  return (
+    <script
+      type="application/ld+json"
+      dangerouslySetInnerHTML={{ __html: safeJsonLd(payload) }}
+    />
+  );
+}
+
+function BreadcrumbJsonLd({
+  items,
+}: {
+  items: Array<{ name: string; path: string }>;
+}) {
+  const baseUrl = env.NEXT_PUBLIC_SITE_URL.replace(/\/$/, "");
+  const payload = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: items.map((item, i) => ({
+      "@type": "ListItem",
+      position: i + 1,
+      name: item.name,
+      item: `${baseUrl}${item.path}`,
+    })),
   };
 
   return (
