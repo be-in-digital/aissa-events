@@ -5,11 +5,11 @@ import { ArrowRight, Loader2 } from "lucide-react";
 import { useActionState } from "react";
 import { Eyebrow } from "./eyebrow";
 import { renderInlineItalic } from "@/lib/sanity/text";
+import { submitContactForm } from "@/app/actions/contact";
 import {
-  submitContactForm,
   INITIAL_CONTACT_STATE,
   type ContactFormState,
-} from "@/app/actions/contact";
+} from "@/app/actions/contact-state";
 import type { HomePageQueryResult, SiteSettingsQueryResult } from "@/sanity.types";
 
 type ContactData = NonNullable<HomePageQueryResult>["contact"];

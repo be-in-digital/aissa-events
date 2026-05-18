@@ -59,7 +59,11 @@ export function resolveCta(cta: CtaShape | null | undefined): ResolvedCta | null
       return { ...baseExternal, href: cta.externalUrl };
     }
     case "internal": {
-      const safePath = sanitizeInternalPath(cta.internalPath ?? "/") ?? "/";
+      // Pas de fallback silencieux vers "/" : si le CMS n'a pas renseigné de
+      // chemin valide, on retourne null pour que la CTA disparaisse et que
+      // l'admin voie qu'il manque la destination.
+      const safePath = sanitizeInternalPath(cta.internalPath);
+      if (!safePath) return null;
       return {
         label: cta.label,
         href: safePath,
@@ -69,17 +73,20 @@ export function resolveCta(cta: CtaShape | null | undefined): ResolvedCta | null
     }
     case "anchor": {
       const safeAnchor = sanitizeAnchor(cta.anchor);
+      if (!safeAnchor) return null;
       return {
         label: cta.label,
-        href: safeAnchor ? `#${safeAnchor}` : "#",
+        href: `#${safeAnchor}`,
         external: false,
         variant,
       };
     }
     case "form":
+      // `#contact` n'existe que sur la home — on force la navigation
+      // cross-page pour que le CTA fonctionne depuis n'importe quelle page.
       return {
         label: cta.label,
-        href: "#contact",
+        href: "/#contact",
         external: false,
         variant,
       };

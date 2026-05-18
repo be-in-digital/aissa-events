@@ -104,7 +104,7 @@ export const siteSettings = defineType({
       title: "Email de contact",
       type: "string",
       group: "contact",
-      initialValue: "contact@aissaevents.fr",
+      initialValue: "contact@aissaevents.com",
     }),
     defineField({
       name: "phone",

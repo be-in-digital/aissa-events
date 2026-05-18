@@ -757,3 +757,128 @@ export const crossServicesSection = defineType({
     }),
   ],
 });
+
+/* ============================================================================
+ * LEAD MAGNET — Téléchargement des catalogues (homepage)
+ * ========================================================================== */
+export const leadMagnetSection = defineType({
+  name: "leadMagnetSection",
+  title: "Lead Magnet (catalogues PDF)",
+  type: "object",
+  groups: [
+    { name: "content", title: "Contenu texte", default: true },
+    { name: "form", title: "Formulaire" },
+    { name: "catalogues", title: "Catalogues visuels" },
+  ],
+  fields: [
+    enabledField,
+    defineField({
+      name: "eyebrow",
+      title: "Suréclat (texte au-dessus du titre)",
+      type: "string",
+      group: "content",
+      initialValue: "Catalogues 2026 · Édition limitée",
+    }),
+    defineField({
+      name: "title",
+      title: "Titre principal",
+      type: "text",
+      rows: 3,
+      group: "content",
+      description:
+        'Sauts de ligne respectés. Encadrez un fragment avec _underscores_ pour le mettre en italique doré. Ex : "Recevez nos\\n_trois catalogues_\\npar email."',
+      validation: (Rule) => Rule.required(),
+    }),
+    defineField({
+      name: "intro",
+      title: "Paragraphe d'introduction",
+      type: "text",
+      rows: 4,
+      group: "content",
+    }),
+    defineField({
+      name: "bullets",
+      title: "Liste à puces (bénéfices)",
+      type: "array",
+      group: "content",
+      of: [{ type: "string" }],
+      validation: (Rule) => Rule.min(1).max(6),
+      description: "3 items recommandés. Une coche dorée est ajoutée automatiquement.",
+    }),
+    defineField({
+      name: "emailPlaceholder",
+      title: "Placeholder du champ email",
+      type: "string",
+      group: "form",
+      initialValue: "vous@exemple.com",
+    }),
+    defineField({
+      name: "submitLabel",
+      title: "Texte du bouton d'envoi",
+      type: "string",
+      group: "form",
+      initialValue: "Recevoir",
+    }),
+    defineField({
+      name: "successMessage",
+      title: "Message de confirmation après envoi",
+      type: "string",
+      group: "form",
+      initialValue: "✓ C'est parti — vérifiez vos emails dans 1 min",
+    }),
+    defineField({
+      name: "privacyNote",
+      title: "Note de confidentialité (sous le formulaire)",
+      type: "text",
+      rows: 2,
+      group: "form",
+      initialValue:
+        "Vos données restent privées. Désinscription en un clic. Aïssa lit chaque email.",
+    }),
+    defineField({
+      name: "catalogues",
+      title: "Catalogues affichés (cartes empilées)",
+      type: "array",
+      group: "catalogues",
+      validation: (Rule) => Rule.min(1).max(5),
+      description: "3 cartes recommandées. Ordre = ordre d'empilement (la première est en dessous).",
+      of: [
+        {
+          type: "object",
+          fields: [
+            defineField({
+              name: "title",
+              title: "Titre du catalogue",
+              type: "string",
+              validation: (Rule) => Rule.required(),
+            }),
+            defineField({
+              name: "subtitle",
+              title: "Sous-titre",
+              type: "string",
+              description: 'Ex : "Wedding planning · 2026"',
+            }),
+            defineField({
+              name: "cover",
+              title: "Couverture du catalogue",
+              type: "imageWithAlt",
+              description: "Format vertical recommandé (ratio 3/4).",
+              validation: (Rule) => Rule.required(),
+            }),
+            defineField({
+              name: "rotate",
+              title: "Rotation (degrés)",
+              type: "number",
+              description: "Angle d'inclinaison de la carte. Ex : -3, 1.5, 4. Laisser 0 pour aucune.",
+              initialValue: 0,
+              validation: (Rule) => Rule.min(-15).max(15),
+            }),
+          ],
+          preview: {
+            select: { title: "title", subtitle: "subtitle", media: "cover" },
+          },
+        },
+      ],
+    }),
+  ],
+});

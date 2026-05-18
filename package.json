@@ -34,7 +34,7 @@
     "lucide-react": "^1.14.0",
     "motion": "^12.38.0",
     "next": "16.2.6",
-    "next-sanity": "^12.4.5",
+    "next-sanity": "13.0.0-cache-components.58",
     "next-themes": "^0.4.6",
     "react": "19.2.4",
     "react-calendly": "^4.4.0",

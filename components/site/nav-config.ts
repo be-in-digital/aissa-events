@@ -11,9 +11,9 @@ export type NavItem = {
  * En production, le menu vient de siteSettings.headerNav.
  */
 export const FALLBACK_NAV: NavItem[] = [
-  { label: "Mariages", href: "/mariage", external: false },
-  { label: "Événements pro", href: "/evenements-pro", external: false },
   { label: "Espace Events", href: "/espace-emerainville", external: false },
+  { label: "Événements pro", href: "/evenements-pro", external: false },
+  { label: "Mariage", href: "/mariage", external: false },
   { label: "Réalisations", href: "/realisations", external: false },
   { label: "Blog", href: "/blog", external: false },
 ];

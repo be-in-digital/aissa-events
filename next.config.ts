@@ -40,10 +40,12 @@ const nextConfig: NextConfig = {
         source: "/:path*",
         headers: securityHeaders,
       },
-      // Site public : interdit l'embed iframe (anti-clickjacking)
+      // Site public : autorise uniquement les iframes same-origin
+      // (nécessaire pour la Presentation tool de Sanity qui charge les pages
+      // depuis /studio). Bloque toujours les iframes tierces (anti-clickjacking).
       {
         source: "/((?!studio).*)",
-        headers: [{ key: "X-Frame-Options", value: "DENY" }],
+        headers: [{ key: "X-Frame-Options", value: "SAMEORIGIN" }],
       },
       // Studio Sanity : autorise les iframes internes (Mux, vision), pas d'indexation
       {

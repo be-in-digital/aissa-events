@@ -65,9 +65,9 @@ export function SiteHeader({ settings }: { settings: SiteSettingsQueryResult }) 
         <Link
           href="/"
           aria-label={`${settings?.siteName ?? "Aïssa Events"} — accueil`}
-          className="transition-opacity hover:opacity-80"
+          className="rounded-sm transition-opacity hover:opacity-80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-bordeaux focus-visible:ring-offset-2 focus-visible:ring-offset-cream"
         >
-          <Logo tone="gold" className="text-[13px]" />
+          <Logo tone="gold" className="text-[11px] sm:text-[13px]" />
         </Link>
 
         <nav className="hidden items-center gap-9 lg:flex">
@@ -81,7 +81,7 @@ export function SiteHeader({ settings }: { settings: SiteSettingsQueryResult }) 
                 rel={item.external ? "noopener noreferrer" : undefined}
                 aria-current={active ? "page" : undefined}
                 className={cn(
-                  "group relative font-sans text-[13px] font-normal transition-colors",
+                  "group relative rounded-sm font-sans text-[13px] font-normal transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-bordeaux focus-visible:ring-offset-2 focus-visible:ring-offset-cream",
                   active ? "text-bordeaux" : "text-ink hover:text-bordeaux",
                 )}
               >
@@ -103,7 +103,7 @@ export function SiteHeader({ settings }: { settings: SiteSettingsQueryResult }) 
             href={headerCta.href}
             target={headerCta.external ? "_blank" : undefined}
             rel={headerCta.external ? "noopener noreferrer" : undefined}
-            className="group hidden items-center gap-2 rounded-full bg-bordeaux px-6 py-3 font-sans text-[11px] font-medium uppercase tracking-[0.2em] text-cream transition-all hover:-translate-y-0.5 hover:bg-bordeaux-deep hover:shadow-[0_10px_28px_rgba(61,37,73,0.3)] lg:inline-flex"
+            className="group hidden items-center gap-2 rounded-full bg-bordeaux px-6 py-3 font-sans text-[11px] font-medium uppercase tracking-[0.2em] text-cream transition-all hover:-translate-y-0.5 hover:bg-bordeaux-deep hover:shadow-[0_10px_28px_rgba(61,37,73,0.3)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-bordeaux focus-visible:ring-offset-2 focus-visible:ring-offset-cream lg:inline-flex"
           >
             {headerCta.label}
             <ArrowRight className="size-3.5 transition-transform group-hover:translate-x-0.5" />

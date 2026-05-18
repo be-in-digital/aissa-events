@@ -27,29 +27,27 @@ export function Universes({ data }: { data?: UniversesData }) {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-80px" }}
           transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1] }}
-          className="mb-20 grid items-end gap-12 lg:grid-cols-2 lg:gap-20"
+          className="mb-20 max-w-[1100px]"
         >
-          <div>
-            {eyebrow && (
-              <p className="mb-6 font-mono text-[11px] uppercase tracking-[0.28em] text-bordeaux">
-                {eyebrow}
-              </p>
-            )}
-            <h2
-              className="font-serif text-[44px] leading-[0.95] tracking-[-0.03em] sm:text-[60px] lg:text-[88px]"
-              style={{ fontWeight: 300 }}
-            >
-              {title.split("\n").map((line, i, arr) => (
-                <span key={i}>
-                  {renderInlineItalic(line)}
-                  {i < arr.length - 1 && <br />}
-                </span>
-              ))}
-            </h2>
-          </div>
+          {eyebrow && (
+            <p className="mb-6 font-mono text-[11px] uppercase tracking-[0.28em] text-bordeaux">
+              {eyebrow}
+            </p>
+          )}
+          <h2
+            className="font-serif text-[44px] leading-[0.95] tracking-[-0.03em] sm:text-[60px] lg:text-[88px]"
+            style={{ fontWeight: 300 }}
+          >
+            {title.split("\n").map((line, i, arr) => (
+              <span key={i}>
+                {renderInlineItalic(line)}
+                {i < arr.length - 1 && <br />}
+              </span>
+            ))}
+          </h2>
           {intro && (
             <p
-              className="max-w-xl font-serif text-[18px] italic leading-[1.55] text-ink-soft sm:text-[19px]"
+              className="mt-8 max-w-2xl font-serif text-[18px] italic leading-[1.55] text-ink-soft sm:text-[19px]"
               style={{ fontWeight: 300 }}
             >
               {intro}
@@ -136,30 +134,7 @@ export function Universes({ data }: { data?: UniversesData }) {
                     </div>
                   )}
 
-                  {(u?.price?.value || u?.price?.label) && (
-                    <div className="mb-6 border-t border-dashed border-[var(--rule)] pt-5">
-                      {u.price.label && (
-                        <p className="font-mono text-[10px] uppercase tracking-[0.22em] text-muted-ink">
-                          {u.price.label}
-                        </p>
-                      )}
-                      {u.price.value && (
-                        <p
-                          className="mt-1 font-serif text-[34px] italic leading-none tracking-[-0.02em] text-bordeaux"
-                          style={{ fontWeight: 500 }}
-                        >
-                          {u.price.value}
-                        </p>
-                      )}
-                      {u.price.note && (
-                        <p className="mt-2 text-[12px] leading-snug text-ink-soft">
-                          {u.price.note}
-                        </p>
-                      )}
-                    </div>
-                  )}
-
-                  <div className="mt-auto flex flex-col gap-3">
+                  <div className="mt-auto flex flex-col gap-3 border-t border-dashed border-[var(--rule)] pt-6">
                     {primary && (
                       <Link
                         href={primary.href}

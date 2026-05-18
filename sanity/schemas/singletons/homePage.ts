@@ -13,7 +13,8 @@ export const homePage = defineType({
     { name: "about", title: "6. À propos" },
     { name: "testimonials", title: "7. Témoignages" },
     { name: "faq", title: "8. FAQ" },
-    { name: "contact", title: "9. Contact" },
+    { name: "leadMagnet", title: "9. Lead Magnet (catalogues)" },
+    { name: "contact", title: "10. Contact" },
     { name: "seo", title: "SEO" },
   ],
   fields: [
@@ -26,6 +27,7 @@ export const homePage = defineType({
     defineField({ name: "pillars", title: "Piliers (section sombre, optionnelle)", type: "pillarsSection", group: "about" }),
     defineField({ name: "testimonials", title: "Témoignages", type: "testimonialsSection", group: "testimonials" }),
     defineField({ name: "faq", title: "FAQ", type: "faqSection", group: "faq" }),
+    defineField({ name: "leadMagnet", title: "Lead Magnet (catalogues PDF)", type: "leadMagnetSection", group: "leadMagnet" }),
     defineField({ name: "contact", title: "Contact (form + Calendly)", type: "contactSection", group: "contact" }),
     defineField({ name: "seo", title: "SEO", type: "seo", group: "seo" }),
   ],

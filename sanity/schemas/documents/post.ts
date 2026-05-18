@@ -65,6 +65,15 @@ export const post = defineType({
       options: { layout: "tags" },
     }),
     defineField({ name: "seo", type: "seo", title: "SEO" }),
+    defineField({
+      name: "wasAIAssisted",
+      title: "Article généré avec IA",
+      type: "boolean",
+      initialValue: false,
+      readOnly: true,
+      description:
+        "Rempli automatiquement par l'action « Générer avec IA ». Sert uniquement aux stats internes, non rendu côté site.",
+    }),
   ],
   orderings: [
     {

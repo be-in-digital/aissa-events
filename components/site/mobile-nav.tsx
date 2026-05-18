@@ -29,7 +29,7 @@ export function MobileNav({
     <DialogPrimitive.Root open={open} onOpenChange={setOpen}>
       <DialogPrimitive.Trigger
         aria-label="Ouvrir le menu"
-        className="inline-flex size-10 items-center justify-center rounded-full text-ink transition-colors hover:bg-ink/5 lg:hidden"
+        className="inline-flex size-10 items-center justify-center rounded-full text-ink transition-colors hover:bg-ink/5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-bordeaux focus-visible:ring-offset-2 lg:hidden"
       >
         <Menu className="size-5" aria-hidden />
       </DialogPrimitive.Trigger>
@@ -42,7 +42,7 @@ export function MobileNav({
             </DialogPrimitive.Title>
             <DialogPrimitive.Close
               aria-label="Fermer le menu"
-              className="inline-flex size-10 items-center justify-center rounded-full text-ink transition-colors hover:bg-ink/5"
+              className="inline-flex size-10 items-center justify-center rounded-full text-ink transition-colors hover:bg-ink/5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-bordeaux focus-visible:ring-offset-2"
             >
               <X className="size-5" aria-hidden />
             </DialogPrimitive.Close>
@@ -60,7 +60,7 @@ export function MobileNav({
                   onClick={() => setOpen(false)}
                   aria-current={active ? "page" : undefined}
                   className={cn(
-                    "group relative flex items-center gap-3 rounded-lg px-3 py-3 font-serif text-[28px] italic font-normal transition-colors",
+                    "group relative flex items-center gap-3 rounded-lg px-3 py-3 font-serif text-[28px] italic font-normal transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-bordeaux focus-visible:ring-offset-2",
                     active
                       ? "text-bordeaux"
                       : "text-ink hover:bg-ink/5 hover:text-bordeaux",
@@ -87,7 +87,7 @@ export function MobileNav({
               target={cta.external ? "_blank" : undefined}
               rel={cta.external ? "noopener noreferrer" : undefined}
               onClick={() => setOpen(false)}
-              className="group inline-flex w-full items-center justify-center gap-2 rounded-full bg-bordeaux px-6 py-4 font-sans text-[12px] font-medium uppercase tracking-[0.2em] text-cream transition-all hover:bg-bordeaux-deep"
+              className="group inline-flex w-full items-center justify-center gap-2 rounded-full bg-bordeaux px-6 py-4 font-sans text-[12px] font-medium uppercase tracking-[0.2em] text-cream transition-all hover:bg-bordeaux-deep focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-bordeaux focus-visible:ring-offset-2"
             >
               {cta.label}
               <ArrowRight className="size-4 transition-transform group-hover:translate-x-1" />

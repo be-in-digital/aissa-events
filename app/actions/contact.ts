@@ -5,15 +5,7 @@ import { ContactFormSchema, type ContactFormErrors } from "@/lib/contact/schema"
 import { checkContactRateLimit } from "@/lib/contact/rate-limit";
 import { sendLeadEmail } from "@/lib/contact/resend";
 import { pushLeadToHubspot } from "@/lib/contact/hubspot";
-
-export type ContactFormState = {
-  status: "idle" | "success" | "error" | "rate_limited";
-  errors?: ContactFormErrors;
-  generalError?: string;
-  submittedAt?: number;
-};
-
-export const INITIAL_CONTACT_STATE: ContactFormState = { status: "idle" };
+import type { ContactFormState } from "./contact-state";
 
 /**
  * Server Action invoqué depuis le `<form action={...}>` côté client.

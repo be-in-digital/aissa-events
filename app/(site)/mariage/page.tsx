@@ -23,6 +23,7 @@ import { MariageConditions } from "@/components/mariage/conditions";
 import { MariageFaq } from "@/components/mariage/faq";
 import { MariageCtaFinal } from "@/components/mariage/cta-final";
 import { MariageStickyCta } from "@/components/mariage/sticky-cta";
+import { AvailabilitySection } from "@/components/availability/section";
 
 const PATH = "/mariage";
 
@@ -57,15 +58,24 @@ export default async function MariagePage() {
       <MariageHero data={data?.hero} />
       <MariageTrustBar data={data?.trustBar} />
       <MariageIntro data={data?.intro} />
-      <MariageFounder founder={settings?.founder} />
       <MariageCeremonies data={data?.ceremonies} />
       <MariagePacks data={data?.packs} />
+      <MariageFounder founder={settings?.founder} />
       <MariageLieux data={data?.lieux} />
-      <MariageTimeline data={data?.timeline} />
+      <AvailabilitySection
+        utmSource="mariage"
+        utmContent="calendar-mariage"
+        eyebrow="Disponibilités"
+        title="Votre date est-elle libre ?"
+        description="L'agenda d'Aïssa pour les mariages, mis à jour en quasi-temps réel. Cliquez sur votre date pour réserver un appel découverte — elle confirme sa disponibilité sous 48 h."
+        nextSlotsEyebrow="Prochaines dates"
+        nextSlotsTitle="Les samedis de mariage encore libres"
+      />
       <MariageThemes data={data?.themes} />
       <MariageALaCarte data={data?.alacarte} />
       <MariagePortfolio data={data?.portfolio} />
       <MariageTestimonials data={data?.testimonials} />
+      <MariageTimeline data={data?.timeline} />
       <MariageConditions data={data?.conditions} />
       <MariageFaq data={data?.faq} />
       <MariageCtaFinal data={data?.finalCta} />
@@ -83,7 +93,7 @@ function WeddingPlannerJsonLd() {
       "@type": "LocalBusiness",
       name: "Aïssa Events",
       telephone: "+33661948859",
-      email: "contact@aissaevents.fr",
+      email: "contact@aissaevents.com",
       address: {
         "@type": "PostalAddress",
         streetAddress: "35 Bd de Beaubourg",

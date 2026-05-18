@@ -51,9 +51,9 @@ export const siteSettingsDoc = {
     signatureQuote: "Une soirée tient grâce à sa bande-son. C'est ce qu'on travaille en premier.",
   },
   headerNav: [
-    { _key: "n1", label: "Mariages", cta: { _type: "cta", label: "Mariages", type: "internal", internalPath: "/mariage", variant: "ghost" } },
+    { _key: "n1", label: "Espace Events", cta: { _type: "cta", label: "Espace Events", type: "internal", internalPath: "/espace-emerainville", variant: "ghost" } },
     { _key: "n2", label: "Événements pro", cta: { _type: "cta", label: "Événements pro", type: "internal", internalPath: "/evenements-pro", variant: "ghost" } },
-    { _key: "n3", label: "Espace Events", cta: { _type: "cta", label: "Espace Events", type: "internal", internalPath: "/espace-emerainville", variant: "ghost" } },
+    { _key: "n3", label: "Mariage", cta: { _type: "cta", label: "Mariage", type: "internal", internalPath: "/mariage", variant: "ghost" } },
     { _key: "n4", label: "Réalisations", cta: { _type: "cta", label: "Réalisations", type: "internal", internalPath: "/realisations", variant: "ghost" } },
     { _key: "n5", label: "Blog", cta: { _type: "cta", label: "Blog", type: "internal", internalPath: "/blog", variant: "ghost" } },
   ],
@@ -64,7 +64,7 @@ export const siteSettingsDoc = {
     anchor: "contact",
     variant: "primary",
   },
-  email: "contact@aissaevents.fr",
+  email: "contact@aissaevents.com",
   phone: "06 61 94 88 59",
   phoneHref: "+33661948859",
   address: {
@@ -78,7 +78,7 @@ export const siteSettingsDoc = {
     { _key: "h1", label: "Lundi-Vendredi", value: "9h-18h" },
     { _key: "h2", label: "Week-end", value: "Sur rendez-vous" },
   ],
-  calendlyUrl: "https://calendly.com/aissaevents/appel-decouverte",
+  calendlyUrl: "https://calendly.com/aissaeventscontact",
   social: {
     items: [
       { _key: "s1", platform: "instagram", label: "Instagram", url: "https://instagram.com/aissa.events" },
@@ -86,15 +86,15 @@ export const siteSettingsDoc = {
     ],
   },
   footerTagline:
-    "Wedding planner et agence événementielle à Émerainville (77), depuis 2020. Notre lieu (Espace Events) accueille mariages, cérémonies et soirées pro jusqu'à 50 personnes. Pour les autres formats, nous nous déplaçons partout en Île-de-France.",
+    "Agence événementielle à Émerainville (77), depuis 2020. Notre lieu (Espace Events) accueille mariages, baptêmes, anniversaires, henné, événements pros et soirées jusqu'à 50 personnes. Pour les autres formats, nous nous déplaçons partout en Île-de-France.",
   footerColumns: [
     {
       _key: "c1",
       title: "Univers",
       links: [
-        { _key: "l1", label: "Mariages & cérémonies", cta: { _type: "cta", label: "Mariages & cérémonies", type: "internal", internalPath: "/mariage", variant: "ghost" } },
+        { _key: "l1", label: "Espace Events · le lieu", cta: { _type: "cta", label: "Espace Events", type: "internal", internalPath: "/espace-emerainville", variant: "ghost" } },
         { _key: "l2", label: "Événements pro", cta: { _type: "cta", label: "Événements pro", type: "internal", internalPath: "/evenements-pro", variant: "ghost" } },
-        { _key: "l3", label: "Espace Events · le lieu", cta: { _type: "cta", label: "Espace Events", type: "internal", internalPath: "/espace-emerainville", variant: "ghost" } },
+        { _key: "l3", label: "Mariages & cérémonies", cta: { _type: "cta", label: "Mariages & cérémonies", type: "internal", internalPath: "/mariage", variant: "ghost" } },
       ],
     },
     {
@@ -123,9 +123,9 @@ export const siteSettingsDoc = {
     host: "Vercel Inc., 340 S Lemon Ave #4133, Walnut, CA 91789, USA",
   },
   defaultSeo: {
-    title: "Aïssa Events · Wedding Planner & Agence Événementielle à Émerainville (77)",
+    title: "Aïssa Events · Agence événementielle à Émerainville (77)",
     description:
-      "Wedding planning et agence événementielle à Émerainville (Seine-et-Marne), depuis 2020. Mariages, célébrations, événements corporate. Espace Events — votre lieu de réception en Île-de-France.",
+      "Agence événementielle à Émerainville (Seine-et-Marne), depuis 2020. Mariages, baptêmes, anniversaires, henné, événements pros, séminaires. Espace Events — votre lieu de réception en Île-de-France.",
   },
 };
 
@@ -138,17 +138,17 @@ export const homePageDoc = {
   hero: {
     _type: "heroHomeSection",
     enabled: true,
-    eyebrow: "Wedding Planner · Émerainville 77 · Depuis 2020",
-    title: "Mariages et événements à _votre image._",
+    eyebrow: "Agence événementielle · Émerainville 77 · Depuis 2020",
+    title: "Vos événements à _votre image._",
     subtitle:
-      "Wedding planning, soirées pro, célébrations privées. Dans notre lieu à Émerainville (77) ou chez vous, partout en Île-de-France.",
+      "Mariages, baptêmes, anniversaires, henné, événements pro, séminaires. Dans notre lieu à Émerainville (77) ou chez vous, partout en Île-de-France.",
     image: imageRef("home-hero"),
     ctas: [
       { _type: "cta", _key: "c1", label: "Réserver un appel", type: "anchor", anchor: "contact", variant: "primary" },
       { _type: "cta", _key: "c2", label: "Découvrir l'univers", type: "anchor", anchor: "universes", variant: "secondary" },
     ],
     stats: [
-      { _key: "s1", value: "+60", label: "Mariages orchestrés" },
+      { _key: "s1", value: "+60", label: "Événements orchestrés" },
       { _key: "s2", value: "Émerainville", label: "Notre lieu (77)" },
       { _key: "s3", value: "IDF", label: "& au-delà" },
     ],
@@ -180,7 +180,7 @@ export const homePageDoc = {
       { _type: "reference", _key: "r1", _ref: "realisation-sarah-david" },
       { _type: "reference", _key: "r2", _ref: "realisation-cote-sud" },
     ],
-    footerEyebrow: "+ 60 mariages orchestrés depuis 2020",
+    footerEyebrow: "+ 60 événements orchestrés depuis 2020",
     footerCta: {
       _type: "cta",
       label: "Voir toutes les réalisations",
@@ -280,7 +280,7 @@ export const homePageDoc = {
     _type: "aboutSection",
     enabled: true,
     eyebrow: "À propos d'Aïssa",
-    title: "Wedding planner\nà _Émerainville_\ndepuis 2020.",
+    title: "Agence événementielle\nà _Émerainville_\ndepuis 2020.",
     image: imageRef("home-about-founder"),
   },
   pillars: {
@@ -832,7 +832,7 @@ export const mentionsLegalesDoc = {
       _key: "b2",
       style: "normal",
       children: [
-        { _type: "span", _key: "s1", text: "Aïssa Events — 35 Bd de Beaubourg, 77184 Émerainville, France. Email : contact@aissaevents.fr — Téléphone : 06 61 94 88 59. Directeur de publication : Aïssa.", marks: [] },
+        { _type: "span", _key: "s1", text: "Aïssa Events — 35 Bd de Beaubourg, 77184 Émerainville, France. Email : contact@aissaevents.com — Téléphone : 06 61 94 88 59. Directeur de publication : Aïssa.", marks: [] },
       ],
     },
     {
@@ -911,7 +911,7 @@ export const politiqueConfidentialiteDoc = {
       _key: "b6",
       style: "normal",
       children: [
-        { _type: "span", _key: "s1", text: "Conformément au RGPD, vous disposez d'un droit d'accès, de rectification, de suppression et de portabilité de vos données. Pour exercer ces droits, écrivez-nous à contact@aissaevents.fr.", marks: [] },
+        { _type: "span", _key: "s1", text: "Conformément au RGPD, vous disposez d'un droit d'accès, de rectification, de suppression et de portabilité de vos données. Pour exercer ces droits, écrivez-nous à contact@aissaevents.com.", marks: [] },
       ],
     },
   ],
