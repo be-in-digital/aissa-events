@@ -101,7 +101,7 @@ export function PackBlock({
           </p>
         </motion.div>
 
-        <div className="grid gap-6 lg:grid-cols-3">
+        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
           {packs.map((p, i) => (
             <PackCard key={p.num} pack={p} index={i} />
           ))}

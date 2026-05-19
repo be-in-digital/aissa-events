@@ -51,7 +51,7 @@ export function Pillars({ data }: { data?: PillarsData }) {
           </motion.div>
         )}
 
-        <div className="grid grid-cols-1 border-y border-cream/15 lg:grid-cols-3">
+        <div className="grid grid-cols-1 border-y border-cream/15 md:grid-cols-3">
           {items.map((p, i) => (
             <motion.div
               key={p?.title ?? i}
