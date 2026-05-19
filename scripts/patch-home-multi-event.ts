@@ -33,7 +33,7 @@ const client = createClient({
 });
 
 const NEW_HEADER_NAV = [
-  { _key: "nav-espace-events", label: "Espace Events", cta: { _type: "cta", label: "Espace Events", type: "internal", internalPath: "/espace-emerainville", variant: "ghost" } },
+  { _key: "nav-espace-events", label: "Espace Events", cta: { _type: "cta", label: "Espace Events", type: "internal", internalPath: "/espace-events", variant: "ghost" } },
   { _key: "nav-espace-pro", label: "Événements pro", cta: { _type: "cta", label: "Événements pro", type: "internal", internalPath: "/evenements-pro", variant: "ghost" } },
   { _key: "nav-mariage", label: "Mariage", cta: { _type: "cta", label: "Mariage", type: "internal", internalPath: "/mariage", variant: "ghost" } },
   { _key: "nav-realisations", label: "Réalisations", cta: { _type: "cta", label: "Réalisations", type: "internal", internalPath: "/realisations", variant: "ghost" } },
@@ -41,7 +41,7 @@ const NEW_HEADER_NAV = [
 ];
 
 const NEW_UNIVERSE_LINKS = [
-  { _key: "univers-espace-events", label: "Espace Events · le lieu", cta: { _type: "cta", label: "Espace Events", type: "internal", internalPath: "/espace-emerainville", variant: "ghost" } },
+  { _key: "univers-espace-events", label: "Espace Events · le lieu", cta: { _type: "cta", label: "Espace Events", type: "internal", internalPath: "/espace-events", variant: "ghost" } },
   { _key: "univers-espace-pro", label: "Événements pro", cta: { _type: "cta", label: "Événements pro", type: "internal", internalPath: "/evenements-pro", variant: "ghost" } },
   { _key: "univers-mariage", label: "Mariages & cérémonies", cta: { _type: "cta", label: "Mariages & cérémonies", type: "internal", internalPath: "/mariage", variant: "ghost" } },
 ];

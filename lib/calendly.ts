@@ -8,7 +8,7 @@ export type CalendlyContext = {
 };
 
 export function buildCalendlyUrl(context: CalendlyContext = {}): string {
-  const { source = "espace-emerainville", content, preferredDate } = context;
+  const { source = "espace-events", content, preferredDate } = context;
   const url = new URL(env.NEXT_PUBLIC_CALENDLY_URL);
   url.searchParams.set("utm_source", source);
   if (content) {

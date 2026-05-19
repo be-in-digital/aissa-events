@@ -51,7 +51,7 @@ export const siteSettingsDoc = {
     signatureQuote: "Une soirée tient grâce à sa bande-son. C'est ce qu'on travaille en premier.",
   },
   headerNav: [
-    { _key: "n1", label: "Espace Events", cta: { _type: "cta", label: "Espace Events", type: "internal", internalPath: "/espace-emerainville", variant: "ghost" } },
+    { _key: "n1", label: "Espace Events", cta: { _type: "cta", label: "Espace Events", type: "internal", internalPath: "/espace-events", variant: "ghost" } },
     { _key: "n2", label: "Événements pro", cta: { _type: "cta", label: "Événements pro", type: "internal", internalPath: "/evenements-pro", variant: "ghost" } },
     { _key: "n3", label: "Mariage", cta: { _type: "cta", label: "Mariage", type: "internal", internalPath: "/mariage", variant: "ghost" } },
     { _key: "n4", label: "Réalisations", cta: { _type: "cta", label: "Réalisations", type: "internal", internalPath: "/realisations", variant: "ghost" } },
@@ -92,7 +92,7 @@ export const siteSettingsDoc = {
       _key: "c1",
       title: "Univers",
       links: [
-        { _key: "l1", label: "Espace Events · le lieu", cta: { _type: "cta", label: "Espace Events", type: "internal", internalPath: "/espace-emerainville", variant: "ghost" } },
+        { _key: "l1", label: "Espace Events · le lieu", cta: { _type: "cta", label: "Espace Events", type: "internal", internalPath: "/espace-events", variant: "ghost" } },
         { _key: "l2", label: "Événements pro", cta: { _type: "cta", label: "Événements pro", type: "internal", internalPath: "/evenements-pro", variant: "ghost" } },
         { _key: "l3", label: "Mariages & cérémonies", cta: { _type: "cta", label: "Mariages & cérémonies", type: "internal", internalPath: "/mariage", variant: "ghost" } },
       ],
@@ -207,7 +207,7 @@ export const homePageDoc = {
         tags: ["Le lieu", "Pack Célébration", "Pack Festivité", "Location seule"],
         price: { label: "Location seule", value: "350 €", note: "Packs tout compris dès 1 000 €" },
         image: imageRef("universe-espace"),
-        primaryCta: { _type: "cta", label: "Découvrir le lieu", type: "internal", internalPath: "/espace-emerainville", variant: "primary" },
+        primaryCta: { _type: "cta", label: "Découvrir le lieu", type: "internal", internalPath: "/espace-events", variant: "primary" },
         secondaryCta: { _type: "cta", label: "Réserver une visite", type: "anchor", anchor: "contact", variant: "secondary" },
       },
       {

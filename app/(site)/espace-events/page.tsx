@@ -24,7 +24,7 @@ import { OtherServices } from "@/components/espace/other-services";
 import { StickyCta } from "@/components/espace/sticky-cta";
 import { AvailabilitySection } from "@/components/availability/section";
 
-const PATH = "/espace-emerainville";
+const PATH = "/espace-events";
 
 async function getEspaceData() {
   return sanityFetch<EspaceEventsPageQueryResult>({
@@ -61,7 +61,7 @@ export default async function EspaceEmerainvillePage() {
       <ALaCarte data={data?.alacarte} />
       <LocationOnly data={data?.locationOnly} />
       <AvailabilitySection
-        utmSource="espace-emerainville"
+        utmSource="espace-events"
         utmContent="calendar-espace"
         eyebrow="Disponibilités"
         title="Quel jour vous tente ?"

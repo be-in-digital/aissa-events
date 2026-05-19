@@ -60,6 +60,17 @@ const nextConfig: NextConfig = {
       },
     ],
   },
+  async redirects() {
+    return [
+      // Anciennes URLs renommées — 308 permanent pour ne pas casser les liens
+      // déjà indexés / partagés et les CTAs Sanity historiques.
+      {
+        source: "/espace-emerainville",
+        destination: "/espace-events",
+        permanent: true,
+      },
+    ];
+  },
   async headers() {
     return [
       // Headers globaux sur toutes les routes

@@ -37,7 +37,7 @@ const FALLBACK_ITEMS: FallbackLieu[] = [
     ],
     cta: {
       label: "Découvrir l'Espace Events",
-      href: "/espace-emerainville",
+      href: "/espace-events",
       external: false,
     },
   },
