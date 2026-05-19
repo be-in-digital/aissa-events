@@ -6,7 +6,7 @@ import { getAvailabilityData } from "@/lib/availability/server";
 import { getNextFreeDates } from "@/lib/availability";
 
 type Props = {
-  /** Identifie la source dans l'UTM Calendly : `espace-emerainville`, `mariage`, `evenements-pro`. */
+  /** Identifie la source dans l'UTM Calendly : `espace-events`, `mariage`, `evenements-pro`. */
   utmSource: string;
   /** Préfixe envoyé en `utm_content` (la date YYYY-MM-DD sera concaténée). */
   utmContent?: string;

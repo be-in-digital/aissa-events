@@ -75,7 +75,7 @@ export const cta = defineType({
     defineField({
       name: "internalPath",
       title: "Chemin interne",
-      description: "Ex : /mariage, /espace-emerainville",
+      description: "Ex : /mariage, /espace-events",
       type: "string",
       hidden: ({ parent }) => parent?.type !== "internal",
     }),
