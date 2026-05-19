@@ -208,7 +208,7 @@ export function MariagePacks({ data }: { data?: PacksData }) {
             </p>
           </motion.div>
 
-          <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
+          <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
             {modes.map((m, i) => (
               <motion.article
                 key={`${m.name}-${i}`}

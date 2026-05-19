@@ -119,7 +119,7 @@ export function EvenementPacks({ data }: { data?: PacksData }) {
               packs.length === 1
                 ? "max-w-[480px] grid-cols-1"
                 : packs.length === 2
-                  ? "max-w-[860px] grid-cols-1 lg:grid-cols-2"
+                  ? "max-w-[860px] grid-cols-1 md:grid-cols-2"
                   : "grid-cols-1 sm:grid-cols-2 lg:grid-cols-3"
             }`}
           >
