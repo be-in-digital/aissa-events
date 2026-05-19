@@ -159,7 +159,7 @@ export function ContactSection({
                   href={calendlyUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="group inline-flex w-full items-center justify-center gap-2 rounded-full bg-gold px-7 py-4 font-sans text-[12px] font-medium uppercase tracking-[0.2em] text-ink transition-all hover:-translate-y-0.5 hover:bg-gold-soft"
+                  className="group inline-flex w-full items-center justify-center gap-2 rounded-full bg-gold px-7 py-4 font-sans text-[12px] font-medium uppercase tracking-[0.2em] text-ink transition-all hover:-translate-y-0.5 active:translate-y-0 hover:bg-gold-soft"
                 >
                   {calendlyButtonLabel}
                   <ArrowRight className="size-4 transition-transform group-hover:translate-x-1" />
@@ -282,6 +282,7 @@ export function ContactSection({
                     label="Prénom *"
                     placeholder="Aïssa"
                     required
+                    autoComplete="given-name"
                     error={hasFieldErrors ? state.errors?.firstName?.[0] : undefined}
                   />
                   <Field
@@ -289,6 +290,7 @@ export function ContactSection({
                     label="Nom *"
                     placeholder="Dupont"
                     required
+                    autoComplete="family-name"
                     error={hasFieldErrors ? state.errors?.lastName?.[0] : undefined}
                   />
                 </div>
@@ -298,6 +300,8 @@ export function ContactSection({
                   label="Email *"
                   placeholder="vous@exemple.com"
                   required
+                  autoComplete="email"
+                  inputMode="email"
                   error={hasFieldErrors ? state.errors?.email?.[0] : undefined}
                 />
                 <div className="grid gap-4 sm:grid-cols-2">
@@ -306,6 +310,8 @@ export function ContactSection({
                     type="tel"
                     label="Téléphone"
                     placeholder="06 12 34 56 78"
+                    autoComplete="tel"
+                    inputMode="tel"
                     error={hasFieldErrors ? state.errors?.phone?.[0] : undefined}
                   />
                   <SelectField
@@ -371,7 +377,7 @@ export function ContactSection({
                 <button
                   type="submit"
                   disabled={pending}
-                  className="group mt-2 inline-flex w-full items-center justify-center gap-2 rounded-full bg-bordeaux px-7 py-4 font-sans text-[12px] font-medium uppercase tracking-[0.2em] text-cream transition-all hover:-translate-y-0.5 hover:bg-bordeaux-deep disabled:cursor-not-allowed disabled:opacity-60 disabled:hover:translate-y-0"
+                  className="group mt-2 inline-flex w-full items-center justify-center gap-2 rounded-full bg-bordeaux px-7 py-4 font-sans text-[12px] font-medium uppercase tracking-[0.2em] text-cream transition-all hover:-translate-y-0.5 active:translate-y-0 hover:bg-bordeaux-deep disabled:cursor-not-allowed disabled:opacity-60 disabled:hover:translate-y-0"
                 >
                   {pending ? (
                     <>
@@ -418,6 +424,8 @@ function Field({
   placeholder,
   required,
   error,
+  autoComplete,
+  inputMode,
 }: {
   name: string;
   label: string;
@@ -425,6 +433,8 @@ function Field({
   placeholder?: string;
   required?: boolean;
   error?: string;
+  autoComplete?: string;
+  inputMode?: "text" | "email" | "tel" | "numeric" | "decimal" | "search" | "url" | "none";
 }) {
   const id = `contact-${name}`;
   return (
@@ -436,6 +446,8 @@ function Field({
         type={type}
         required={required}
         placeholder={placeholder}
+        autoComplete={autoComplete}
+        inputMode={inputMode}
         aria-invalid={Boolean(error) || undefined}
         className="w-full border-b border-ink bg-transparent py-3 font-sans text-[15px] text-ink placeholder:italic placeholder:text-muted-ink focus-visible:border-bordeaux focus-visible:outline-none aria-invalid:border-bordeaux"
       />

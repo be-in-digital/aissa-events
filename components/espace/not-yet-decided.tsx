@@ -109,8 +109,8 @@ export function NotYetDecided({
                         rel="noopener noreferrer"
                         className={
                           isPrimary
-                            ? "group inline-flex w-full items-center justify-between gap-4 rounded-full bg-bordeaux px-6 py-4 text-cream transition-all duration-500 hover:-translate-y-0.5 hover:bg-bordeaux-deep hover:shadow-[0_14px_40px_rgba(122,46,67,0.20)] sm:w-auto sm:min-w-[300px]"
-                            : "group inline-flex w-full items-center justify-between gap-4 rounded-full border border-bordeaux/30 bg-cream px-6 py-4 transition-all duration-500 hover:-translate-y-0.5 hover:border-bordeaux hover:shadow-[0_14px_40px_rgba(122,46,67,0.10)] sm:w-auto sm:min-w-[300px]"
+                            ? "group inline-flex w-full items-center justify-between gap-4 rounded-full bg-bordeaux px-6 py-4 text-cream transition-all duration-500 hover:-translate-y-0.5 active:translate-y-0 hover:bg-bordeaux-deep hover:shadow-[0_14px_40px_rgba(122,46,67,0.20)] sm:w-auto sm:min-w-[300px]"
+                            : "group inline-flex w-full items-center justify-between gap-4 rounded-full border border-bordeaux/30 bg-cream px-6 py-4 transition-all duration-500 hover:-translate-y-0.5 active:translate-y-0 hover:border-bordeaux hover:shadow-[0_14px_40px_rgba(122,46,67,0.10)] sm:w-auto sm:min-w-[300px]"
                         }
                       >
                         <span className="flex items-center gap-3">
@@ -133,8 +133,8 @@ export function NotYetDecided({
                         <ArrowUpRight
                           className={
                             isPrimary
-                              ? "size-3.5 transition-transform duration-500 group-hover:-translate-y-0.5 group-hover:translate-x-0.5"
-                              : "size-3.5 text-bordeaux transition-transform duration-500 group-hover:-translate-y-0.5 group-hover:translate-x-0.5"
+                              ? "size-3.5 transition-transform duration-500 group-hover:-translate-y-0.5 active:translate-y-0 group-hover:translate-x-0.5"
+                              : "size-3.5 text-bordeaux transition-transform duration-500 group-hover:-translate-y-0.5 active:translate-y-0 group-hover:translate-x-0.5"
                           }
                         />
                       </a>
@@ -156,8 +156,8 @@ export function NotYetDecided({
                       }
                       className={
                         isPrimary
-                          ? "group inline-flex w-full items-center justify-between gap-4 rounded-full bg-bordeaux px-6 py-4 text-cream transition-all duration-500 hover:-translate-y-0.5 hover:bg-bordeaux-deep hover:shadow-[0_14px_40px_rgba(122,46,67,0.20)] sm:w-auto sm:min-w-[300px]"
-                          : "group inline-flex w-full items-center justify-between gap-4 rounded-full border border-bordeaux/30 bg-cream px-6 py-4 transition-all duration-500 hover:-translate-y-0.5 hover:border-bordeaux hover:shadow-[0_14px_40px_rgba(122,46,67,0.10)] sm:w-auto sm:min-w-[300px]"
+                          ? "group inline-flex w-full items-center justify-between gap-4 rounded-full bg-bordeaux px-6 py-4 text-cream transition-all duration-500 hover:-translate-y-0.5 active:translate-y-0 hover:bg-bordeaux-deep hover:shadow-[0_14px_40px_rgba(122,46,67,0.20)] sm:w-auto sm:min-w-[300px]"
+                          : "group inline-flex w-full items-center justify-between gap-4 rounded-full border border-bordeaux/30 bg-cream px-6 py-4 transition-all duration-500 hover:-translate-y-0.5 active:translate-y-0 hover:border-bordeaux hover:shadow-[0_14px_40px_rgba(122,46,67,0.10)] sm:w-auto sm:min-w-[300px]"
                       }
                     >
                       <span className="flex items-center gap-3">
@@ -180,8 +180,8 @@ export function NotYetDecided({
                       <ArrowUpRight
                         className={
                           isPrimary
-                            ? "size-3.5 transition-transform duration-500 group-hover:-translate-y-0.5 group-hover:translate-x-0.5"
-                            : "size-3.5 text-bordeaux transition-transform duration-500 group-hover:-translate-y-0.5 group-hover:translate-x-0.5"
+                            ? "size-3.5 transition-transform duration-500 group-hover:-translate-y-0.5 active:translate-y-0 group-hover:translate-x-0.5"
+                            : "size-3.5 text-bordeaux transition-transform duration-500 group-hover:-translate-y-0.5 active:translate-y-0 group-hover:translate-x-0.5"
                         }
                       />
                     </Link>

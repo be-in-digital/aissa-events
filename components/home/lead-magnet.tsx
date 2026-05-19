@@ -173,13 +173,15 @@ export function LeadMagnet({ data }: { data?: LeadMagnetData } = {}) {
                   <input
                     type="email"
                     required
+                    autoComplete="email"
+                    inputMode="email"
                     placeholder={emailPlaceholder}
                     aria-label="Adresse email"
                     className="w-full rounded-full border border-cream/20 bg-cream/5 px-6 py-4 font-sans text-[15px] text-cream placeholder:italic placeholder:text-cream/40 focus-visible:border-gold-soft focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold-soft/30"
                   />
                   <button
                     type="submit"
-                    className="group inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-full bg-gold px-7 py-4 font-sans text-[12px] font-medium uppercase tracking-[0.2em] text-ink transition-all hover:-translate-y-0.5 hover:bg-gold-soft focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold-soft focus-visible:ring-offset-2 focus-visible:ring-offset-ink"
+                    className="group inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-full bg-gold px-7 py-4 font-sans text-[12px] font-medium uppercase tracking-[0.2em] text-ink transition-all hover:-translate-y-0.5 active:translate-y-0 hover:bg-gold-soft focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold-soft focus-visible:ring-offset-2 focus-visible:ring-offset-ink"
                   >
                     {submitLabel}
                     <ArrowRight className="size-4 transition-transform group-hover:translate-x-1" />

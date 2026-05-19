@@ -75,7 +75,7 @@ export default async function MentionsLegalesPage() {
       <section className="relative pb-24 sm:pb-32">
         <div className="mx-auto max-w-[760px] px-6 sm:px-14">
           {body ? (
-            <article className="prose-blog font-serif text-[17px] leading-[1.8] text-ink-soft sm:text-[18px]">
+            <article className="font-serif text-[17px] leading-[1.8] text-ink-soft sm:text-[18px]">
               <RichText value={body} />
             </article>
           ) : (
