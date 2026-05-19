@@ -1,3 +1,4 @@
+import { connection } from "next/server";
 import { getAvailabilityData } from "@/lib/availability/server";
 import { getStatusForDate, type DayStatus } from "@/lib/availability";
 import { AvailabilityCalendarClient } from "./calendar-client";
@@ -77,6 +78,7 @@ export async function AvailabilityCalendar({
   title = "Quel jour vous tente ?",
   description,
 }: Props) {
+  await connection();
   const data = await getAvailabilityData();
 
   const resolveStatus = (date: Date) => getStatusForDate(data, date);

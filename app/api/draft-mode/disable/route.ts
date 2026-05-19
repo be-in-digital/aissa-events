@@ -9,6 +9,10 @@ export async function GET(request: Request) {
   const dm = await draftMode();
   dm.disable();
   const url = new URL(request.url);
-  const next = url.searchParams.get("next") ?? "/";
-  return NextResponse.redirect(new URL(next, request.url));
+  const nextParam = url.searchParams.get("next") ?? "/";
+  // Anti open-redirect : on n'accepte qu'un chemin relatif `/…`.
+  const safeNext = nextParam.startsWith("/") && !nextParam.startsWith("//")
+    ? nextParam
+    : "/";
+  return NextResponse.redirect(new URL(safeNext, request.url));
 }

@@ -4,12 +4,12 @@ import { urlForImageString } from "@/lib/sanity/image";
 import type { Seo } from "@/sanity.types";
 
 /**
- * Fallback Open Graph image utilisée si aucun `seo.ogImage` n'est défini
- * dans Sanity et qu'aucune image (Sanity ou statique) n'est passée à la page.
+ * Fallback Open Graph image — non utilisée par défaut sur les pages du
+ * segment `(site)` qui héritent automatiquement de `app/(site)/opengraph-image.tsx`
+ * (PNG 1200×630 généré côté serveur, compatible LinkedIn/Twitter/Slack).
  *
- * TODO design : remplacer par une vraie image 1200x630 (`/og-image.png`
- * ou équivalent). Le SVG du logo sert de placeholder temporaire — la plupart
- * des plateformes (Twitter/X, LinkedIn, Slack) supportent mal SVG.
+ * Toujours exposée pour les pages qui veulent fournir un fallback explicite
+ * (ex: articles blog avec image de hero, réalisations).
  */
 export const DEFAULT_OG_IMAGE = {
   url: "/aissa-events-logo.svg",
@@ -51,7 +51,9 @@ export function buildMetadata({
 
   // 1. Image Sanity SEO si dispo
   // 2. Sinon image passée par la page (ex: hero d'un article)
-  // 3. Sinon image OG par défaut
+  // 3. Sinon : on laisse Next utiliser `app/(site)/opengraph-image.tsx`
+  //    (PNG 1200×630 auto-généré) en ne mettant PAS de `images` dans
+  //    la metadata — sinon notre `images` court-circuite la fichier-based image.
   const sanityOg =
     seo?.ogImage && (seo.ogImage as { asset?: unknown }).asset
       ? urlForImageString(
@@ -61,24 +63,28 @@ export function buildMetadata({
         )
       : null;
 
-  const fb = fallbackImage ?? DEFAULT_OG_IMAGE;
-  const fbAbsoluteUrl = fb.url.startsWith("http")
-    ? fb.url
-    : `${baseUrl}${fb.url.startsWith("/") ? "" : "/"}${fb.url}`;
+  const fb = fallbackImage;
+  const fbAbsoluteUrl = fb
+    ? fb.url.startsWith("http")
+      ? fb.url
+      : `${baseUrl}${fb.url.startsWith("/") ? "" : "/"}${fb.url}`
+    : null;
 
   const ogImageEntry = sanityOg
     ? {
         url: sanityOg,
         width: 1200,
         height: 630,
-        alt: title ?? fb.alt ?? "Aïssa Events",
+        alt: title ?? fb?.alt ?? "Aïssa Events",
       }
-    : {
-        url: fbAbsoluteUrl,
-        width: fb.width ?? 1200,
-        height: fb.height ?? 630,
-        alt: fb.alt ?? title ?? "Aïssa Events",
-      };
+    : fb && fbAbsoluteUrl
+      ? {
+          url: fbAbsoluteUrl,
+          width: fb.width ?? 1200,
+          height: fb.height ?? 630,
+          alt: fb.alt ?? title ?? "Aïssa Events",
+        }
+      : null;
 
   const twitterImage = sanityOg ?? fbAbsoluteUrl;
 
@@ -93,13 +99,13 @@ export function buildMetadata({
       type: "website",
       locale: "fr_FR",
       url,
-      images: [ogImageEntry],
+      ...(ogImageEntry ? { images: [ogImageEntry] } : {}),
     },
     twitter: {
       card: "summary_large_image",
       title: title ?? undefined,
       description: description ?? undefined,
-      images: [twitterImage],
+      ...(twitterImage ? { images: [twitterImage] } : {}),
     },
   };
 }

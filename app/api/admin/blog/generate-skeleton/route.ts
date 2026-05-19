@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-import { checkBlogAdminAuth } from "@/lib/blog/auth";
+import { checkBlogAdminGate } from "@/lib/blog/auth";
 import { generateSkeleton } from "@/lib/blog/generate-skeleton";
 
 export const maxDuration = 60;
@@ -19,7 +19,7 @@ const briefSchema = z.object({
 });
 
 export async function POST(req: Request) {
-  const authError = checkBlogAdminAuth(req);
+  const authError = await checkBlogAdminGate(req);
   if (authError) return authError;
 
   let body: unknown;
@@ -43,7 +43,7 @@ export async function POST(req: Request) {
   } catch (err) {
     console.error("[api/blog/generate-skeleton] échec :", err);
     return Response.json(
-      { error: "Échec de génération du squelette", message: err instanceof Error ? err.message : "unknown" },
+      { error: "Échec de génération du squelette" },
       { status: 500 },
     );
   }
