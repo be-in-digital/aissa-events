@@ -15,6 +15,7 @@ import { Process } from "@/components/home/process";
 import { About } from "@/components/home/about";
 import { Testimonials } from "@/components/home/testimonials";
 import { Faq } from "@/components/home/faq";
+import { HomeAvailability } from "@/components/home/availability";
 import { ContactSection } from "@/components/home/contact-section";
 
 async function getHomeData() {
@@ -51,6 +52,7 @@ export default async function HomePage() {
       <Pillars data={data?.pillars} />
       <Testimonials data={data?.testimonials} />
       <Faq data={data?.faq} />
+      <HomeAvailability />
       <ContactSection
         data={data?.contact}
         calendlyUrl={calendlyUrl}
