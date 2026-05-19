@@ -91,7 +91,7 @@ export async function NextSlots({
                 })}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="group inline-flex items-center gap-2 rounded-full border border-bordeaux/30 bg-cream px-4 py-2 transition-all duration-300 hover:-translate-y-0.5 hover:border-bordeaux hover:shadow-[0_8px_24px_rgba(122,46,67,0.10)]"
+                className="group inline-flex items-center gap-2 rounded-full border border-bordeaux/30 bg-cream px-4 py-2 transition-all duration-300 hover:-translate-y-0.5 active:translate-y-0 hover:border-bordeaux hover:shadow-[0_8px_24px_rgba(122,46,67,0.10)]"
               >
                 <span className="font-mono text-[11px] uppercase tracking-[0.18em] text-ink">
                   {formatDateFR(slot)}

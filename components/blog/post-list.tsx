@@ -111,7 +111,7 @@ function FilterButton({
       role="tab"
       aria-selected={active}
       onClick={onClick}
-      className={`group inline-flex items-center gap-2 rounded-full border px-4 py-2.5 font-mono text-[10.5px] uppercase tracking-[0.22em] transition-all duration-300 sm:px-5 sm:py-3 ${
+      className={`group inline-flex min-h-11 items-center gap-2 rounded-full border px-5 py-3 font-mono text-[10.5px] uppercase tracking-[0.22em] transition-all duration-300 active:scale-[0.97] sm:px-5 sm:py-3 ${
         active
           ? "border-bordeaux bg-bordeaux text-cream"
           : "border-[var(--rule)] bg-cream text-ink-soft hover:border-bordeaux/40 hover:text-ink"

@@ -145,7 +145,7 @@ export function EvenementLieux({ data }: { data?: LieuxData }) {
                         href={p.cta.href}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="mt-6 inline-flex items-center gap-2 self-start rounded-full border border-bordeaux/30 px-5 py-3 font-mono text-[11px] uppercase tracking-[0.22em] text-bordeaux transition-all hover:-translate-y-0.5 hover:border-bordeaux hover:bg-bordeaux hover:text-cream"
+                        className="mt-6 inline-flex items-center gap-2 self-start rounded-full border border-bordeaux/30 px-5 py-3 font-mono text-[11px] uppercase tracking-[0.22em] text-bordeaux transition-all hover:-translate-y-0.5 active:translate-y-0 hover:border-bordeaux hover:bg-bordeaux hover:text-cream"
                       >
                         {p.cta.label}
                         <ArrowRight className="size-3.5 transition-transform group-hover:translate-x-1" />
@@ -153,7 +153,7 @@ export function EvenementLieux({ data }: { data?: LieuxData }) {
                     ) : (
                       <Link
                         href={p.cta.href}
-                        className="mt-6 inline-flex items-center gap-2 self-start rounded-full border border-bordeaux/30 px-5 py-3 font-mono text-[11px] uppercase tracking-[0.22em] text-bordeaux transition-all hover:-translate-y-0.5 hover:border-bordeaux hover:bg-bordeaux hover:text-cream"
+                        className="mt-6 inline-flex items-center gap-2 self-start rounded-full border border-bordeaux/30 px-5 py-3 font-mono text-[11px] uppercase tracking-[0.22em] text-bordeaux transition-all hover:-translate-y-0.5 active:translate-y-0 hover:border-bordeaux hover:bg-bordeaux hover:text-cream"
                       >
                         {p.cta.label}
                         <ArrowRight className="size-3.5 transition-transform group-hover:translate-x-1" />

@@ -25,7 +25,7 @@ export function RealisationDetailContent({
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: "-80px" }}
             transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}
-            className="prose-blog font-serif text-[17px] leading-[1.8] text-ink-soft sm:text-[18px]"
+            className="font-serif text-[17px] leading-[1.8] text-ink-soft sm:text-[18px]"
           >
             <RichText value={realisation.description} />
           </motion.article>

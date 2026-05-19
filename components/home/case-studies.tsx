@@ -241,7 +241,7 @@ export function CaseStudies({ data }: { data?: CaseStudiesData }) {
                 href={footerCta.href}
                 target={footerCta.external ? "_blank" : undefined}
                 rel={footerCta.external ? "noopener noreferrer" : undefined}
-                className="group inline-flex items-center gap-2 rounded-full border border-ink px-9 py-4 font-sans text-[12px] font-medium uppercase tracking-[0.22em] text-ink transition-all hover:-translate-y-0.5 hover:bg-ink hover:text-cream"
+                className="group inline-flex items-center gap-2 rounded-full border border-ink px-9 py-4 font-sans text-[12px] font-medium uppercase tracking-[0.22em] text-ink transition-all hover:-translate-y-0.5 active:translate-y-0 hover:bg-ink hover:text-cream"
               >
                 {footerCta.label}
                 <ArrowRight className="size-4 transition-transform group-hover:translate-x-1" />

@@ -125,7 +125,7 @@ export function BlogPostCard({
 
         <span className="mt-4 inline-flex items-center gap-2 font-mono text-[11px] uppercase tracking-[0.22em] text-bordeaux transition-all group-hover:gap-3.5">
           Lire l&apos;article
-          <ArrowUpRight className="size-3.5 transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
+          <ArrowUpRight className="size-3.5 transition-transform group-hover:-translate-y-0.5 active:translate-y-0 group-hover:translate-x-0.5" />
         </span>
       </Link>
     </motion.article>

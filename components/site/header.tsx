@@ -103,7 +103,7 @@ export function SiteHeader({ settings }: { settings: SiteSettingsQueryResult }) 
             href={headerCta.href}
             target={headerCta.external ? "_blank" : undefined}
             rel={headerCta.external ? "noopener noreferrer" : undefined}
-            className="group hidden items-center gap-2 rounded-full bg-bordeaux px-6 py-3 font-sans text-[11px] font-medium uppercase tracking-[0.2em] text-cream transition-all hover:-translate-y-0.5 hover:bg-bordeaux-deep hover:shadow-[0_10px_28px_rgba(61,37,73,0.3)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-bordeaux focus-visible:ring-offset-2 focus-visible:ring-offset-cream lg:inline-flex"
+            className="group hidden items-center gap-2 rounded-full bg-bordeaux px-6 py-3 font-sans text-[11px] font-medium uppercase tracking-[0.2em] text-cream transition-all hover:-translate-y-0.5 active:translate-y-0 hover:bg-bordeaux-deep hover:shadow-[0_10px_28px_rgba(61,37,73,0.3)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-bordeaux focus-visible:ring-offset-2 focus-visible:ring-offset-cream lg:inline-flex"
           >
             {headerCta.label}
             <ArrowRight className="size-3.5 transition-transform group-hover:translate-x-0.5" />

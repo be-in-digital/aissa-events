@@ -177,7 +177,7 @@ export function MariageHero({ data }: { data?: HeroData }) {
 
               <motion.dl
                 variants={fadeUp}
-                className="mt-14 grid max-w-[520px] grid-cols-3 gap-6 border-t border-[var(--rule)] pt-7"
+                className="mt-14 grid max-w-[520px] grid-cols-1 gap-6 border-t border-[var(--rule)] pt-7 sm:grid-cols-3"
               >
                 {FALLBACK_STATS.map((s) => (
                   <div key={s.value}>

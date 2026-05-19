@@ -212,7 +212,7 @@ export function MariageALaCarte({ data }: { data?: ALaCarteData }) {
                   href={cta.href}
                   target={cta.external ? "_blank" : undefined}
                   rel={cta.external ? "noopener noreferrer" : undefined}
-                  className="group inline-flex items-center gap-2 rounded-full border border-ink px-7 py-3 font-sans text-[12px] font-medium uppercase tracking-[0.22em] text-ink transition-all hover:-translate-y-0.5 hover:bg-ink hover:text-cream"
+                  className="group inline-flex items-center gap-2 rounded-full border border-ink px-7 py-3 font-sans text-[12px] font-medium uppercase tracking-[0.22em] text-ink transition-all hover:-translate-y-0.5 active:translate-y-0 hover:bg-ink hover:text-cream"
                 >
                   {cta.label}
                   <ArrowRight className="size-3.5 transition-transform group-hover:translate-x-1" />

@@ -43,7 +43,7 @@ export function CalendlyDialog({
     <DialogPrimitive.Root open={open} onOpenChange={onOpenChange}>
       <DialogPrimitive.Portal>
         <DialogPrimitive.Backdrop className="fixed inset-0 z-50 bg-ink/55 backdrop-blur-sm data-open:animate-in data-open:fade-in-0 data-closed:animate-out data-closed:fade-out-0" />
-        <DialogPrimitive.Popup className="fixed inset-x-0 bottom-0 top-0 z-50 mx-auto flex w-full max-w-[1080px] flex-col overflow-hidden bg-cream shadow-[0_30px_120px_rgba(44,31,51,0.3)] outline-none data-open:animate-in data-open:fade-in-0 data-closed:animate-out data-closed:fade-out-0 sm:inset-y-8 sm:rounded-3xl">
+        <DialogPrimitive.Popup className="fixed inset-x-0 bottom-0 top-0 z-50 mx-auto flex h-[100dvh] w-full max-w-[1080px] flex-col overflow-hidden bg-cream pb-[env(safe-area-inset-bottom)] shadow-[0_30px_120px_rgba(44,31,51,0.3)] outline-none data-open:animate-in data-open:fade-in-0 data-closed:animate-out data-closed:fade-out-0 sm:inset-y-8 sm:h-auto sm:pb-0 sm:rounded-3xl">
           <div className="flex items-start justify-between border-b border-[var(--rule-soft)] px-6 py-5 sm:px-8">
             <div>
               <DialogPrimitive.Title className="font-mono text-[10px] uppercase tracking-[0.28em] text-bordeaux">

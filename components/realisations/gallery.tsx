@@ -151,7 +151,7 @@ export function RealisationsGallery({ data, realisations }: Props) {
                   role="tab"
                   aria-selected={isActive}
                   onClick={() => setFilter(f.value)}
-                  className={`group inline-flex items-center gap-2 rounded-full border px-4 py-2.5 font-mono text-[10.5px] uppercase tracking-[0.22em] transition-all duration-300 sm:px-5 sm:py-3 ${
+                  className={`group inline-flex min-h-11 items-center gap-2 rounded-full border px-5 py-3 font-mono text-[10.5px] uppercase tracking-[0.22em] transition-all duration-300 active:scale-[0.97] sm:px-5 sm:py-3 ${
                     isActive
                       ? isSage
                         ? "border-sage bg-sage text-cream"

@@ -297,8 +297,8 @@ function DayCell({
     : "Libre — réserver une visite à cette date";
 
   const cls = isOption
-    ? `${base} bg-[var(--cream-deep)] text-ink hover:bg-bordeaux hover:text-cream hover:-translate-y-0.5 hover:shadow-[0_6px_16px_rgba(122,46,67,0.18)]`
-    : `${base} bg-cream text-ink ring-1 ring-inset ring-[var(--rule-soft)] hover:bg-bordeaux hover:text-cream hover:-translate-y-0.5 hover:ring-bordeaux hover:shadow-[0_6px_16px_rgba(122,46,67,0.18)] ${
+    ? `${base} bg-[var(--cream-deep)] text-ink hover:bg-bordeaux hover:text-cream hover:-translate-y-0.5 active:translate-y-0 hover:shadow-[0_6px_16px_rgba(122,46,67,0.18)]`
+    : `${base} bg-cream text-ink ring-1 ring-inset ring-[var(--rule-soft)] hover:bg-bordeaux hover:text-cream hover:-translate-y-0.5 active:translate-y-0 hover:ring-bordeaux hover:shadow-[0_6px_16px_rgba(122,46,67,0.18)] ${
         day.isWeekend ? "font-semibold" : ""
       }`;
 

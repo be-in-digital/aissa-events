@@ -49,7 +49,7 @@ export function MariageStickyCta({ data }: { data?: StickyCtaData }) {
             animate={{ y: 0, opacity: 1 }}
             exit={{ y: 100, opacity: 0 }}
             transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
-            className="fixed inset-x-0 bottom-0 z-40 px-3 pb-3 lg:hidden"
+            className="fixed inset-x-0 bottom-0 z-40 px-3 pb-[max(0.75rem,env(safe-area-inset-bottom))] md:hidden"
           >
             <div className="mx-auto max-w-md">
               {(label || subLabel) && (

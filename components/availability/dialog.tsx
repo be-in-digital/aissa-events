@@ -40,7 +40,7 @@ export function AvailabilityDialog({
   return (
     <DialogPrimitive.Root open={open} onOpenChange={setOpen}>
       <DialogPrimitive.Trigger
-        className="group inline-flex items-center gap-3 rounded-full border border-bordeaux/30 bg-cream px-6 py-3 transition-all duration-300 hover:-translate-y-0.5 hover:border-bordeaux hover:shadow-[0_12px_32px_rgba(122,46,67,0.10)]"
+        className="group inline-flex items-center gap-3 rounded-full border border-bordeaux/30 bg-cream px-6 py-3 transition-all duration-300 hover:-translate-y-0.5 active:translate-y-0 hover:border-bordeaux hover:shadow-[0_12px_32px_rgba(122,46,67,0.10)]"
       >
         <CalendarIcon className="size-4 text-bordeaux" strokeWidth={1.5} />
         <span className="font-mono text-[11px] uppercase tracking-[0.22em] text-ink">

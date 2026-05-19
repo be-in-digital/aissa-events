@@ -53,7 +53,7 @@ export function RealisationDetailCta() {
                 })}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="group inline-flex min-w-[260px] items-center justify-between gap-4 rounded-full bg-bordeaux px-6 py-4 text-cream transition-all duration-500 hover:-translate-y-0.5 hover:bg-bordeaux-deep hover:shadow-[0_14px_40px_rgba(122,46,67,0.20)]"
+                className="group inline-flex min-w-[260px] items-center justify-between gap-4 rounded-full bg-bordeaux px-6 py-4 text-cream transition-all duration-500 hover:-translate-y-0.5 active:translate-y-0 hover:bg-bordeaux-deep hover:shadow-[0_14px_40px_rgba(122,46,67,0.20)]"
               >
                 <span className="font-mono text-[11px] uppercase tracking-[0.22em]">
                   Réserver un appel
@@ -62,7 +62,7 @@ export function RealisationDetailCta() {
               </a>
               <Link
                 href="/realisations"
-                className="group inline-flex min-w-[260px] items-center justify-between gap-4 rounded-full border border-bordeaux/30 bg-cream px-6 py-4 transition-all duration-500 hover:-translate-y-0.5 hover:border-bordeaux"
+                className="group inline-flex min-w-[260px] items-center justify-between gap-4 rounded-full border border-bordeaux/30 bg-cream px-6 py-4 transition-all duration-500 hover:-translate-y-0.5 active:translate-y-0 hover:border-bordeaux"
               >
                 <span className="font-mono text-[11px] uppercase tracking-[0.22em] text-ink">
                   Voir toutes les réalisations
