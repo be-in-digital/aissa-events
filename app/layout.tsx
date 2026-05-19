@@ -6,7 +6,6 @@ import {
   Fraunces,
   JetBrains_Mono,
   Great_Vibes,
-  Alex_Brush,
 } from "next/font/google";
 import { cn } from "@/lib/utils";
 import { env } from "@/env";
@@ -42,13 +41,6 @@ const script = Great_Vibes({
   display: "swap",
 });
 
-const logo = Alex_Brush({
-  subsets: ["latin"],
-  variable: "--font-logo",
-  weight: ["400"],
-  display: "swap",
-});
-
 export const metadata: Metadata = {
   title: {
     default: "Aïssa Events — The Perfect Timing",
@@ -73,7 +65,6 @@ export default function RootLayout({
         fraunces.variable,
         mono.variable,
         script.variable,
-        logo.variable,
       )}
     >
       <body className="min-h-full flex flex-col bg-cream text-ink">
