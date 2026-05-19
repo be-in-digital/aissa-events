@@ -87,7 +87,7 @@ export function SiteFooter({ settings }: { settings: SiteSettingsQueryResult }) 
           style={{ ["--footer-lg-cols" as string]: lgGridCols }}
         >
           <div className="sm:col-span-2 lg:col-span-1">
-            <Logo tone="cream" className="text-[15px]" />
+            <Logo tone="cream" className="h-14" />
             {tagline && (
               <p className="mt-6 max-w-md text-[14px] leading-[1.7] text-cream/80 whitespace-pre-line">
                 {tagline}

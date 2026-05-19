@@ -1,54 +1,51 @@
+import Image from "next/image";
 import { cn } from "@/lib/utils";
+
+type Tone = "gold" | "cream" | "ink";
+
+// Les PNG fournis n'ont pas de canal alpha : on neutralise leur fond via
+// mix-blend-mode pour qu'il se confonde avec celui du conteneur.
+// - "gold" : texte doré sur fond blanc → multiply efface le blanc sur le cream
+// - "cream" : texte blanc sur fond noir → screen efface le noir sur l'ink
+// - "ink" : variante dorée sombre sur fond clair → multiply identique au gold
+const VARIANTS: Record<
+  Tone,
+  { src: string; blend: string }
+> = {
+  gold: { src: "/logos/aissa-events-gold.png", blend: "mix-blend-multiply" },
+  cream: { src: "/logos/aissa-events-white.png", blend: "mix-blend-screen" },
+  ink: { src: "/logos/aissa-events-gold.png", blend: "mix-blend-multiply" },
+};
 
 export function Logo({
   className,
-  tagline = true,
   tone = "gold",
+  priority = false,
 }: {
   className?: string;
+  /** `tagline` est conservée pour compat API mais le PNG inclut toujours le tagline. */
   tagline?: boolean;
-  tone?: "gold" | "cream" | "ink";
+  tone?: Tone;
+  priority?: boolean;
 }) {
-  const wordmarkColor =
-    tone === "cream"
-      ? "text-cream"
-      : tone === "ink"
-        ? "text-ink"
-        : "text-[#887666]";
-
-  const taglineColor =
-    tone === "cream"
-      ? "text-cream/80"
-      : tone === "ink"
-        ? "text-ink/80"
-        : "text-ink/90";
+  const { src, blend } = VARIANTS[tone];
 
   return (
     <span
-      className={cn("inline-flex flex-col items-center leading-none", className)}
+      className={cn(
+        "relative inline-block aspect-[3.6/1] h-12 w-auto overflow-hidden",
+        className,
+      )}
       aria-label="Aïssa Events — The Perfect Timing"
     >
-      <span
-        className={cn("font-normal text-[3em]", wordmarkColor)}
-        style={{
-          fontFamily: "var(--font-logo), cursive",
-          letterSpacing: "0.005em",
-          lineHeight: 1,
-        }}
-      >
-        Aïssa Events
-      </span>
-      {tagline && (
-        <span
-          className={cn(
-            "mt-[0.2em] font-sans font-light uppercase text-[0.7em]",
-            taglineColor,
-          )}
-          style={{ letterSpacing: "0.42em" }}
-        >
-          The Perfect Timing
-        </span>
-      )}
+      <Image
+        src={src}
+        alt=""
+        fill
+        sizes="(min-width: 640px) 240px, 180px"
+        priority={priority}
+        className={cn("object-cover object-center", blend)}
+      />
     </span>
   );
 }

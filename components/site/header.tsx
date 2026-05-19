@@ -67,7 +67,7 @@ export function SiteHeader({ settings }: { settings: SiteSettingsQueryResult }) 
           aria-label={`${settings?.siteName ?? "Aïssa Events"} — accueil`}
           className="rounded-sm transition-opacity hover:opacity-80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-bordeaux focus-visible:ring-offset-2 focus-visible:ring-offset-cream"
         >
-          <Logo tone="gold" className="text-[11px] sm:text-[13px]" />
+          <Logo tone="gold" priority className="h-10 sm:h-12" />
         </Link>
 
         <nav className="hidden items-center gap-9 lg:flex">
