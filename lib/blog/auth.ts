@@ -1,6 +1,7 @@
 import "server-only";
 
 import { env } from "@/env";
+import { checkBlogAdminRateLimit } from "./rate-limit";
 
 /**
  * Vérifie qu'une requête vers les routes /api/admin/blog/* est autorisée.
@@ -11,9 +12,11 @@ import { env } from "@/env";
  * `NEXT_PUBLIC_BLOG_AI_ADMIN_TOKEN` (les deux doivent être configurées
  * avec la même valeur). Trade-off documenté dans .context/blog-ai-generator-design.md.
  *
- * Returns null if authorized, or a Response with 401/403 if not.
+ * Returns null if authorized, or a Response with 401/403/429 if not.
  */
-export function checkBlogAdminAuth(req: Request): Response | null {
+export async function checkBlogAdminGate(
+  req: Request,
+): Promise<Response | null> {
   const secret = process.env.BLOG_AI_ADMIN_SECRET;
   if (!secret) {
     return new Response(
@@ -38,8 +41,30 @@ export function checkBlogAdminAuth(req: Request): Response | null {
     });
   }
 
+  const ip =
+    req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ||
+    req.headers.get("x-real-ip") ||
+    "anonymous";
+
+  const rl = await checkBlogAdminRateLimit(ip);
+  if (!rl.success) {
+    return new Response(
+      JSON.stringify({
+        error: "Trop de requêtes. Réessaye dans une minute.",
+      }),
+      {
+        status: 429,
+        headers: {
+          "Content-Type": "application/json",
+          "Retry-After": Math.max(1, Math.ceil((rl.reset - Date.now()) / 1000)).toString(),
+        },
+      },
+    );
+  }
+
   return null;
 }
+
 
 /** Force le typecheck à voir env utilisé pour éviter un warning unused (et signaler la dep). */
 void env;

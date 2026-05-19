@@ -9,6 +9,7 @@ import {
   processOutboundEcho,
   processOutboundStatus,
 } from "@/lib/whatsapp/processor";
+import { checkMetaWebhookRateLimit } from "@/lib/whatsapp/rate-limit";
 import type { WhatsAppWebhookPayload } from "@/lib/whatsapp/types";
 import {
   handleHandshake,
@@ -63,12 +64,27 @@ export async function POST(req: Request) {
   const echoes = extractOutboundEchoes(payload);
   const statuses = extractOutboundStatuses(payload);
 
+  // Anti-flood : on borne le nombre de messages traités par numéro / minute.
+  // Les messages au-delà de la limite sont droppés silencieusement (Meta a déjà
+  // accepté le payload via la signature ; on évite juste les coûts LLM aval).
+  const allowedMessages: typeof messages = [];
+  for (const msg of messages) {
+    const rl = await checkMetaWebhookRateLimit(msg.contactRef);
+    if (rl.success) {
+      allowedMessages.push(msg);
+    } else {
+      console.warn(
+        `[webhook/meta] rate-limit atteint pour ${msg.contactRef} — message ${msg.messageId} ignoré`,
+      );
+    }
+  }
+
   // Traitement asynchrone (après réponse 200). Vercel Functions Fluid Compute
   // exécute le callback `waitUntil` jusqu'à 5 min après la réponse.
-  if (messages.length > 0 || echoes.length > 0 || statuses.length > 0) {
+  if (allowedMessages.length > 0 || echoes.length > 0 || statuses.length > 0) {
     waitUntil(
       (async () => {
-        for (const msg of messages) {
+        for (const msg of allowedMessages) {
           try {
             await processIncomingMessage(msg);
           } catch (err) {
@@ -105,7 +121,8 @@ export async function POST(req: Request) {
   // Toujours répondre 200 immédiatement, même si pas de messages (statuses, etc.)
   return NextResponse.json({
     ok: true,
-    processed: messages.length,
+    processed: allowedMessages.length,
+    dropped: messages.length - allowedMessages.length,
     echoes: echoes.length,
     statuses: statuses.length,
   });

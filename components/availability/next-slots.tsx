@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { connection } from "next/server";
 import { ArrowRight, Calendar } from "lucide-react";
 import { buildCalendlyUrl } from "@/lib/calendly";
 import { getAvailabilityData } from "@/lib/availability/server";
@@ -30,6 +31,7 @@ export async function NextSlots({
   eyebrow = "Prochaines dates",
   title = "Les samedis encore libres",
 }: Props) {
+  await connection();
   const data = await getAvailabilityData();
   const slots = getNextFreeDates(data, { count });
 

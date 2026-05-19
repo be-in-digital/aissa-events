@@ -1,7 +1,7 @@
 // Route: suggest 3-6 key points from a partial brief
 import { z } from "zod";
 
-import { checkBlogAdminAuth } from "@/lib/blog/auth";
+import { checkBlogAdminGate } from "@/lib/blog/auth";
 import { suggestKeypoints } from "@/lib/blog/suggest-keypoints";
 
 export const maxDuration = 30;
@@ -15,7 +15,7 @@ const requestSchema = z.object({
 });
 
 export async function POST(req: Request) {
-  const authError = checkBlogAdminAuth(req);
+  const authError = await checkBlogAdminGate(req);
   if (authError) return authError;
 
   let body: unknown;
@@ -38,12 +38,6 @@ export async function POST(req: Request) {
     return Response.json({ keyPoints });
   } catch (err) {
     console.error("[api/blog/suggest-keypoints] échec :", err);
-    return Response.json(
-      {
-        error: "Échec de la suggestion",
-        message: err instanceof Error ? err.message : "unknown",
-      },
-      { status: 500 },
-    );
+    return Response.json({ error: "Échec de la suggestion" }, { status: 500 });
   }
 }

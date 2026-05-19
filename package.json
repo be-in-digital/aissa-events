@@ -37,7 +37,6 @@
     "next-sanity": "13.0.0-cache-components.58",
     "next-themes": "^0.4.6",
     "react": "19.2.4",
-    "react-calendly": "^4.4.0",
     "react-dom": "19.2.4",
     "react-hook-form": "^7.75.0",
     "resend": "^6.12.3",

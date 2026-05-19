@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-import { checkBlogAdminAuth } from "@/lib/blog/auth";
+import { checkBlogAdminGate } from "@/lib/blog/auth";
 import { generateCoverImages } from "@/lib/blog/generate-cover-images";
 
 export const maxDuration = 120;
@@ -21,7 +21,7 @@ const requestSchema = z.object({
 });
 
 export async function POST(req: Request) {
-  const authError = checkBlogAdminAuth(req);
+  const authError = await checkBlogAdminGate(req);
   if (authError) return authError;
 
   let body: unknown;
@@ -51,10 +51,7 @@ export async function POST(req: Request) {
   } catch (err) {
     console.error("[api/blog/generate-images] échec :", err);
     return Response.json(
-      {
-        error: "Échec de génération d'images",
-        message: err instanceof Error ? err.message : "unknown",
-      },
+      { error: "Échec de génération d'images" },
       { status: 500 },
     );
   }

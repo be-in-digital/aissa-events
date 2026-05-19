@@ -175,7 +175,7 @@ export function LeadMagnet({ data }: { data?: LeadMagnetData } = {}) {
                     required
                     placeholder={emailPlaceholder}
                     aria-label="Adresse email"
-                    className="w-full rounded-full border border-cream/20 bg-cream/5 px-6 py-4 font-sans text-[15px] text-cream placeholder:italic placeholder:text-cream/40 focus:border-gold-soft focus:outline-none focus:ring-2 focus:ring-gold-soft/30"
+                    className="w-full rounded-full border border-cream/20 bg-cream/5 px-6 py-4 font-sans text-[15px] text-cream placeholder:italic placeholder:text-cream/40 focus-visible:border-gold-soft focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold-soft/30"
                   />
                   <button
                     type="submit"

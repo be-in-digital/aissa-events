@@ -49,3 +49,6 @@ next-env.d.ts
 
 # Sanity image cache (local seed only)
 .sanity-image-cache.json
+
+# Local AI assistant state
+.claude/

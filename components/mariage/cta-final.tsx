@@ -23,7 +23,7 @@ const FALLBACK_CTAS = [
   },
   {
     label: "Écrire un message",
-    href: "/contact",
+    href: "/#contact",
     external: false,
     variant: "secondary" as const,
   },

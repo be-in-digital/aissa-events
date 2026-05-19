@@ -20,7 +20,7 @@ export const FALLBACK_NAV: NavItem[] = [
 
 export const FALLBACK_HEADER_CTA: ResolvedCta = {
   label: "Réserver un appel",
-  href: "#contact",
+  href: "/#contact",
   external: false,
   variant: "primary",
 };

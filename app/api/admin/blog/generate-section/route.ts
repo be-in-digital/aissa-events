@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-import { checkBlogAdminAuth } from "@/lib/blog/auth";
+import { checkBlogAdminGate } from "@/lib/blog/auth";
 import { generateSection } from "@/lib/blog/generate-section";
 
 export const maxDuration = 300;
@@ -43,7 +43,7 @@ const requestSchema = z.object({
 });
 
 export async function POST(req: Request) {
-  const authError = checkBlogAdminAuth(req);
+  const authError = await checkBlogAdminGate(req);
   if (authError) return authError;
 
   let body: unknown;
@@ -67,10 +67,7 @@ export async function POST(req: Request) {
   } catch (err) {
     console.error("[api/blog/generate-section] échec :", err);
     return Response.json(
-      {
-        error: "Échec de génération de la section",
-        message: err instanceof Error ? err.message : "unknown",
-      },
+      { error: "Échec de génération de la section" },
       { status: 500 },
     );
   }

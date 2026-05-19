@@ -330,7 +330,7 @@ export function ContactSection({
                     minLength={10}
                     maxLength={5000}
                     placeholder="Parlez-nous de votre projet, votre vision, vos envies…"
-                    className="min-h-[110px] w-full resize-y border-b border-ink bg-transparent py-3 font-sans text-[15px] text-ink placeholder:italic placeholder:text-muted-ink focus:border-bordeaux focus:outline-none"
+                    className="min-h-[110px] w-full resize-y border-b border-ink bg-transparent py-3 font-sans text-[15px] text-ink placeholder:italic placeholder:text-muted-ink focus-visible:border-bordeaux focus-visible:outline-none"
                   />
                   {hasFieldErrors && state.errors?.message?.[0] && (
                     <p className="mt-1 text-[12px] text-bordeaux">
@@ -437,7 +437,7 @@ function Field({
         required={required}
         placeholder={placeholder}
         aria-invalid={Boolean(error) || undefined}
-        className="w-full border-b border-ink bg-transparent py-3 font-sans text-[15px] text-ink placeholder:italic placeholder:text-muted-ink focus:border-bordeaux focus:outline-none aria-invalid:border-bordeaux"
+        className="w-full border-b border-ink bg-transparent py-3 font-sans text-[15px] text-ink placeholder:italic placeholder:text-muted-ink focus-visible:border-bordeaux focus-visible:outline-none aria-invalid:border-bordeaux"
       />
       {error && <p className="mt-1 text-[12px] text-bordeaux">{error}</p>}
     </div>
@@ -465,7 +465,7 @@ function SelectField({
         required
         defaultValue=""
         aria-invalid={Boolean(error) || undefined}
-        className="w-full appearance-none border-b border-ink bg-transparent py-3 pr-8 font-sans text-[15px] text-ink focus:border-bordeaux focus:outline-none aria-invalid:border-bordeaux"
+        className="w-full appearance-none border-b border-ink bg-transparent py-3 pr-8 font-sans text-[15px] text-ink focus-visible:border-bordeaux focus-visible:outline-none aria-invalid:border-bordeaux"
         style={{
           backgroundImage:
             "url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath fill='none' stroke='%232C1F33' stroke-width='1' d='M1 1.5l5 5 5-5'/%3E%3C/svg%3E\")",
