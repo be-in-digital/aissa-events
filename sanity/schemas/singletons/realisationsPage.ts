@@ -51,7 +51,7 @@ export const realisationsPage = defineType({
               name: "value",
               type: "string",
               title: "Valeur (clé)",
-              description: 'Doit correspondre à un type de réalisation : all, mariage, anniversaire, corporate, ceremonie, henne, babyshower, autre',
+              description: 'Doit correspondre à un type de réalisation : all, mariage, ceremonie, pro, famille, autre',
               validation: (Rule) => Rule.required(),
             },
           ],

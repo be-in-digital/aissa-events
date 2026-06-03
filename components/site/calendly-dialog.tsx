@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useMemo } from "react";
 import { X } from "lucide-react";
 import { Dialog as DialogPrimitive } from "@base-ui/react/dialog";
 
@@ -28,16 +28,12 @@ export function CalendlyDialog({
   open: boolean;
   onOpenChange: (open: boolean) => void;
 }) {
-  const [embedUrl, setEmbedUrl] = useState<string | null>(null);
-
-  useEffect(() => {
-    if (open && href) {
-      setEmbedUrl(withEmbedParams(href));
-    }
-    if (!open) {
-      setEmbedUrl(null);
-    }
-  }, [open, href]);
+  // Dérivé des props — pas d'effet (le dialog démarre fermé, donc embedUrl=null
+  // au SSR et à l'hydratation ; window n'est lu que sur ouverture côté client).
+  const embedUrl = useMemo(
+    () => (open && href ? withEmbedParams(href) : null),
+    [open, href],
+  );
 
   return (
     <DialogPrimitive.Root open={open} onOpenChange={onOpenChange}>

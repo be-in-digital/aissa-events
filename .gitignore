@@ -45,6 +45,7 @@ next-env.d.ts
 # sanity generated artifacts
 /sanity/extract.json
 /sanity.types.ts
+/schema.json
 .gstack/
 
 # Sanity image cache (local seed only)

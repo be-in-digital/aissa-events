@@ -93,7 +93,6 @@ export async function AvailabilityCalendar({
   return (
     <AvailabilityCalendarClient
       months={months}
-      defaultVisible={data.monthsAhead}
       utmSource={utmSource}
       utmContent={utmContent}
       eyebrow={eyebrow}
