@@ -12,6 +12,8 @@ const eslintConfig = defineConfig([
     "out/**",
     "build/**",
     "next-env.d.ts",
+    // Espace de travail scratch/collaboration (gitignoré, non livré).
+    ".context/**",
   ]),
 ]);
 

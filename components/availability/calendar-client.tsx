@@ -26,7 +26,6 @@ const formatLastSync = (iso: string | null) => {
 
 type Props = {
   months: CalendarMonth[];
-  defaultVisible: number;
   utmSource: string;
   utmContent: string;
   eyebrow?: string;
@@ -43,7 +42,6 @@ type Props = {
  */
 export function AvailabilityCalendarClient({
   months,
-  defaultVisible,
   utmSource,
   utmContent,
   eyebrow,
@@ -76,11 +74,6 @@ export function AvailabilityCalendarClient({
   const syncLabel = formatLastSync(lastSyncedAt);
   const canPrev = safeCursor > 0;
   const canNext = safeCursor < maxCursor;
-  // `defaultVisible` reste pris en compte pour positionner le curseur initial
-  // sur le 1er mois affiché côté Sanity (sinon 0 par défaut).
-  useEffect(() => {
-    setCursor(0);
-  }, [defaultVisible]);
 
   return (
     <section className="relative px-5 py-10 sm:px-10 sm:py-14">
