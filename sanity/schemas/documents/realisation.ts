@@ -51,11 +51,9 @@ export const realisation = defineType({
       options: {
         list: [
           { title: "Mariage", value: "mariage" },
-          { title: "Anniversaire", value: "anniversaire" },
-          { title: "Événement corporate", value: "corporate" },
-          { title: "Cérémonie / célébration", value: "ceremonie" },
-          { title: "Henné", value: "henne" },
-          { title: "Baby shower / Baptême", value: "babyshower" },
+          { title: "Cérémonie", value: "ceremonie" },
+          { title: "Professionnel", value: "pro" },
+          { title: "Famille (anniv, baby shower, henné…)", value: "famille" },
           { title: "Autre", value: "autre" },
         ],
       },

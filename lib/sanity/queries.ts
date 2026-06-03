@@ -568,6 +568,7 @@ export const realisationsListQuery = defineQuery(`
     eventDate,
     location,
     cover{ ${imageFragment} },
+    gallery[]{ ${imageFragment} },
     tags,
     featured
   }
