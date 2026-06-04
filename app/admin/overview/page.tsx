@@ -143,7 +143,7 @@ type PageProps = { searchParams: Promise<{ secret?: string }> };
 /**
  * Accès protégé par un lien secret : `/admin/overview?secret=<valeur>`.
  * Sans le bon secret → 404 (la page n'existe pas pour un visiteur lambda).
- * Réutilise le secret admin déjà configuré `ADMIN_AGENT_HEALTH_SECRET`.
+ * Secret dédié : variable d'env `ADMIN_OVERVIEW_SECRET`.
  */
 export default function OverviewPage({ searchParams }: PageProps) {
   return (
@@ -161,7 +161,7 @@ export default function OverviewPage({ searchParams }: PageProps) {
 
 async function OverviewGate({ searchParams }: PageProps) {
   await connection();
-  const required = process.env.ADMIN_AGENT_HEALTH_SECRET;
+  const required = process.env.ADMIN_OVERVIEW_SECRET;
   if (!required) {
     return (
       <main className="mx-auto max-w-[640px] px-6 py-24 font-sans text-ink">
@@ -172,7 +172,7 @@ async function OverviewGate({ searchParams }: PageProps) {
           Sécurité non configurée
         </h1>
         <p className="mt-4 text-[15px] leading-[1.7] text-ink-soft">
-          Définis la variable <code>ADMIN_AGENT_HEALTH_SECRET</code> dans Vercel,
+          Définis la variable <code>ADMIN_OVERVIEW_SECRET</code> dans Vercel,
           puis accède à la page avec <code>?secret=&lt;valeur&gt;</code>.
         </p>
       </main>
