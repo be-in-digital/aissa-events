@@ -1,6 +1,9 @@
 /* eslint-disable react/no-unescaped-entities -- page de doc 100% texte français : les apostrophes droites sont volontaires et lisibles dans la source. */
+import { Suspense } from "react";
 import Image from "next/image";
 import type { Metadata } from "next";
+import { notFound } from "next/navigation";
+import { connection } from "next/server";
 import { VideoCard, type Tutorial } from "./video-card";
 
 export const metadata: Metadata = {
@@ -135,7 +138,52 @@ const GLOSSARY = [
   ["SEO", "Tout ce qui aide Google à bien te placer dans les résultats."],
 ];
 
-export default function OverviewPage() {
+type PageProps = { searchParams: Promise<{ secret?: string }> };
+
+/**
+ * Accès protégé par un lien secret : `/admin/overview?secret=<valeur>`.
+ * Sans le bon secret → 404 (la page n'existe pas pour un visiteur lambda).
+ * Réutilise le secret admin déjà configuré `ADMIN_AGENT_HEALTH_SECRET`.
+ */
+export default function OverviewPage({ searchParams }: PageProps) {
+  return (
+    <Suspense
+      fallback={
+        <main className="flex min-h-screen items-center justify-center bg-cream font-mono text-[11px] uppercase tracking-[0.22em] text-ink-soft">
+          Chargement…
+        </main>
+      }
+    >
+      <OverviewGate searchParams={searchParams} />
+    </Suspense>
+  );
+}
+
+async function OverviewGate({ searchParams }: PageProps) {
+  await connection();
+  const required = process.env.ADMIN_AGENT_HEALTH_SECRET;
+  if (!required) {
+    return (
+      <main className="mx-auto max-w-[640px] px-6 py-24 font-sans text-ink">
+        <p className="font-mono text-[11px] uppercase tracking-[0.22em] text-bordeaux">
+          Accès protégé
+        </p>
+        <h1 className="mt-3 font-serif text-[28px]" style={{ fontWeight: 300 }}>
+          Sécurité non configurée
+        </h1>
+        <p className="mt-4 text-[15px] leading-[1.7] text-ink-soft">
+          Définis la variable <code>ADMIN_AGENT_HEALTH_SECRET</code> dans Vercel,
+          puis accède à la page avec <code>?secret=&lt;valeur&gt;</code>.
+        </p>
+      </main>
+    );
+  }
+  const { secret } = await searchParams;
+  if (secret !== required) notFound();
+  return <OverviewContent />;
+}
+
+function OverviewContent() {
   return (
     <main className="min-h-screen bg-cream text-ink">
       {/* HERO */}
