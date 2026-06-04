@@ -9,6 +9,8 @@ export type Tutorial = {
   poster: string;
   /** Chemin de la vidéo MP4 (dans /public). Absent = vidéo à venir. */
   src?: string;
+  /** Sous-titres WebVTT (dans /public). Affichés par défaut dans le lecteur. */
+  captions?: string;
   /** Pas-à-pas affiché à côté de la vidéo. */
   steps: string[];
 };
@@ -18,7 +20,8 @@ export type Tutorial = {
  * + liste d'étapes. Server Component, lecteur HTML natif (aucun JS custom).
  */
 export function VideoCard({ tutorial }: { tutorial: Tutorial }) {
-  const { id, number, title, description, poster, src, steps } = tutorial;
+  const { id, number, title, description, poster, src, captions, steps } =
+    tutorial;
   return (
     <section
       id={id}
@@ -32,9 +35,18 @@ export function VideoCard({ tutorial }: { tutorial: Tutorial }) {
               controls
               preload="none"
               poster={poster}
-              className="aspect-video w-full bg-ink/5 object-cover"
+              className="aspect-video w-full bg-ink object-contain"
             >
               <source src={src} type="video/mp4" />
+              {captions && (
+                <track
+                  kind="subtitles"
+                  src={captions}
+                  srcLang="fr"
+                  label="Français"
+                  default
+                />
+              )}
               Ton navigateur ne peut pas lire cette vidéo.
             </video>
           ) : (
