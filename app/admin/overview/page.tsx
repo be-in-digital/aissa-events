@@ -20,7 +20,6 @@ const TUTORIALS: Tutorial[] = [
       "Changer un titre, un texte ou une photo sur une page existante (Accueil, Mariage, Espace Events…).",
     poster: `${A}/poster-page.jpg`,
     src: `${A}/videos/tuto-page.mp4`,
-    captions: `${A}/videos/tuto-page.vtt`,
     steps: [
       "Barre de gauche → <b>Pages du site</b> → choisis la page (ex. <b>Accueil</b>).",
       "En haut, clique sur l'<b>onglet</b> de la partie à changer (ils sont numérotés dans l'ordre de la page).",
@@ -37,7 +36,6 @@ const TUTORIALS: Tutorial[] = [
       "Rédiger un nouvel article de A à Z : titre, image, contenu, et mise en ligne.",
     poster: `${A}/poster-article.jpg`,
     src: `${A}/videos/tuto-article.mp4`,
-    captions: `${A}/videos/tuto-article.vtt`,
     steps: [
       "Barre de gauche → <b>Blog</b> → <b>Articles</b> → bouton <b>+</b>.",
       "Remplis le <b>Titre</b>, puis clique <b>Generate</b> à côté du <b>Slug</b> (adresse auto).",
@@ -55,7 +53,6 @@ const TUTORIALS: Tutorial[] = [
       "Laisser l'assistant te proposer un brouillon d'article à partir d'un simple sujet, puis le relire et le publier.",
     poster: `${A}/poster-ia.jpg`,
     src: `${A}/videos/tuto-ia.mp4`,
-    captions: `${A}/videos/tuto-ia.vtt`,
     steps: [
       "Ouvre un article (ou crée-en un) dans <b>Blog → Articles</b>.",
       "Dans le menu d'actions de la fiche, clique sur <b>« Générer un article avec l'IA »</b>.",
@@ -72,7 +69,6 @@ const TUTORIALS: Tutorial[] = [
       "Mettre en ligne un événement passé avec sa photo de couverture et une galerie complète.",
     poster: `${A}/poster-realisation.jpg`,
     src: `${A}/videos/tuto-realisation.mp4`,
-    captions: `${A}/videos/tuto-realisation.vtt`,
     steps: [
       "Barre de gauche → <b>Réalisations</b> → bouton <b>+</b>.",
       "Remplis <b>Titre</b>, <b>Slug</b> (Generate), <b>Type d'événement</b> (range la réalisation dans le bon filtre).",
