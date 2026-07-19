@@ -1,6 +1,7 @@
 import "server-only";
 import { Client } from "@hubspot/api-client";
 import type { ContactFormData } from "./schema";
+import type { BusinessLeadData } from "./business-schema";
 
 /**
  * Pousse un lead vers HubSpot CRM.
@@ -54,3 +55,51 @@ export async function pushLeadToHubspot(
     throw e;
   }
 }
+
+/**
+ * Pousse un lead entreprise (formulaire de qualification B2B) vers HubSpot.
+ * Mappe les propriétés standard `company` / `jobtitle` en plus des coordonnées.
+ * Optionnel : no-op silencieux si le token est absent.
+ */
+export async function pushBusinessLeadToHubspot(
+  data: BusinessLeadData,
+): Promise<{ id: string } | null> {
+  const token = process.env.HUBSPOT_PRIVATE_APP_TOKEN;
+  if (!token) return null;
+
+  const hubspot = new Client({ accessToken: token });
+  const [firstname, ...rest] = data.contactName.trim().split(/\s+/);
+  const lastname = rest.join(" ");
+
+  try {
+    const result = await hubspot.crm.contacts.basicApi.create({
+      properties: {
+        email: data.email,
+        firstname: firstname || data.contactName,
+        lastname: lastname || "",
+        phone: data.phone || "",
+        company: data.company,
+        jobtitle: data.role || "",
+        hs_lead_status: "NEW",
+        lifecyclestage: "lead",
+        // Propriétés custom possibles (à créer côté HubSpot avant de décommenter) :
+        // event_type: data.eventType,
+        // headcount: data.headcount,
+        // budget_range: data.budget,
+      },
+      associations: [],
+    });
+    return { id: result.id };
+  } catch (e: unknown) {
+    if (
+      typeof e === "object" &&
+      e !== null &&
+      "code" in e &&
+      (e as { code?: number }).code === 409
+    ) {
+      return null;
+    }
+    throw e;
+  }
+}
+

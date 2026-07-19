@@ -24,7 +24,13 @@ type Pack = {
   ctaExternal: boolean;
 };
 
-export function EvenementPacks({ data }: { data?: PacksData }) {
+export function EvenementPacks({
+  data,
+  quoteAnchor,
+}: {
+  data?: PacksData;
+  quoteAnchor?: string;
+}) {
   if (data?.enabled === false) return null;
   if (!data?.packs?.length) return null;
   if (!data?.title) return null;
@@ -32,12 +38,22 @@ export function EvenementPacks({ data }: { data?: PacksData }) {
   const eyebrow = data?.eyebrow;
   const title = data.title;
   const intro = data?.intro;
+  const showPrices = data?.showPrices ?? true;
+  const featuredBadgeLabel = data?.featuredBadgeLabel?.trim() || undefined;
+  const commitmentEyebrow = data?.commitmentEyebrow?.trim() || undefined;
+  const commitmentText = data?.commitmentText?.trim() || undefined;
+  const reassuranceText = data?.reassuranceText?.trim() || undefined;
 
   const packs: Pack[] = data.packs
     .map((p, i): Pack | null => {
       const cta = resolveCta(p.cta ?? null);
-      if (!cta) return null;
+      // Sur la page Entreprises (quoteAnchor défini), chaque bouton mène au
+      // formulaire avec le pack prérempli — même si aucun CTA n'est configuré.
+      if (!cta && !quoteAnchor) return null;
       const priceLabel = p.priceLabel ?? (p.priceFrom ? `${p.priceFrom} €` : "Sur devis");
+      const ctaHref = quoteAnchor
+        ? `?pack=${encodeURIComponent(p.title ?? "")}${quoteAnchor}`
+        : (cta?.href ?? "#");
       return {
         num: `Pack ${String(i + 1).padStart(2, "0")}`,
         name: p.title ?? "",
@@ -46,11 +62,11 @@ export function EvenementPacks({ data }: { data?: PacksData }) {
         priceFrom: p.tagline ?? "",
         capacity: "",
         featured: p.featured ?? false,
-        badge: p.featured ? "Le plus demandé" : undefined,
+        badge: p.featured ? featuredBadgeLabel : undefined,
         features: (p.includedItems ?? []).map((label) => label),
-        ctaLabel: cta.label,
-        ctaHref: cta.href,
-        ctaExternal: cta.external,
+        ctaLabel: cta?.label ?? "Demander une estimation",
+        ctaHref,
+        ctaExternal: quoteAnchor ? false : (cta?.external ?? false),
       };
     })
     .filter((p): p is Pack => p !== null);
@@ -94,25 +110,33 @@ export function EvenementPacks({ data }: { data?: PacksData }) {
             )}
           </motion.div>
 
-          <motion.div
-            initial={{ opacity: 0, y: 24 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: "-40px" }}
-            transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
-            className="mb-14 flex flex-wrap items-center justify-between gap-4 rounded-[24px] border border-[var(--rule)] bg-cream px-6 py-5 sm:px-8"
-          >
-            <div>
-              <p className="font-mono text-[10px] uppercase tracking-[0.22em] text-bordeaux">
-                — Dans tous les cas
-              </p>
-              <p className="mt-1 font-serif text-[15px] italic text-ink sm:text-[16px]">
-                Direction artistique · Production · Coordination jour J
-              </p>
-            </div>
-            <p className="font-serif text-[14px] italic text-bordeaux">
-              Devis sous 48 h · Facturation entreprise (TVA · SIRET)
-            </p>
-          </motion.div>
+          {(commitmentEyebrow || commitmentText || reassuranceText) && (
+            <motion.div
+              initial={{ opacity: 0, y: 24 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: "-40px" }}
+              transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
+              className="mb-14 flex flex-wrap items-center justify-between gap-4 rounded-[24px] border border-[var(--rule)] bg-cream px-6 py-5 sm:px-8"
+            >
+              <div>
+                {commitmentEyebrow && (
+                  <p className="font-mono text-[10px] uppercase tracking-[0.22em] text-bordeaux">
+                    — {commitmentEyebrow}
+                  </p>
+                )}
+                {commitmentText && (
+                  <p className="mt-1 font-serif text-[15px] italic text-ink sm:text-[16px]">
+                    {commitmentText}
+                  </p>
+                )}
+              </div>
+              {reassuranceText && (
+                <p className="font-serif text-[14px] italic text-bordeaux">
+                  {reassuranceText}
+                </p>
+              )}
+            </motion.div>
+          )}
 
           <div
             className={`mx-auto grid gap-6 ${
@@ -175,24 +199,28 @@ export function EvenementPacks({ data }: { data?: PacksData }) {
                     {p.tagline}
                   </p>
 
-                  <div className="mt-7 flex items-baseline gap-3">
-                    <span
-                      className={`whitespace-nowrap font-serif text-[40px] italic leading-none tracking-[-0.02em] ${
-                        p.featured ? "text-cream" : "text-bordeaux"
-                      }`}
-                      style={{ fontWeight: 500 }}
-                    >
-                      {p.priceLabel}
-                    </span>
-                  </div>
-                  {(p.priceFrom || p.capacity) && (
-                    <p
-                      className={`mt-3 font-mono text-[10.5px] uppercase tracking-[0.22em] ${
-                        p.featured ? "text-cream/55" : "text-muted-ink"
-                      }`}
-                    >
-                      {[p.priceFrom, p.capacity].filter(Boolean).join(" · ")}
-                    </p>
+                  {showPrices && (
+                    <>
+                      <div className="mt-7 flex items-baseline gap-3">
+                        <span
+                          className={`whitespace-nowrap font-serif text-[40px] italic leading-none tracking-[-0.02em] ${
+                            p.featured ? "text-cream" : "text-bordeaux"
+                          }`}
+                          style={{ fontWeight: 500 }}
+                        >
+                          {p.priceLabel}
+                        </span>
+                      </div>
+                      {(p.priceFrom || p.capacity) && (
+                        <p
+                          className={`mt-3 font-mono text-[10.5px] uppercase tracking-[0.22em] ${
+                            p.featured ? "text-cream/55" : "text-muted-ink"
+                          }`}
+                        >
+                          {[p.priceFrom, p.capacity].filter(Boolean).join(" · ")}
+                        </p>
+                      )}
+                    </>
                   )}
                 </div>
 

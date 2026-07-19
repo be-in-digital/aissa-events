@@ -37,6 +37,8 @@ import {
   crossServicesSection,
   leadMagnetSection,
 } from "./objects/page-sections";
+import { qualificationFormSection } from "./objects/qualification-form";
+import { budgetSection } from "./objects/budget-section";
 
 // Documents (collections)
 import { pack } from "./documents/pack";
@@ -98,6 +100,8 @@ export const schemaTypes: SchemaTypeDefinition[] = [
   locationPricingSection,
   crossServicesSection,
   leadMagnetSection,
+  qualificationFormSection,
+  budgetSection,
 
   // Documents
   pack,
