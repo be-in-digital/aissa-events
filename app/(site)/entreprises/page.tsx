@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { Suspense } from "react";
 import { sanityFetch } from "@/lib/sanity/fetch";
 import { evenementPageQuery } from "@/lib/sanity/queries";
 import type { EvenementPageQueryResult } from "@/sanity.types";
@@ -15,6 +16,7 @@ import { EvenementIntro } from "@/components/evenements-pro/intro";
 import { EvenementUseCases } from "@/components/evenements-pro/usecases";
 import { EvenementFounder } from "@/components/evenements-pro/founder";
 import { EvenementPacks } from "@/components/evenements-pro/packs";
+import { EvenementBudget } from "@/components/evenements-pro/budget";
 import { EvenementLieux } from "@/components/evenements-pro/lieux";
 import { EvenementTimeline } from "@/components/evenements-pro/timeline";
 import { EvenementScope } from "@/components/evenements-pro/scope";
@@ -25,10 +27,11 @@ import { EvenementPortfolio } from "@/components/evenements-pro/portfolio";
 import { EvenementProcess } from "@/components/evenements-pro/process";
 import { EvenementFaq } from "@/components/evenements-pro/faq";
 import { EvenementCtaFinal } from "@/components/evenements-pro/cta-final";
+import { QualificationForm } from "@/components/evenements-pro/qualification-form";
 import { EvenementStickyCta } from "@/components/evenements-pro/sticky-cta";
 import { AvailabilitySection } from "@/components/availability/section";
 
-const PATH = "/evenements-pro";
+const PATH = "/entreprises";
 
 async function getEvenementData() {
   return sanityFetch<EvenementPageQueryResult>({
@@ -42,9 +45,9 @@ export async function generateMetadata(): Promise<Metadata> {
   return buildMetadata({
     seo: data?.seo,
     fallbackTitle:
-      "Événements professionnels — Soirées clients · Lancements · Séminaires · Aïssa Events",
+      "Organisation d'événements professionnels en Île-de-France | Aïssa Events",
     fallbackDescription:
-      "Direction artistique d'événements pro : afterworks, soirées clients, lancements, séminaires. Pack Ambiance Signature dès 1 750 €. À l'Espace Events ou dans vos locaux. Devis sous 48 h.",
+      "Aïssa Events conçoit, organise et coordonne vos séminaires, afterworks et événements d'entreprise à Émerainville, dans vos locaux ou dans un lieu partenaire en Île-de-France.",
     pathname: PATH,
   });
 }
@@ -64,7 +67,8 @@ export default async function EvenementPage() {
       {/* <EvenementLogos /> — à activer dès logos clients dispo */}
       <EvenementUseCases data={data?.usecases} />
       <EvenementFounder founder={settings?.founder} />
-      <EvenementPacks data={data?.packs} />
+      <EvenementPacks data={data?.packs} quoteAnchor="#devis" />
+      <EvenementBudget data={data?.budget} />
       <EvenementLieux data={data?.lieux} />
       <EvenementTimeline data={data?.timeline} />
       <EvenementScope data={data?.scope} />
@@ -74,7 +78,7 @@ export default async function EvenementPage() {
       <EvenementProcess data={data?.process} />
       <EvenementFaq data={data?.faq} />
       <AvailabilitySection
-        utmSource="evenements-pro"
+        utmSource="entreprises"
         utmContent="calendar-pro"
         eyebrow="Disponibilités"
         title="Votre date butoir tient-elle ?"
@@ -83,6 +87,9 @@ export default async function EvenementPage() {
         nextSlotsTitle="Les vendredis et samedis encore libres"
       />
       <EvenementCtaFinal data={data?.finalCta} />
+      <Suspense fallback={null}>
+        <QualificationForm data={data?.qualificationForm} />
+      </Suspense>
       <EvenementStickyCta data={data?.stickyCta} />
     </>
   );
@@ -115,16 +122,6 @@ function ProServiceJsonLd() {
       "@type": "Country",
       name: "France",
     },
-    offers: [
-      {
-        "@type": "Offer",
-        name: "Pack Ambiance Signature",
-        price: "1750",
-        priceCurrency: "EUR",
-        description:
-          "Direction artistique, DJ, mise en lumière, décoration et coordination — tout inclus.",
-      },
-    ],
   };
 
   return (

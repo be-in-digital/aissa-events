@@ -1027,7 +1027,7 @@ export const espaceEventsPageDoc = {
           "Soirées clients, afterworks, lancements, séminaires. Pack Ambiance clé en main ou organisation sur mesure — à Espace Events, dans vos locaux ou en lieu partenaire.",
         tags: ["Pack Ambiance", "Sur mesure", "Hors lieu"],
         ctaLabel: "Découvrir l'offre B2B",
-        ctaHref: "/evenements-pro",
+        ctaHref: "/entreprises",
       },
     ],
   },

@@ -69,6 +69,13 @@ const nextConfig: NextConfig = {
         destination: "/espace-events",
         permanent: true,
       },
+      // Page « Événements pro » renommée en « Entreprises » (directives cliente,
+      // juillet 2026). 308 pour préserver le SEO et les liens déjà partagés.
+      {
+        source: "/evenements-pro",
+        destination: "/entreprises",
+        permanent: true,
+      },
     ];
   },
   async headers() {

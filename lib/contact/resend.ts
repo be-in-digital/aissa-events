@@ -1,7 +1,12 @@
 import "server-only";
 import { Resend } from "resend";
 import type { ContactFormData } from "./schema";
+import type { BusinessLeadData } from "./business-schema";
 import { buildLeadEmailHtml, buildLeadEmailText } from "./email-template";
+import {
+  buildBusinessLeadEmailHtml,
+  buildBusinessLeadEmailText,
+} from "./business-email-template";
 
 /**
  * Envoie l'email de lead à l'agence via Resend.
@@ -35,6 +40,42 @@ export async function sendLeadEmail(data: ContactFormData): Promise<{ id: string
     subject,
     html: buildLeadEmailHtml(data),
     text: buildLeadEmailText(data),
+  });
+
+  if (error) {
+    throw new Error(`Resend a refusé l'envoi : ${error.message ?? "unknown error"}`);
+  }
+
+  return result ? { id: result.id } : null;
+}
+
+/**
+ * Envoie l'email de qualification B2B (page Entreprises) à l'agence.
+ * Mêmes variables d'env que `sendLeadEmail`.
+ */
+export async function sendBusinessLeadEmail(
+  data: BusinessLeadData,
+): Promise<{ id: string } | null> {
+  const apiKey = process.env.RESEND_API_KEY;
+  const fromEmail = process.env.RESEND_FROM_EMAIL ?? "contact@aissaevents.com";
+  const toEmail = process.env.RESEND_TO_EMAIL ?? "contact@aissaevents.com";
+
+  if (!apiKey) {
+    throw new Error(
+      "RESEND_API_KEY manquant. Configurez-le pour activer l'envoi d'emails.",
+    );
+  }
+
+  const resend = new Resend(apiKey);
+  const subject = `[Aïssa Events · Entreprise] ${data.eventType} — ${data.company}`;
+
+  const { data: result, error } = await resend.emails.send({
+    from: `Aïssa Events <${fromEmail}>`,
+    to: [toEmail],
+    replyTo: data.email,
+    subject,
+    html: buildBusinessLeadEmailHtml(data),
+    text: buildBusinessLeadEmailText(data),
   });
 
   if (error) {

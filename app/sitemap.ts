@@ -7,7 +7,7 @@ import type { SitemapQueryResult } from "@/sanity.types";
 const STATIC_ROUTES = [
   { path: "/", priority: 1, changeFrequency: "weekly" as const },
   { path: "/mariage", priority: 0.9, changeFrequency: "monthly" as const },
-  { path: "/evenements-pro", priority: 0.9, changeFrequency: "monthly" as const },
+  { path: "/entreprises", priority: 0.9, changeFrequency: "monthly" as const },
   { path: "/espace-events", priority: 0.9, changeFrequency: "monthly" as const },
   { path: "/realisations", priority: 0.8, changeFrequency: "weekly" as const },
   { path: "/blog", priority: 0.7, changeFrequency: "weekly" as const },

@@ -79,6 +79,43 @@ export const packsSection = defineType({
       of: [{ type: "reference", to: [{ type: "pack" }] }],
       description: "Laisser vide pour afficher automatiquement selon le filtre ci-dessus.",
     }),
+    defineField({
+      name: "showPrices",
+      title: "Afficher les prix sur les cartes ?",
+      type: "boolean",
+      initialValue: true,
+      description:
+        "Activé : le tarif « à partir de » (ou « Sur devis ») apparaît sur chaque carte. Désactivé : aucun prix ne s'affiche — recommandé pour les offres entreprises, qui se chiffrent toujours sur devis.",
+    }),
+    defineField({
+      name: "featuredBadgeLabel",
+      title: "Texte du badge « offre phare »",
+      type: "string",
+      initialValue: "Offre phare",
+      description:
+        "Le petit badge doré affiché en haut du pack coché « Mis en avant ». Ex : « Offre phare », « Le plus demandé ». Laisser vide pour n'afficher aucun badge.",
+    }),
+    defineField({
+      name: "commitmentEyebrow",
+      title: "Bandeau « inclus dans tous les cas » — petit titre",
+      type: "string",
+      description:
+        "Le bandeau rappelle ce qui est inclus quel que soit le pack choisi. Ceci en est le petit titre coloré. Ex : « Dans tous les cas ». Laisser vide pour masquer tout le bandeau.",
+    }),
+    defineField({
+      name: "commitmentText",
+      title: "Bandeau « inclus dans tous les cas » — texte",
+      type: "string",
+      description:
+        "Les prestations toujours comprises, séparées par « · ». Ex : « Direction artistique · Production · Coordination jour J ».",
+    }),
+    defineField({
+      name: "reassuranceText",
+      title: "Bandeau — mention rassurante (à droite)",
+      type: "string",
+      description:
+        "Courte phrase de réassurance affichée à droite du bandeau. Ex : « Devis sous 48 h · Facturation entreprise (TVA · SIRET) ».",
+    }),
   ],
 });
 

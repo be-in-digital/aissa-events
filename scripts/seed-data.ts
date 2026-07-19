@@ -52,7 +52,7 @@ export const siteSettingsDoc = {
   },
   headerNav: [
     { _key: "n1", label: "Espace Events", cta: { _type: "cta", label: "Espace Events", type: "internal", internalPath: "/espace-events", variant: "ghost" } },
-    { _key: "n2", label: "Événements pro", cta: { _type: "cta", label: "Événements pro", type: "internal", internalPath: "/evenements-pro", variant: "ghost" } },
+    { _key: "n2", label: "Entreprises", cta: { _type: "cta", label: "Entreprises", type: "internal", internalPath: "/entreprises", variant: "ghost" } },
     { _key: "n3", label: "Mariage", cta: { _type: "cta", label: "Mariage", type: "internal", internalPath: "/mariage", variant: "ghost" } },
     { _key: "n4", label: "Réalisations", cta: { _type: "cta", label: "Réalisations", type: "internal", internalPath: "/realisations", variant: "ghost" } },
     { _key: "n5", label: "Blog", cta: { _type: "cta", label: "Blog", type: "internal", internalPath: "/blog", variant: "ghost" } },
@@ -93,7 +93,7 @@ export const siteSettingsDoc = {
       title: "Univers",
       links: [
         { _key: "l1", label: "Espace Events · le lieu", cta: { _type: "cta", label: "Espace Events", type: "internal", internalPath: "/espace-events", variant: "ghost" } },
-        { _key: "l2", label: "Événements pro", cta: { _type: "cta", label: "Événements pro", type: "internal", internalPath: "/evenements-pro", variant: "ghost" } },
+        { _key: "l2", label: "Entreprises", cta: { _type: "cta", label: "Entreprises", type: "internal", internalPath: "/entreprises", variant: "ghost" } },
         { _key: "l3", label: "Mariages & cérémonies", cta: { _type: "cta", label: "Mariages & cérémonies", type: "internal", internalPath: "/mariage", variant: "ghost" } },
       ],
     },
@@ -221,7 +221,7 @@ export const homePageDoc = {
         tags: ["Pack Ambiance", "Sur mesure", "DJ & traiteur", "Lieu inclus"],
         price: { label: "À partir de", value: "1 750 €", note: "Pack Ambiance Signature" },
         image: imageRef("universe-pro"),
-        primaryCta: { _type: "cta", label: "Voir les formules", type: "internal", internalPath: "/evenements-pro", variant: "primary" },
+        primaryCta: { _type: "cta", label: "Voir les formules", type: "internal", internalPath: "/entreprises", variant: "primary" },
         secondaryCta: { _type: "cta", label: "Réserver un appel", type: "anchor", anchor: "contact", variant: "secondary" },
       },
       {

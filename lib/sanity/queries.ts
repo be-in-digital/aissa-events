@@ -80,6 +80,11 @@ const packsSectionFragment = /* groq */ `
   title,
   intro,
   filterByType,
+  showPrices,
+  featuredBadgeLabel,
+  commitmentEyebrow,
+  commitmentText,
+  reassuranceText,
   "packs": coalesce(
     selectedPacks[]->{ ${packReference} },
     *[_type == "pack" && (^.filterByType == "all" || type == ^.filterByType)] | order(order asc, _createdAt asc){ ${packReference} }
@@ -472,6 +477,45 @@ export const mariagePageQuery = defineQuery(`
   }
 `);
 
+const qualificationFormFragment = /* groq */ `
+  enabled,
+  eyebrow,
+  title,
+  intro,
+  eventTypes,
+  locationOptions,
+  serviceOptions,
+  budgetRanges,
+  companyLabel,
+  sectorLabel,
+  contactNameLabel,
+  roleLabel,
+  emailLabel,
+  phoneLabel,
+  eventTypeLabel,
+  headcountLabel,
+  periodLabel,
+  locationLabel,
+  scheduleLabel,
+  servicesLabel,
+  budgetLabel,
+  objectiveLabel,
+  notesLabel,
+  submitLabel,
+  successTitle,
+  successMessage,
+  consentText
+`;
+
+const budgetSectionFragment = /* groq */ `
+  enabled,
+  eyebrow,
+  title,
+  intro,
+  items[]{ title, description },
+  note
+`;
+
 export const evenementPageQuery = defineQuery(`
   *[_type == "evenementPage"][0]{
     hero{ ${heroFragment} },
@@ -479,6 +523,7 @@ export const evenementPageQuery = defineQuery(`
     intro{ ${aboutFragment} },
     usecases{ ${processSectionFragment} },
     packs{ ${packsSectionFragment} },
+    budget{ ${budgetSectionFragment} },
     process{ ${processSectionFragment} },
     lieux{ ${lieuxSectionFragment} },
     scope{ ${conditionsSectionFragment} },
@@ -489,6 +534,7 @@ export const evenementPageQuery = defineQuery(`
     testimonials{ ${testimonialsSectionFragment} },
     faq{ ${faqSectionFragment} },
     finalCta{ ${ctaSectionFragment} },
+    qualificationForm{ ${qualificationFormFragment} },
     stickyCta{ ${stickyCtaSectionFragment} },
     seo
   }

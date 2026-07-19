@@ -207,3 +207,32 @@ body {
     background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='200' height='200'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2'/><feColorMatrix values='0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 0.04 0'/></filter><rect width='200' height='200' filter='url(%23n)'/></svg>");
   }
 }
+
+/* ------------------------------------------------------------------ *
+ * Rendu sans JavaScript / à l'impression (export PDF)
+ *
+ * Les animations d'apparition (Motion) posent `opacity: 0` sur le HTML
+ * initial. Sans JS, ou à l'impression, le contenu resterait invisible.
+ * On force donc l'affichage dans ces contextes pour que chaque section
+ * apparaisse dans les exports PDF et pour les robots qui n'exécutent pas
+ * le JavaScript.
+ * ------------------------------------------------------------------ */
+@media print {
+  *,
+  *::before,
+  *::after {
+    opacity: 1 !important;
+    transform: none !important;
+    animation: none !important;
+    transition: none !important;
+  }
+}
+
+@media (scripting: none) {
+  *,
+  *::before,
+  *::after {
+    opacity: 1 !important;
+    transform: none !important;
+  }
+}
