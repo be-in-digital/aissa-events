@@ -101,21 +101,16 @@ function renameNavLabels(items: Json): { value: Json; changed: boolean } {
   return { value: out, changed };
 }
 
-async function patchType(type: string) {
-  const doc = await client.fetch<Record<string, Json> | null>(
-    `*[_type == $type && !(_id in path("drafts.**"))][0]`,
-    { type },
-  );
-  if (!doc) {
-    console.log(`   ⚠️  ${type} : document publié introuvable — ignoré.`);
-    return;
-  }
+async function patchDoc(doc: Record<string, Json>): Promise<boolean> {
+  const type = doc._type as string;
   const setPayload: Record<string, Json> = {};
   for (const key of Object.keys(doc)) {
     if (key.startsWith("_")) continue;
     const pathRes = replacePaths(doc[key]);
     let value = pathRes.value;
     let changed = pathRes.changed;
+    // Le renommage du libellé « Événements pro » → « Entreprises » ne concerne
+    // que le menu principal (siteSettings.headerNav).
     if (type === "siteSettings" && key === "headerNav") {
       const navRes = renameNavLabels(value);
       value = navRes.value;
@@ -124,23 +119,30 @@ async function patchType(type: string) {
     if (changed) setPayload[key] = value;
   }
   const keys = Object.keys(setPayload);
-  if (keys.length === 0) {
-    console.log(`   ✔ ${type} : déjà conforme, rien à changer.`);
-    return;
-  }
+  if (keys.length === 0) return false;
   await client
     .patch(doc._id as string)
     .set(setPayload)
     .commit({ autoGenerateArrayKeys: false });
-  console.log(`   ✅ ${type} : champ(s) mis à jour → ${keys.join(", ")}`);
+  console.log(`   ✅ ${type} (${doc._id}) → ${keys.join(", ")}`);
+  return true;
 }
 
 async function main() {
-  console.log(`→ Connecté à Sanity ${projectId}/${dataset}. Renommage des liens…`);
-  for (const type of ["siteSettings", "homePage", "evenementPage"]) {
-    await patchType(type);
+  console.log(`→ Connecté à Sanity ${projectId}/${dataset}. Scan de TOUS les documents…`);
+  const docs = await client.fetch<Record<string, Json>[]>(
+    `*[!(_id in path("drafts.**"))]`,
+  );
+  console.log(`   ${docs.length} document(s) publié(s) à scanner.`);
+  let patched = 0;
+  for (const doc of docs) {
+    if (await patchDoc(doc)) patched++;
   }
-  console.log("✅ Terminé. (Revalidation du site ~60 s.)");
+  console.log(
+    patched === 0
+      ? "✔ Aucun lien /evenements-pro dans le contenu — déjà propre."
+      : `✅ ${patched} document(s) patché(s). (Revalidation ~60 s.)`,
+  );
 }
 
 main().catch((err) => {

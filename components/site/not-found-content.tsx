@@ -5,7 +5,7 @@ import { Eyebrow } from "@/components/home/eyebrow";
 const QUICK_LINKS = [
   { href: "/realisations", label: "Réalisations" },
   { href: "/mariage", label: "Mariages" },
-  { href: "/evenements-pro", label: "Événements pro" },
+  { href: "/entreprises", label: "Entreprises" },
   { href: "/espace-events", label: "Le lieu" },
   { href: "/#contact", label: "Contact" },
 ];

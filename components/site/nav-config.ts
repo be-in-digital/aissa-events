@@ -12,7 +12,7 @@ export type NavItem = {
  */
 export const FALLBACK_NAV: NavItem[] = [
   { label: "Espace Events", href: "/espace-events", external: false },
-  { label: "Événements pro", href: "/evenements-pro", external: false },
+  { label: "Entreprises", href: "/entreprises", external: false },
   { label: "Mariage", href: "/mariage", external: false },
   { label: "Réalisations", href: "/realisations", external: false },
   { label: "Blog", href: "/blog", external: false },
