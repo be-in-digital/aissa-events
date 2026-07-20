@@ -2,8 +2,7 @@ import { AvailabilityCalendar } from "./calendar";
 import { NextSlots } from "./next-slots";
 import { AvailabilityDialog } from "./dialog";
 import { getAvailabilityData } from "@/lib/availability/server";
-
-const CALENDLY_URL = process.env.NEXT_PUBLIC_CALENDLY_URL ?? "https://calendly.com/aissa-events";
+import { buildBookingUrl } from "@/lib/booking/url";
 
 type Props = {
   utmSource: string;
@@ -65,9 +64,10 @@ export async function AvailabilitySection({
           </p>
           <div className="mt-8">
             <a
-              href={CALENDLY_URL}
-              target="_blank"
-              rel="noopener noreferrer"
+              href={buildBookingUrl({
+                source: utmSource,
+                content: `${utmContent}-fallback`,
+              })}
               className="inline-flex min-h-12 items-center gap-2 rounded-full bg-bordeaux px-7 py-3.5 font-mono text-[11px] uppercase tracking-[0.22em] text-cream transition hover:bg-bordeaux/90 active:scale-[0.97]"
             >
               Voir les disponibilités

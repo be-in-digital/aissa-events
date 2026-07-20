@@ -641,7 +641,8 @@ export const contactSection = defineType({
   groups: [
     { name: "header", title: "En-tête", default: true },
     { name: "calendlyCard", title: "Carte Calendly" },
-    { name: "form", title: "Formulaire" },
+    { name: "form", title: "Formulaire particulier" },
+    { name: "formPro", title: "Formulaire professionnel" },
     { name: "meta", title: "Bloc coordonnées" },
   ],
   fields: [
@@ -649,6 +650,10 @@ export const contactSection = defineType({
     defineField({ name: "eyebrow", type: "string", title: "Suréclat", group: "header", initialValue: "Parlons de votre projet" }),
     defineField({ name: "title", type: "string", title: "Titre", group: "header", description: 'Encadrez les mots en italique avec _underscores_.' }),
     defineField({ name: "intro", type: "text", title: "Introduction", rows: 3, group: "header" }),
+
+    // Libellés du sélecteur Particulier / Professionnel (2 onglets au-dessus du formulaire)
+    defineField({ name: "audienceParticulierLabel", type: "string", title: "Onglet « Particulier »", group: "header", initialValue: "Particulier", description: "Libellé de l'onglet du formulaire destiné aux particuliers (mariage, anniversaire, baptême…)." }),
+    defineField({ name: "audienceProLabel", type: "string", title: "Onglet « Professionnel »", group: "header", initialValue: "Professionnel", description: "Libellé de l'onglet du formulaire destiné aux entreprises (séminaire, soirée client…)." }),
 
     defineField({ name: "calendlyEyebrow", type: "string", title: "Suréclat carte", group: "calendlyCard", initialValue: "— Le plus rapide" }),
     defineField({ name: "calendlyTitle", type: "string", title: "Titre carte", group: "calendlyCard" }),
@@ -668,6 +673,55 @@ export const contactSection = defineType({
     defineField({ name: "formSubmitLabel", type: "string", title: "Texte du bouton d'envoi", group: "form", initialValue: "Envoyer mon projet" }),
     defineField({ name: "formSuccessTitle", type: "string", title: "Titre après envoi", group: "form", initialValue: "Merci !" }),
     defineField({ name: "formSuccessMessage", type: "string", title: "Message après envoi", group: "form", initialValue: "Aïssa répond sous 48h ouvrées." }),
+
+    // ————————————————————— Formulaire professionnel (onglet « Professionnel ») —————————————————————
+    // Version compacte de la demande entreprise. Envoie vers le même circuit que la page Entreprises.
+    defineField({ name: "proFormEyebrow", type: "string", title: "Suréclat formulaire pro", group: "formPro", initialValue: "— Vous êtes une entreprise ?" }),
+    defineField({ name: "proFormTitle", type: "string", title: "Titre formulaire pro", group: "formPro", initialValue: "Votre événement professionnel" }),
+    defineField({
+      name: "proEventTypes",
+      title: "Types d'événement pro (select)",
+      type: "array",
+      group: "formPro",
+      of: [{ type: "string" }],
+      options: { layout: "tags" },
+      initialValue: [
+        "Séminaire / Réunion",
+        "Afterwork / Cocktail",
+        "Soirée client / Lancement",
+        "Événement de fin d'année",
+        "Team building",
+        "Convention / Conférence",
+        "Autre",
+      ],
+    }),
+    defineField({
+      name: "proBudgetRanges",
+      title: "Fourchettes de budget pro (select)",
+      type: "array",
+      group: "formPro",
+      of: [{ type: "string" }],
+      options: { layout: "tags" },
+      initialValue: [
+        "Moins de 5 000 €",
+        "5 000 – 10 000 €",
+        "10 000 – 20 000 €",
+        "20 000 – 50 000 €",
+        "Plus de 50 000 €",
+        "À définir ensemble",
+      ],
+    }),
+    defineField({ name: "proFormSubmitLabel", type: "string", title: "Texte du bouton d'envoi (pro)", group: "formPro", initialValue: "Demander une étude" }),
+    defineField({ name: "proFormSuccessTitle", type: "string", title: "Titre après envoi (pro)", group: "formPro", initialValue: "Merci !" }),
+    defineField({ name: "proFormSuccessMessage", type: "string", title: "Message après envoi (pro)", group: "formPro", initialValue: "Votre demande est transmise. Aïssa Events revient vers vous sous 48 h ouvrées." }),
+    defineField({
+      name: "proFormFullLinkLabel",
+      type: "string",
+      title: "Lien vers le formulaire complet (pro)",
+      group: "formPro",
+      initialValue: "Besoin d'une étude détaillée ? Formulaire complet",
+      description: "Affiché sous le formulaire pro, pointe vers la page Entreprises (/entreprises#devis). Laissez vide pour le masquer.",
+    }),
   ],
 });
 

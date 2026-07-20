@@ -1,6 +1,6 @@
 "use client";
 
-import { buildCalendlyUrl } from "@/lib/calendly";
+import { buildBookingUrl } from "@/lib/booking/url";
 import { resolveCta } from "@/lib/sanity/cta";
 import type { EspaceEventsPageQueryResult } from "@/sanity.types";
 import { PackBlock, type Pack } from "./pack-block";
@@ -68,7 +68,7 @@ export function PackCelebration({ data }: { data?: PacksData }) {
       ctaLabel: cta?.label ?? "Réserver un appel",
       ctaHref:
         cta?.href ??
-        buildCalendlyUrl({ content: `pack-celebration-${slugForCalendly}` }),
+        buildBookingUrl({ content: `pack-celebration-${slugForCalendly}` }),
     };
   });
   const packs: [Pack, Pack, Pack] = [mapped[0], mapped[1], mapped[2]];

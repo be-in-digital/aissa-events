@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { motion } from "motion/react";
 import { ArrowRight } from "lucide-react";
-import { buildCalendlyUrl } from "@/lib/calendly";
+import { buildBookingUrl } from "@/lib/booking/url";
 import { resolveCta } from "@/lib/sanity/cta";
 import { renderInlineItalic } from "@/lib/sanity/text";
 import type { BlogPageQueryResult } from "@/sanity.types";
@@ -135,7 +135,7 @@ export function BlogArticleCta({ data }: { data?: ArticleCtaData }) {
               ) : (
                 <>
                   <a
-                    href={buildCalendlyUrl({
+                    href={buildBookingUrl({
                       source: "blog",
                       content: "article-cta",
                     })}

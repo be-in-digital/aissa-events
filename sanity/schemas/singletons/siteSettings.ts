@@ -151,10 +151,12 @@ export const siteSettings = defineType({
     }),
     defineField({
       name: "calendlyUrl",
-      title: "URL Calendly (RDV)",
+      title: "URL Calendly (déprécié — ne plus utiliser)",
       type: "url",
       group: "contact",
-      description: "Lien Calendly utilisé partout sur le site (header CTA, contact, etc.). Si non rempli, la valeur de l'environnement sert de secours.",
+      readOnly: true,
+      description:
+        "⚠️ Déprécié. La prise de RDV passe désormais par le scheduler natif interne. Réglages dans « Réservation d'appel ». Ce champ n'a plus d'effet.",
     }),
 
     // -------- Social --------
