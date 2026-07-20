@@ -7,7 +7,7 @@ import React from "react";
 const AltTextInput = (props: StringInputProps) => {
   if (typeof window === "undefined") return props.renderDefault(props);
   // eslint-disable-next-line @typescript-eslint/no-var-requires
-  const { AltTextInput: Input } = require("../components/AltTextInput") as {
+  const { AltTextInput: Input } = require("../../components/AltTextInput") as {
     AltTextInput: React.ComponentType<StringInputProps>;
   };
   return React.createElement(Input, props);
