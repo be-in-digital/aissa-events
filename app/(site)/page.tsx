@@ -4,7 +4,6 @@ import { sanityFetch } from "@/lib/sanity/fetch";
 import { homePageQuery } from "@/lib/sanity/queries";
 import type { HomePageQueryResult } from "@/sanity.types";
 import { buildMetadata } from "@/lib/seo/metadata";
-import { env } from "@/env";
 import { getSiteSettings } from "@/lib/sanity/site";
 
 import { Hero } from "@/components/home/hero";
@@ -55,7 +54,6 @@ export async function generateMetadata(): Promise<Metadata> {
 
 export default async function HomePage() {
   const [data, settings] = await Promise.all([getHomeData(), getSiteSettings()]);
-  const calendlyUrl = settings?.calendlyUrl ?? env.NEXT_PUBLIC_CALENDLY_URL;
 
   // Ordre éditable depuis le Studio Sanity ; retombe sur DEFAULT_ORDER si absent/vide.
   const order: string[] =
@@ -82,7 +80,6 @@ export default async function HomePage() {
     contact: (
       <ContactSection
         data={data?.contact}
-        calendlyUrl={calendlyUrl}
         settings={settings}
       />
     ),
@@ -101,7 +98,6 @@ export default async function HomePage() {
       {!order.includes("contact") && (
         <ContactSection
           data={data?.contact}
-          calendlyUrl={calendlyUrl}
           settings={settings}
         />
       )}

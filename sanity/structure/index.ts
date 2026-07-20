@@ -13,6 +13,7 @@ import {
   TagIcon,
   ClipboardIcon,
   RobotIcon,
+  ClockIcon,
 } from "@sanity/icons";
 import type { StructureResolver } from "sanity/structure";
 
@@ -28,6 +29,7 @@ const SINGLETON_TYPES = new Set<string>([
   "politiqueConfidentialite",
   "agentSettings",
   "availability",
+  "bookingSettings",
 ]);
 
 const HIDDEN_FROM_DEFAULT = new Set<string>([
@@ -38,6 +40,8 @@ const HIDDEN_FROM_DEFAULT = new Set<string>([
   "faqItem",
   "post",
   "category",
+  "booking",
+  "bookingType",
 ]);
 
 export const structure: StructureResolver = (S) =>
@@ -243,6 +247,35 @@ export const structure: StructureResolver = (S) =>
             .schemaType("availability")
             .documentId("availability")
             .title("Disponibilités (calendrier)"),
+        ),
+
+      S.listItem()
+        .title("Types de rendez-vous")
+        .icon(ClockIcon)
+        .child(
+          S.documentTypeList("bookingType")
+            .title("Types de rendez-vous")
+            .defaultOrdering([{ field: "order", direction: "asc" }]),
+        ),
+
+      S.listItem()
+        .title("Réservation — page de choix")
+        .icon(CogIcon)
+        .child(
+          S.editor()
+            .id("bookingSettings")
+            .schemaType("bookingSettings")
+            .documentId("bookingSettings")
+            .title("Réservation — page de choix"),
+        ),
+
+      S.listItem()
+        .title("Rendez-vous réservés")
+        .icon(CalendarIcon)
+        .child(
+          S.documentTypeList("booking")
+            .title("Rendez-vous réservés")
+            .defaultOrdering([{ field: "start", direction: "asc" }]),
         ),
 
       // Catch-all

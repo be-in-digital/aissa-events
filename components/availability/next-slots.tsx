@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { connection } from "next/server";
 import { ArrowRight, Calendar } from "lucide-react";
-import { buildCalendlyUrl } from "@/lib/calendly";
+import { buildBookingUrl } from "@/lib/booking/url";
 import { getAvailabilityData } from "@/lib/availability/server";
 import { getNextFreeDates } from "@/lib/availability";
 
@@ -46,12 +46,10 @@ export async function NextSlots({
           loin ensemble.
         </p>
         <Link
-          href={buildCalendlyUrl({
+          href={buildBookingUrl({
             source: utmSource,
             content: `${utmContent}-waitlist`,
           })}
-          target="_blank"
-          rel="noopener noreferrer"
           className="mt-4 inline-flex items-center gap-2 font-mono text-[11px] uppercase tracking-[0.22em] text-bordeaux underline-offset-4 hover:underline"
         >
           Échanger avec Aïssa
@@ -84,13 +82,11 @@ export async function NextSlots({
           return (
             <li key={iso}>
               <Link
-                href={buildCalendlyUrl({
+                href={buildBookingUrl({
                   source: utmSource,
                   content: `${utmContent}-${iso}`,
                   preferredDate: iso,
                 })}
-                target="_blank"
-                rel="noopener noreferrer"
                 className="group inline-flex items-center gap-2 rounded-full border border-bordeaux/30 bg-cream px-4 py-2 transition-all duration-300 hover:-translate-y-0.5 active:translate-y-0 hover:border-bordeaux hover:shadow-[0_8px_24px_rgba(122,46,67,0.10)]"
               >
                 <span className="font-mono text-[11px] uppercase tracking-[0.18em] text-ink">

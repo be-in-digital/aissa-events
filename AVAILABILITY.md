@@ -4,6 +4,12 @@ Ce document décrit comment activer et maintenir le calendrier public affiché
 sur les pages produit (`/espace-emerainville`, `/mariage`, `/evenements-pro`)
 et utilisé par le bouton « Vérifier la disponibilité ».
 
+> ℹ️ **Calendly a été remplacé** par un scheduler de réservation **natif**
+> (`/reserver`, cf. `BOOKING.md`). Le calendrier public et le scheduler
+> **partagent le même flux Google ICS** décrit ici (§1-3). Les sections qui
+> mentionnent Calendly ci-dessous sont conservées pour l'historique — la partie
+> Google Calendar (agenda dédié + URL ICS secrète) reste, elle, d'actualité.
+
 ## Vue d'ensemble du pipeline
 
 ```
@@ -25,12 +31,13 @@ Pages produit (Next.js, SSR)
 Calendrier interactif (modale + NextSlots)
         │  clic sur date libre
         ▼
-Calendly (préfilled avec la date sélectionnée)
+Modale de réservation native (/reserver, date d'événement pré-notée)
 ```
 
-Calendly et le calendrier public **partagent la même source de vérité Google
-Calendar** : chaque réservation Calendly atterrit dans l'agenda, et le site
-relit ce même agenda toutes les quelques heures pour afficher les statuts.
+Le scheduler natif et le calendrier public **partagent la même source de vérité
+Google Calendar** : le site relit l'agenda (flux ICS) pour afficher les statuts
+jour-par-jour, et le scheduler s'en sert aussi pour ne pas proposer un créneau
+d'appel quand Aïssa est déjà prise. Voir `BOOKING.md`.
 
 ## 1. Créer l'agenda Google dédié
 
@@ -95,8 +102,7 @@ Trois variables à configurer dans **Vercel → Project → Settings → Environ
 | Variable | Valeur | Rôle |
 |---|---|---|
 | `CRON_SECRET` | une chaîne aléatoire générée par `openssl rand -hex 32` | Authentifie les requêtes du cron de Vercel. Sans elle, le cron renvoie 401. |
-| `NEXT_PUBLIC_CALENDLY_URL` | `https://calendly.com/aissaeventscontact` | URL de la fiche Calendly. Utilisée par `buildCalendlyUrl()` (avec UTM et `date` préfillée). |
-| `SANITY_API_WRITE_TOKEN` | token Sanity « Editor » ou « Maintainer » | Permet au cron d'écrire les `busyRanges` dans Sanity. |
+| `SANITY_API_WRITE_TOKEN` | token Sanity « Editor » ou « Maintainer » | Permet au cron d'écrire les `busyRanges` dans Sanity (et au scheduler d'écrire les `booking`). |
 
 > Pour la prod, le cron Vercel n'a accès qu'aux variables **Production**.
 > Pour tester en local, voir « Tester en local » plus bas.
@@ -233,4 +239,4 @@ CTA dans la section « Pas encore décidé ? » de la page espace).
 - `components/availability/dialog.tsx` — modale + event bus `open-availability-dialog`
 - `components/availability/calendar.tsx` / `calendar-client.tsx` — vue 3 mois interactive
 - `components/availability/next-slots.tsx` — pill des 3 prochaines dates libres
-- `lib/calendly.ts` — `buildCalendlyUrl()` (UTM + date préfillée)
+- `lib/booking/url.ts` — `buildBookingUrl()` (remplace `buildCalendlyUrl` ; cf. `BOOKING.md`)

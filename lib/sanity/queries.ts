@@ -372,6 +372,8 @@ const contactSectionFragment = /* groq */ `
   eyebrow,
   title,
   intro,
+  audienceParticulierLabel,
+  audienceProLabel,
   calendlyEyebrow,
   calendlyTitle,
   calendlyDescription,
@@ -381,7 +383,15 @@ const contactSectionFragment = /* groq */ `
   formEventTypes,
   formSubmitLabel,
   formSuccessTitle,
-  formSuccessMessage
+  formSuccessMessage,
+  proFormEyebrow,
+  proFormTitle,
+  proEventTypes,
+  proBudgetRanges,
+  proFormSubmitLabel,
+  proFormSuccessTitle,
+  proFormSuccessMessage,
+  proFormFullLinkLabel
 `;
 
 // ============================================================================

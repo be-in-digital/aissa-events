@@ -4,7 +4,7 @@ import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import { motion } from "motion/react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
-import { buildCalendlyUrl } from "@/lib/calendly";
+import { buildBookingUrl } from "@/lib/booking/url";
 import { Eyebrow } from "@/components/home/eyebrow";
 import type { CalendarMonth, CalendarDay } from "./calendar";
 
@@ -279,7 +279,7 @@ function DayCell({
   }
 
   const isOption = day.status === "option";
-  const href = buildCalendlyUrl({
+  const href = buildBookingUrl({
     source: utmSource,
     content: `${utmContent}${isOption ? "-option" : ""}-${day.iso}`,
     preferredDate: day.iso,
@@ -298,8 +298,6 @@ function DayCell({
   return (
     <Link
       href={href}
-      target="_blank"
-      rel="noopener noreferrer"
       className={cls}
       title={tooltip}
       aria-label={`${day.dayOfMonth} — ${isOption ? "option" : "libre"}`}

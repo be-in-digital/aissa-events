@@ -63,6 +63,9 @@ import {
 } from "./singletons/legalPages";
 import { agentSettings } from "./singletons/agentSettings";
 import { availability } from "./singletons/availability";
+import { bookingSettings } from "./singletons/bookingSettings";
+import { booking } from "./documents/booking";
+import { bookingType } from "./documents/bookingType";
 
 export const schemaTypes: SchemaTypeDefinition[] = [
   // Objects de base
@@ -111,6 +114,8 @@ export const schemaTypes: SchemaTypeDefinition[] = [
   faqItem,
   post,
   category,
+  booking,
+  bookingType,
 
   // Singletons
   siteSettings,
@@ -124,4 +129,5 @@ export const schemaTypes: SchemaTypeDefinition[] = [
   politiqueConfidentialite,
   agentSettings,
   availability,
+  bookingSettings,
 ];

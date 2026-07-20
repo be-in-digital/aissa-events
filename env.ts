@@ -62,6 +62,14 @@ const serverSchema = z.object({
   GOOGLE_PLACES_API_KEY: z.string().min(1).optional(),
   GOOGLE_PLACE_ID: z.string().min(1).optional(),
 
+  // Google Calendar (écriture) — création de l'event + lien Meet pour les RDV.
+  // Refresh token OAuth obtenu une fois via `scripts/google-oauth.ts`. Cf. BOOKING.md.
+  // Non configuré → le scheduler retombe sur l'invitation .ics par email.
+  GOOGLE_OAUTH_CLIENT_ID: z.string().min(1).optional(),
+  GOOGLE_OAUTH_CLIENT_SECRET: z.string().min(1).optional(),
+  GOOGLE_OAUTH_REFRESH_TOKEN: z.string().min(1).optional(),
+  GOOGLE_CALENDAR_ID: z.string().min(1).optional(),
+
   // Instagram Business Account ID (pour le send Insta DM)
   META_INSTAGRAM_BUSINESS_ACCOUNT_ID: z.string().min(1).optional(),
 
@@ -75,11 +83,6 @@ const clientSchema = z.object({
   NEXT_PUBLIC_SANITY_PROJECT_ID: z.string().min(1).default("6ue0b6jo"),
   NEXT_PUBLIC_SANITY_DATASET: z.string().min(1).default("production"),
   NEXT_PUBLIC_SANITY_API_VERSION: z.string().min(1).default("2026-05-09"),
-  NEXT_PUBLIC_CALENDLY_URL: z
-    .string()
-    .url()
-    .default("https://calendly.com/aissaeventscontact"),
-
   // Meta / WhatsApp Business Cloud API (Phase 2 — agent IA)
   NEXT_PUBLIC_META_APP_ID: z.string().min(1).optional(),
   NEXT_PUBLIC_META_GRAPH_API_VERSION: z.string().min(1).default("v21.0"),
@@ -94,7 +97,6 @@ const clientEnvRaw: Record<string, string | undefined> = {
   NEXT_PUBLIC_SANITY_PROJECT_ID: process.env.NEXT_PUBLIC_SANITY_PROJECT_ID,
   NEXT_PUBLIC_SANITY_DATASET: process.env.NEXT_PUBLIC_SANITY_DATASET,
   NEXT_PUBLIC_SANITY_API_VERSION: process.env.NEXT_PUBLIC_SANITY_API_VERSION,
-  NEXT_PUBLIC_CALENDLY_URL: process.env.NEXT_PUBLIC_CALENDLY_URL,
   NEXT_PUBLIC_META_APP_ID: process.env.NEXT_PUBLIC_META_APP_ID,
   NEXT_PUBLIC_META_GRAPH_API_VERSION: process.env.NEXT_PUBLIC_META_GRAPH_API_VERSION,
   NEXT_PUBLIC_META_EMBEDDED_SIGNUP_CONFIG_ID: process.env.NEXT_PUBLIC_META_EMBEDDED_SIGNUP_CONFIG_ID,

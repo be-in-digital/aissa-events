@@ -74,7 +74,7 @@ export const cta = defineType({
       type: "string",
       options: {
         list: [
-          { title: "Calendly (RDV découverte)", value: "calendly" },
+          { title: "Réserver un appel (RDV découverte)", value: "calendly" },
           { title: "Formulaire devis", value: "form" },
           { title: "Lien interne (autre page du site)", value: "internal" },
           { title: "Lien externe", value: "external" },
