@@ -451,6 +451,7 @@ export const homePageQuery = defineQuery(`
     faq{ ${faqSectionFragment} },
     leadMagnet{ ${leadMagnetSectionFragment} },
     contact{ ${contactSectionFragment} },
+    sectionsOrder,
     seo
   }
 `);
