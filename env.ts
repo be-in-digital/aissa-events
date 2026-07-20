@@ -58,6 +58,10 @@ const serverSchema = z.object({
   // Cron secret (Vercel Cron)
   CRON_SECRET: z.string().min(16).optional(),
 
+  // Google Places API (synchronisation des avis Google → Sanity)
+  GOOGLE_PLACES_API_KEY: z.string().min(1).optional(),
+  GOOGLE_PLACE_ID: z.string().min(1).optional(),
+
   // Instagram Business Account ID (pour le send Insta DM)
   META_INSTAGRAM_BUSINESS_ACCOUNT_ID: z.string().min(1).optional(),
 

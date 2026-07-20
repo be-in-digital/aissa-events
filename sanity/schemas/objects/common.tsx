@@ -1,4 +1,17 @@
 import { defineType, defineField, defineArrayMember } from "sanity";
+import type { StringInputProps } from "sanity";
+import React from "react";
+
+// Wrapper qui charge AltTextInput via require() pour éviter les problèmes
+// de résolution de module .tsx depuis moduleResolution: bundler.
+const AltTextInput = (props: StringInputProps) => {
+  if (typeof window === "undefined") return props.renderDefault(props);
+  // eslint-disable-next-line @typescript-eslint/no-var-requires
+  const { AltTextInput: Input } = require("../components/AltTextInput") as {
+    AltTextInput: React.ComponentType<StringInputProps>;
+  };
+  return React.createElement(Input, props);
+};
 
 export const seo = defineType({
   name: "seo",
@@ -134,6 +147,7 @@ export const imageWithAlt = defineType({
       description:
         "Décrit l'image pour les lecteurs d'écran et le SEO. Obligatoire.",
       type: "string",
+      components: { input: AltTextInput },
       validation: (Rule) =>
         Rule.required()
           .min(3)
