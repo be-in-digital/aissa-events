@@ -140,8 +140,51 @@ export function RealisationsGallery({ data, realisations }: Props) {
     return () => window.removeEventListener("keydown", onKey);
   }, [lightbox, lightboxNext, lightboxPrev]);
 
-  if (items.length === 0) return null;
-  if (!title) return null;
+  // Titre de secours si non configuré dans Sanity
+  const displayTitle = title ?? 'Nos réalisations';
+
+  // État vide : galerie visible mais sans réalisations encore publiées
+  if (items.length === 0) {
+    return (
+      <section id="galerie" className="relative bg-cream py-24 sm:py-32">
+        <div className="mx-auto max-w-[1440px] px-6 sm:px-14">
+          <motion.div
+            initial={{ opacity: 0, y: 32 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-80px" }}
+            transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1] }}
+            className="mb-10"
+          >
+            {eyebrow && (
+              <div className="mb-6">
+                <Eyebrow>{eyebrow}</Eyebrow>
+              </div>
+            )}
+            <h2
+              className="font-serif text-[40px] leading-[1] tracking-[-0.03em] sm:text-[52px] lg:text-[64px]"
+              style={{ fontWeight: 300 }}
+            >
+              {displayTitle.split("\n").map((line, i, arr) => (
+                <span key={i}>
+                  {renderInlineItalic(line)}
+                  {i < arr.length - 1 && <br />}
+                </span>
+              ))}
+            </h2>
+          </motion.div>
+          <motion.p
+            initial={{ opacity: 0, y: 16 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-40px" }}
+            transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1], delay: 0.1 }}
+            className="text-center font-serif text-[18px] italic text-muted-ink sm:text-[20px]"
+          >
+            Les réalisations arrivent bientôt…
+          </motion.p>
+        </div>
+      </section>
+    );
+  }
 
   return (
     <section id="galerie" className="relative bg-cream py-24 sm:py-32">
@@ -162,7 +205,7 @@ export function RealisationsGallery({ data, realisations }: Props) {
             className="font-serif text-[40px] leading-[1] tracking-[-0.03em] sm:text-[52px] lg:text-[64px]"
             style={{ fontWeight: 300 }}
           >
-            {title.split("\n").map((line, i, arr) => (
+            {displayTitle.split("\n").map((line, i, arr) => (
               <span key={i}>
                 {renderInlineItalic(line)}
                 {i < arr.length - 1 && <br />}
