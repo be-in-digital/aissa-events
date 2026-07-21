@@ -3,35 +3,16 @@
 import Link from "next/link";
 import { motion } from "motion/react";
 import { ArrowUpRight, Calendar, Eye } from "lucide-react";
-import { availabilityLineSync } from "@/lib/availability";
 import { renderInlineItalic } from "@/lib/sanity/text";
-import { resolveCta, type ResolvedCta } from "@/lib/sanity/cta";
-import { openAvailabilityDialog } from "@/components/availability/dialog";
-import { CountUp } from "@/components/site/count-up";
+import { resolveCta } from "@/lib/sanity/cta";
 import type { EspaceEventsPageQueryResult } from "@/sanity.types";
-
-/**
- * Reconnaît un CTA destiné à ouvrir la modale de disponibilités, soit par son
- * href (`#disponibilites`, scope page ou cross-page), soit par son label
- * (cas du seed historique qui pointe vers `/#contact`).
- */
-function isAvailabilityCta(cta: ResolvedCta) {
-  const href = cta.href.toLowerCase();
-  if (href === "#disponibilites" || href.endsWith("/#disponibilites")) {
-    return true;
-  }
-  const label = cta.label.toLowerCase();
-  return label.includes("disponibilit") && label.includes("vérif");
-}
 
 type NotYetDecidedData = NonNullable<EspaceEventsPageQueryResult>["notYetDecided"];
 
 export function NotYetDecided({
   data,
-  availabilityLabel,
 }: {
   data?: NotYetDecidedData;
-  availabilityLabel?: string;
 }) {
   if (data?.enabled === false) return null;
   if (!data?.title) return null;
@@ -92,10 +73,6 @@ export function NotYetDecided({
             </div>
 
             <div>
-              <p className="mb-3 inline-flex items-center gap-2 font-mono text-[10px] uppercase tracking-[0.22em] text-bordeaux">
-                <span className="size-1.5 animate-pulse rounded-full bg-bordeaux" />
-                <CountUp value={availabilityLabel ?? availabilityLineSync()} />
-              </p>
               <div className="flex flex-col gap-3">
                 {ctas.map((cta, i) => {
                   const isPrimary = i === ctas.length - 1;
@@ -140,20 +117,10 @@ export function NotYetDecided({
                       </a>
                     );
                   }
-                  const opensDialog = isAvailabilityCta(cta);
                   return (
                     <Link
                       key={cta.href + cta.label}
-                      href={opensDialog ? "#disponibilites" : cta.href}
-                      onClick={
-                        opensDialog
-                          ? () => {
-                              // Léger délai pour laisser le scroll vers la
-                              // section démarrer avant l'ouverture du dialog.
-                              window.setTimeout(openAvailabilityDialog, 200);
-                            }
-                          : undefined
-                      }
+                      href={cta.href}
                       className={
                         isPrimary
                           ? "group inline-flex w-full items-center justify-between gap-4 rounded-full bg-bordeaux px-6 py-4 text-cream transition-all duration-500 hover:-translate-y-0.5 active:translate-y-0 hover:bg-bordeaux-deep hover:shadow-[0_14px_40px_rgba(122,46,67,0.20)] sm:w-auto sm:min-w-[300px]"

@@ -7,7 +7,7 @@ import { ArrowRight } from "lucide-react";
 import { Eyebrow } from "@/components/home/eyebrow";
 import { resolveCta } from "@/lib/sanity/cta";
 import { urlForImageString } from "@/lib/sanity/image";
-import { buildBookingUrl } from "@/lib/booking/url";
+import { buildContactUrl } from "@/lib/contact/cta-url";
 import { KineticTitle } from "@/components/site/kinetic-title";
 import { Magnetic } from "@/components/site/magnetic";
 import { CountUp } from "@/components/site/count-up";
@@ -30,7 +30,7 @@ const FALLBACK_STATS = [
 const FALLBACK_CTAS = [
   {
     label: "Prendre rendez-vous",
-    href: buildBookingUrl({ source: "mariage", content: "hero-primary" }),
+    href: buildContactUrl({ source: "mariage", content: "hero-primary" }),
     external: true,
     variant: "primary" as const,
   },

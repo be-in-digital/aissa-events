@@ -23,7 +23,6 @@ import { MariageConditions } from "@/components/mariage/conditions";
 import { MariageFaq } from "@/components/mariage/faq";
 import { MariageCtaFinal } from "@/components/mariage/cta-final";
 import { MariageStickyCta } from "@/components/mariage/sticky-cta";
-import { AvailabilitySection } from "@/components/availability/section";
 
 const PATH = "/mariage";
 
@@ -62,15 +61,6 @@ export default async function MariagePage() {
       <MariagePacks data={data?.packs} />
       <MariageFounder founder={settings?.founder} />
       <MariageLieux data={data?.lieux} />
-      <AvailabilitySection
-        utmSource="mariage"
-        utmContent="calendar-mariage"
-        eyebrow="Disponibilités"
-        title="Votre date est-elle libre ?"
-        description="L'agenda d'Aïssa pour les mariages, mis à jour en quasi-temps réel. Cliquez sur votre date pour réserver un appel découverte — elle confirme sa disponibilité sous 48 h."
-        nextSlotsEyebrow="Prochaines dates"
-        nextSlotsTitle="Les samedis de mariage encore libres"
-      />
       <MariageThemes data={data?.themes} />
       <MariageALaCarte data={data?.alacarte} />
       <MariagePortfolio data={data?.portfolio} />

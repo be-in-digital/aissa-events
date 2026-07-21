@@ -1,6 +1,6 @@
 "use client";
 
-import { buildBookingUrl } from "@/lib/booking/url";
+import { buildContactUrl } from "@/lib/contact/cta-url";
 import { resolveCta } from "@/lib/sanity/cta";
 import type { EspaceEventsPageQueryResult } from "@/sanity.types";
 import { PackBlock, type Pack } from "./pack-block";
@@ -67,7 +67,7 @@ export function PackFiesta({ data }: { data?: PacksFiestaData }) {
       ctaLabel: cta?.label ?? "Réserver un appel",
       ctaHref:
         cta?.href ??
-        buildBookingUrl({ content: `pack-fiesta-${slugForCalendly}` }),
+        buildContactUrl({ content: `pack-fiesta-${slugForCalendly}` }),
     };
   });
   const packs: [Pack, Pack, Pack] = [mapped[0], mapped[1], mapped[2]];

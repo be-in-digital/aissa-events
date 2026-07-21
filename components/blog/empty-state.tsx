@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { motion } from "motion/react";
 import { ArrowRight, BookOpen } from "lucide-react";
-import { buildBookingUrl } from "@/lib/booking/url";
+import { buildContactUrl } from "@/lib/contact/cta-url";
 
 export function BlogEmptyState() {
   return (
@@ -42,7 +42,7 @@ export function BlogEmptyState() {
 
           <div className="mt-10 flex flex-wrap items-center justify-center gap-4">
             <a
-              href={buildBookingUrl({
+              href={buildContactUrl({
                 source: "blog",
                 content: "empty-state",
               })}

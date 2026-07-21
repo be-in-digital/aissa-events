@@ -34,7 +34,6 @@ import { EvenementProcess } from "@/components/evenements-pro/process";
 import { EvenementCtaFinal } from "@/components/evenements-pro/cta-final";
 import { QualificationForm } from "@/components/evenements-pro/qualification-form";
 // import { EvenementStickyCta } from "@/components/evenements-pro/sticky-cta";
-import { AvailabilitySection } from "@/components/availability/section";
 
 const PATH = "/entreprises";
 
@@ -84,17 +83,6 @@ export default async function EvenementPage() {
 
       {/* Preuves professionnelles, rapprochées du CTA (cf. directives §9) */}
       <EvenementPortfolio data={data?.portfolio} />
-
-      {/* Disponibilités / agenda — conservé (cf. audit §9) */}
-      <AvailabilitySection
-        utmSource="entreprises"
-        utmContent="calendar-pro"
-        eyebrow="Disponibilités"
-        title="Votre date butoir tient-elle ?"
-        description="L'agenda d'Aïssa pour les événements pro. Cliquez sur votre date cible pour bloquer un appel cadrage — confirmation sous 48 h."
-        nextSlotsEyebrow="Prochaines dates"
-        nextSlotsTitle="Les vendredis et samedis encore libres"
-      />
 
       {/* Section 7 — Appel à l'action final */}
       <EvenementCtaFinal data={data?.finalCta} />

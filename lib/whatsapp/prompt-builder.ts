@@ -125,7 +125,7 @@ ${formatPrices(settings.fourchettesPublic)}
   3. Espace Events Émerainville (lieu de réception propre en Seine-et-Marne 77, location pure ou avec services)
 - Localisation : Émerainville (77), Île-de-France
 - Direction artistique : Aïssa, fondatrice
-- Pour réserver un appel découverte avec Aïssa, partage le lien de réservation : https://aissaevents.fr/reserver
+- Pour être recontacté par Aïssa, invite le visiteur à remplir le formulaire de contact sur le site aissaevents.fr
 `.trim();
 
   const customInstructions = settings.instructionsLibres.trim()

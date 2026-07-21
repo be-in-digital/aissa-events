@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { motion } from "motion/react";
 import { ArrowRight } from "lucide-react";
-import { buildBookingUrl } from "@/lib/booking/url";
+import { buildContactUrl } from "@/lib/contact/cta-url";
 
 export function RealisationDetailCta() {
   return (
@@ -47,7 +47,7 @@ export function RealisationDetailCta() {
 
             <div className="flex flex-col gap-3 sm:flex-row lg:flex-col">
               <a
-                href={buildBookingUrl({
+                href={buildContactUrl({
                   source: "realisations",
                   content: "detail-cta",
                 })}
