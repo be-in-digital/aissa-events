@@ -22,7 +22,6 @@ import { FaqEspace } from "@/components/espace/faq-espace";
 import { CtaFinal } from "@/components/espace/cta-final";
 import { OtherServices } from "@/components/espace/other-services";
 import { StickyCta } from "@/components/espace/sticky-cta";
-import { AvailabilitySection } from "@/components/availability/section";
 
 const PATH = "/espace-events";
 
@@ -60,15 +59,6 @@ export default async function EspaceEmerainvillePage() {
       <NotYetDecided data={data?.notYetDecided} />
       <ALaCarte data={data?.alacarte} />
       <LocationOnly data={data?.locationOnly} />
-      <AvailabilitySection
-        utmSource="espace-events"
-        utmContent="calendar-espace"
-        eyebrow="Disponibilités"
-        title="Quel jour vous tente ?"
-        description="L'agenda d'Aïssa, mis à jour en quasi-temps réel. Cliquez sur une date pour bloquer un appel découverte (15 min) — elle confirme la dispo sous 48 h."
-        nextSlotsEyebrow="Prochaines dates"
-        nextSlotsTitle="Les samedis encore libres à l'Espace"
-      />
       <TestimonialsEspace data={data?.testimonials} />
       <Conditions data={data?.conditions} />
       <FaqEspace data={data?.faq} />

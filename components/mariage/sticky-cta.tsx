@@ -4,14 +4,14 @@ import { useEffect, useState } from "react";
 import { AnimatePresence, MotionConfig, motion } from "motion/react";
 import { ArrowRight, Calendar } from "lucide-react";
 import { resolveCta } from "@/lib/sanity/cta";
-import { buildBookingUrl } from "@/lib/booking/url";
+import { buildContactUrl } from "@/lib/contact/cta-url";
 import type { MariagePageQueryResult } from "@/sanity.types";
 
 type StickyCtaData = NonNullable<MariagePageQueryResult>["stickyCta"];
 
 const FALLBACK_CTA = {
   label: "Réserver un appel",
-  href: buildBookingUrl({ source: "mariage", content: "sticky-cta" }),
+  href: buildContactUrl({ source: "mariage", content: "sticky-cta" }),
   external: true,
   variant: "primary" as const,
 };

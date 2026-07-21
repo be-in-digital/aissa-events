@@ -68,6 +68,7 @@ const packReference = /* groq */ `
   priceFrom,
   priceLabel,
   image{ ${imageFragment} },
+  idealFor,
   includedItems,
   excludedItems,
   cta{ ${ctaFragment} },

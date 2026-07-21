@@ -15,7 +15,6 @@ import { Process } from "@/components/home/process";
 import { About } from "@/components/home/about";
 import { Testimonials } from "@/components/home/testimonials";
 import { Faq } from "@/components/home/faq";
-import { HomeAvailability } from "@/components/home/availability";
 import { ContactSection } from "@/components/home/contact-section";
 
 /** Ordre par défaut utilisé lorsque sectionsOrder n'est pas défini dans Sanity. */
@@ -76,7 +75,6 @@ export default async function HomePage() {
     pillars: <Pillars data={data?.pillars} />,
     testimonials: <Testimonials data={data?.testimonials} />,
     faq: <Faq data={data?.faq} />,
-    // "availability" est toujours en dernier avant contact — pas réorganisable via sectionsOrder
     contact: (
       <ContactSection
         data={data?.contact}
@@ -92,8 +90,6 @@ export default async function HomePage() {
         if (!node) return null;
         return <Fragment key={key}>{node}</Fragment>;
       })}
-      {/* Section disponibilités : toujours rendue après les sections ordonnables */}
-      <HomeAvailability />
       {/* Si "contact" n'était pas dans sectionsOrder, on le force en fin de page */}
       {!order.includes("contact") && (
         <ContactSection

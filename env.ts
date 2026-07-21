@@ -90,6 +90,11 @@ const clientSchema = z.object({
 
   // Blog AI Generator — token Studio (doit matcher BLOG_AI_ADMIN_SECRET côté serveur)
   NEXT_PUBLIC_BLOG_AI_ADMIN_TOKEN: z.string().min(16).optional(),
+
+  // Dropbox Chooser — App key pour la source d'images Dropbox du Studio.
+  // Publique (restreinte par domaine dans la console Dropbox). Sans clé, l'onglet
+  // Dropbox affiche un message de config. Cf. sanity/assetSources/dropbox.tsx.
+  NEXT_PUBLIC_DROPBOX_APP_KEY: z.string().min(1).optional(),
 });
 
 const clientEnvRaw: Record<string, string | undefined> = {
@@ -101,6 +106,7 @@ const clientEnvRaw: Record<string, string | undefined> = {
   NEXT_PUBLIC_META_GRAPH_API_VERSION: process.env.NEXT_PUBLIC_META_GRAPH_API_VERSION,
   NEXT_PUBLIC_META_EMBEDDED_SIGNUP_CONFIG_ID: process.env.NEXT_PUBLIC_META_EMBEDDED_SIGNUP_CONFIG_ID,
   NEXT_PUBLIC_BLOG_AI_ADMIN_TOKEN: process.env.NEXT_PUBLIC_BLOG_AI_ADMIN_TOKEN,
+  NEXT_PUBLIC_DROPBOX_APP_KEY: process.env.NEXT_PUBLIC_DROPBOX_APP_KEY,
 };
 
 const clientEnv = Object.fromEntries(

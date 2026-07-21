@@ -4,7 +4,7 @@ import Link from "next/link";
 import { MotionConfig, motion } from "motion/react";
 import { ArrowRight, Check, Plus, Star } from "lucide-react";
 import { Eyebrow } from "@/components/home/eyebrow";
-import { buildBookingUrl } from "@/lib/booking/url";
+import { buildContactUrl } from "@/lib/contact/cta-url";
 import { resolveCta } from "@/lib/sanity/cta";
 import { renderInlineItalic } from "@/lib/sanity/text";
 import type { MariagePageQueryResult } from "@/sanity.types";
@@ -55,7 +55,7 @@ const FALLBACK_MODES: Mode[] = [
       { label: "Aïssa sur place le jour J, 8h-23h" },
     ],
     ctaLabel: "Demander un devis complet",
-    ctaHref: buildBookingUrl({
+    ctaHref: buildContactUrl({
       source: "mariage",
       content: "pack-organisation-complete",
     }),
@@ -77,7 +77,7 @@ const FALLBACK_MODES: Mode[] = [
       { label: "À combiner selon votre projet", option: true },
     ],
     ctaLabel: "Demander un devis ciblé",
-    ctaHref: buildBookingUrl({
+    ctaHref: buildContactUrl({
       source: "mariage",
       content: "pack-a-la-carte",
     }),
@@ -144,7 +144,7 @@ export function MariagePacks({ data }: { data?: PacksData }) {
           ctaLabel: cta?.label ?? "Demander un devis",
           ctaHref:
             cta?.href ??
-            buildBookingUrl({
+            buildContactUrl({
               source: "mariage",
               content: `pack-${(p.title ?? "").toLowerCase().replace(/\s+/g, "-")}`,
             }),

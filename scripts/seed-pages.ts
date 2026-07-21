@@ -387,17 +387,18 @@ export const mariagePageDoc = {
 export const evenementPageDoc = {
   _id: "evenementPage",
   _type: "evenementPage",
+  // ── Section 1 — Bandeau d'ouverture ──────────────────────────────────────
   hero: {
     _type: "heroSection",
     enabled: true,
-    eyebrow: "Univers 03 · Événements Pro",
-    title: "Quand l'image\ndevient _expérience._",
+    eyebrow: "Aïssa Events Business",
+    title: "Vos événements professionnels,\nconçus et organisés\n_de A à Z._",
     subtitle:
-      "Soirées clients, afterworks, lancements produits, séminaires. Dans notre Espace Events à Émerainville (77) ou chez vous, partout en Île-de-France.",
+      "Aïssa Events accompagne les entreprises dans la conception, l'organisation et la coordination de leurs événements professionnels, à l'Espace Events, dans leurs locaux ou dans un lieu partenaire en Île-de-France.",
     image: imageRef("evenement-hero"),
     ctas: [
-      { _type: "cta", _key: "h1", label: "Réserver un appel", type: "anchor", anchor: "contact", variant: "primary" },
-      { _type: "cta", _key: "h2", label: "Voir les packs", type: "anchor", anchor: "packs", variant: "secondary" },
+      { _type: "cta", _key: "h1", label: "Parler de votre projet", type: "anchor", anchor: "devis", variant: "primary" },
+      { _type: "cta", _key: "h2", label: "Découvrir nos solutions", type: "anchor", anchor: "packs-pro", variant: "secondary" },
     ],
   },
   trustBar: {
@@ -485,66 +486,126 @@ export const evenementPageDoc = {
       },
     ],
   },
+  // ── Section 3 — Les quatre packs ─────────────────────────────────────────
   packs: {
     _type: "packsSection",
     enabled: true,
-    eyebrow: "Packs événement",
-    title: "Nos formules",
+    eyebrow: "Les quatre packs",
+    title: "Quatre formules,\nune _organisation complète._",
+    intro:
+      "Chaque pack est un point de départ. Nous l'ajustons à vos objectifs, à votre effectif et à votre budget.",
     filterByType: "evenement",
+    showPrices: false,
+    featuredBadgeLabel: "Offre phare",
+    commitmentEyebrow: "Sur-mesure",
+    commitmentText:
+      "Un format hors pack ? Le sur-mesure est une modalité d'accompagnement, pas un cinquième pack.",
+    reassuranceText: "Un devis clair, jamais automatique.",
   },
+  // ── Section 4 — Comment est construit le budget ? ────────────────────────
+  budget: {
+    _type: "budgetSection",
+    enabled: true,
+    eyebrow: "La transparence",
+    title: "Comment est construit\nle _budget ?_",
+    intro:
+      "Chaque proposition distingue les honoraires Aïssa Events du budget des prestations extérieures.",
+    items: [
+      {
+        _key: "bud1",
+        title: "Honoraires Aïssa Events",
+        description:
+          "Ils rémunèrent le travail d'organisatrice : cadrage, conception, budget prévisionnel, recherche du lieu et des prestataires, analyse des propositions, rétroplanning, conducteur, coordination et pilotage du jour J.",
+      },
+      {
+        _key: "bud2",
+        title: "Prestations extérieures",
+        description:
+          "Elles regroupent le lieu, la restauration et les boissons, le mobilier, la technique, la décoration, le personnel, la sécurité, les animations, les artistes, la photographie, la vidéo et la logistique.",
+      },
+      {
+        _key: "bud3",
+        title: "Estimation budgétaire",
+        description:
+          "La première proposition présente séparément les honoraires Aïssa Events et une fourchette réaliste pour chaque poste extérieur. Après validation de l'orientation, les fourchettes sont remplacées par les devis réels des prestataires sélectionnés.",
+      },
+    ],
+    note: "Nous n'affichons pas les tarifs des packs ni les fourchettes prestataires sur le site : l'objectif est de qualifier votre demande, pas de produire un devis automatique.",
+  },
+  // ── Section 6 — Notre méthode ────────────────────────────────────────────
   process: {
     _type: "processSection",
     enabled: true,
-    eyebrow: "Démarrer votre projet",
-    title: "Trois étapes,\nune _vision claire._",
+    eyebrow: "Notre méthode",
+    title: "Six étapes,\nde l'idée au _jour J._",
     steps: [
       {
-        _key: "p1",
-        italic: "Premier",
-        rest: "échange",
+        _key: "m1",
+        italic: "Découverte",
+        rest: "du besoin",
         description:
-          "On clarifie ensemble votre vision, votre public cible, votre image de marque et l'atmosphère recherchée. 30 minutes en visio ou présentiel, gratuit et sans engagement.",
+          "Vos objectifs, le nombre de participants, le format et le budget : on clarifie tout dès le premier échange.",
       },
       {
-        _key: "p2",
-        italic: "Proposition",
-        rest: "personnalisée",
+        _key: "m2",
+        italic: "Première",
+        rest: "orientation",
         description:
-          "Vous recevez sous 48 h un devis sur mesure, précis et adapté à votre budget et au périmètre choisi. Note de direction artistique + planning + budget cadre.",
+          "Une première orientation et une estimation budgétaire pour cadrer le projet.",
       },
       {
-        _key: "p3",
-        italic: "Mise",
-        rest: "en œuvre",
+        _key: "m3",
+        italic: "Sélection",
+        rest: "du lieu & des prestataires",
         description:
-          "Nous trouvons le lieu, sélectionnons et briefons les prestataires, pilotons la prod jusqu'au jour J. Recap visuel (photos + teaser) livré sous 72 h post-event pour vos canaux LinkedIn et intranet.",
+          "Recherche du lieu adapté et sélection des prestataires selon votre brief.",
+      },
+      {
+        _key: "m4",
+        italic: "Validation",
+        rest: "du projet",
+        description:
+          "Validation du projet et des devis avant tout engagement.",
+      },
+      {
+        _key: "m5",
+        italic: "Organisation",
+        rest: "& coordination",
+        description:
+          "Organisation, coordination des intervenants et préparation du conducteur.",
+      },
+      {
+        _key: "m6",
+        italic: "Pilotage",
+        rest: "du jour J",
+        description:
+          "Pilotage sur place le jour J, puis débrief à froid.",
       },
     ],
-    cta: { _type: "cta", label: "Réserver un appel", type: "anchor", anchor: "contact", variant: "primary" },
+    cta: { _type: "cta", label: "Parler de votre projet", type: "anchor", anchor: "devis", variant: "primary" },
   },
+  // ── Section 2 — Trois lieux d'intervention ───────────────────────────────
   lieux: {
     _type: "lieuxSection",
     enabled: true,
-    eyebrow: "Le lieu",
-    title: "Chez nous, ou _chez vous._",
+    eyebrow: "Trois lieux d'intervention",
+    title: "Chez nous, chez vous,\nou _ailleurs._",
     intro:
-      "Deux options. Soit vous venez chez nous à Émerainville (25 min de Paris, RER E), soit nous nous déplaçons : vos locaux, un partenaire que nous identifions, ou le lieu de votre choix.",
+      "Nous organisons votre événement là où il aura le plus d'impact — de l'Espace Events à un lieu adapté aux grands effectifs.",
     items: [
       {
         _key: "l1",
-        title: "Espace Events, _Émerainville_",
+        title: "Chez _Aïssa Events_",
         description:
-          "Notre lieu modulable de 65 m², adapté aux afterworks, cocktails, réunions clients ou showcases jusqu'à 50 personnes.",
+          "Notre Espace Events à Émerainville accueille jusqu'à 50 personnes dans un cadre chaleureux et entièrement privatisé.",
         highlights: [
-          "Salle principale spacieuse & lumineuse",
-          "Verrière 25 m² (espace cosy ou buffet)",
-          "Terrasse extérieure aménagée",
-          "Cuisine équipée pour traiteur",
-          "25 min de Paris · RER E · A4",
+          "Émerainville (77) · 25 min de Paris (RER E · A4)",
+          "Jusqu'à 50 personnes",
+          "Cadre chaleureux, entièrement privatisé",
         ],
         cta: {
           _type: "cta",
-          label: "Voir tous les tarifs lieu",
+          label: "Voir l'Espace Events",
           type: "internal",
           internalPath: "/espace-events",
           variant: "ghost",
@@ -552,69 +613,86 @@ export const evenementPageDoc = {
       },
       {
         _key: "l2",
-        title: "Vos locaux ou _lieu partenaire_",
+        title: "Dans _vos locaux_",
         description:
-          "L'événement peut également se dérouler dans vos locaux, dans un lieu partenaire que nous identifions, ou tout endroit que vous avez choisi.",
+          "Nous transformons vos espaces et coordonnons les prestataires nécessaires à la réalisation de votre événement.",
         highlights: [
-          "Recherche & sélection du lieu",
-          "Repérage technique préalable",
-          "Coordination logistique complète",
-          "Adaptation à votre contexte (sécurité, réseau, ERP)",
-          "Gestion sur place le jour J",
+          "Repérage et aménagement de vos espaces",
+          "Coordination des prestataires",
+          "Gestion logistique le jour J",
         ],
         cta: {
           _type: "cta",
           label: "Décrire mon projet",
           type: "anchor",
-          anchor: "contact",
+          anchor: "devis",
+          variant: "ghost",
+        },
+      },
+      {
+        _key: "l3",
+        title: "Dans un _lieu partenaire_",
+        description:
+          "Pour les projets plus importants, nous recherchons et sélectionnons un lieu adapté en Île-de-France.",
+        highlights: [
+          "Recherche et sélection du lieu",
+          "Adapté aux grands effectifs",
+          "Partout en Île-de-France",
+        ],
+        cta: {
+          _type: "cta",
+          label: "Parler de votre projet",
+          type: "anchor",
+          anchor: "devis",
           variant: "ghost",
         },
       },
     ],
   },
+  // ── Section 5 — Pourquoi Aïssa Events ? (slot « scope ») ──────────────────
   scope: {
     _type: "conditionsSection",
     enabled: true,
-    eyebrow: "Sur-mesure · hors pack",
-    title: "Tout ou partie\nde votre _événement._",
+    eyebrow: "Pourquoi nous",
+    title: "Pourquoi _Aïssa Events ?_",
     intro:
-      "Vous avez un brief atypique, un format hors pack ou un besoin précis ? Aïssa Events peut intervenir sur l'intégralité de l'organisation ou sur des prestations ciblées.",
+      "Un accompagnement complet, une exécution rigoureuse, une signature qui vous distingue.",
     items: [
       {
-        _key: "s-1",
-        title: "Recherche & sélection du lieu",
+        _key: "why-1",
+        title: "Un interlocuteur unique",
         description:
-          "Identification du lieu idéal selon votre brief, votre nombre d'invités, votre image de marque et vos contraintes (accessibilité, sécurité ERP, parking).",
+          "Une seule personne pour concevoir, coordonner et piloter votre événement, du premier échange au jour J.",
       },
       {
-        _key: "s-2",
-        title: "Coordination globale",
+        _key: "why-2",
+        title: "Une organisation de A à Z",
         description:
-          "Pilotage de A à Z, gestion du planning, supervision du jour J. Un interlocuteur unique de bout en bout.",
+          "Cadrage, budget, lieu, prestataires, rétroplanning et coordination : tout est pris en charge pour vous.",
       },
       {
-        _key: "s-3",
-        title: "Gestion des prestataires",
+        _key: "why-3",
+        title: "Une proposition adaptée au budget",
         description:
-          "Sélection, négociation, suivi de tous les intervenants externes (traiteur, fleuriste, captation, sécurité, vestiaires, hôtesses).",
+          "Une organisation calée sur vos objectifs, votre effectif et votre enveloppe, sans dépense superflue.",
       },
       {
-        _key: "s-4",
-        title: "Traiteur & service",
+        _key: "why-4",
+        title: "Des partenaires sélectionnés",
         description:
-          "Buffet, cocktail, repas assis. Halal / casher / végé / sans gluten possibles. Tarifs négociés via partenariats récurrents.",
+          "Traiteurs, techniciens, artistes et personnel de confiance, activés selon le format de votre événement.",
       },
       {
-        _key: "s-5",
-        title: "Staff événementiel",
+        _key: "why-5",
+        title: "Une direction artistique et une signature musicale",
         description:
-          "Hôtesses d'accueil bilingues, serveurs, vestiaire, agents de sécurité. Tenue alignée à votre charte si demandé.",
+          "Une véritable identité pour votre événement, portée par notre culture artistique et notre signature musicale.",
       },
       {
-        _key: "s-6",
-        title: "Captation & com post-event",
+        _key: "why-6",
+        title: "Une coordination rigoureuse jusqu'au jour J",
         description:
-          "Photographe corporate + vidéaste teaser/recap pour réutilisation sur LinkedIn, intranet, communication client. Livraison sous 72 h.",
+          "Rétroplanning, conducteur et pilotage sur place : chaque détail est anticipé et tenu.",
       },
     ],
   },
@@ -639,15 +717,18 @@ export const evenementPageDoc = {
       { _key: "g2", ...imageRef("gallery-pro-2") },
     ],
   },
+  // ── Preuves professionnelles (rapprochées du CTA — directives §9) ────────
   portfolio: {
     _type: "caseStudiesSection",
     enabled: true,
-    eyebrow: "Études de cas",
-    title: "Deux briefs,\n_livrés._",
+    eyebrow: "Réalisations",
+    title: "Ils nous ont confié\nleur _événement._",
     intro:
-      "Deux exemples concrets d'événements pro que nous avons orchestrés. Le brief reçu, ce qui a été décidé, ce qui en est ressorti.",
+      "Quelques projets professionnels orchestrés par Aïssa Events, du brief à la coordination du jour J.",
     selectedRealisations: [
-      { _type: "reference", _key: "r1", _ref: "realisation-cote-sud" },
+      { _type: "reference", _key: "r1", _ref: "realisation-2025-10-21-pro" },
+      { _type: "reference", _key: "r2", _ref: "realisation-2026-02-02-pro" },
+      { _type: "reference", _key: "r3", _ref: "realisation-2026-03-21-pro" },
     ],
   },
   timeline: {
@@ -709,23 +790,70 @@ export const evenementPageDoc = {
     title: "Questions fréquentes",
     scope: "evenement",
   },
+  // ── Section 7 — Appel à l'action final ───────────────────────────────────
   finalCta: {
     _type: "ctaSection",
     enabled: true,
-    title: "Transformons\nvotre prochain\névénement _pro._",
+    title: "Parlons de votre\nprochain _événement._",
     description:
-      "Échange découverte de 30 minutes. Aïssa vous reçoit personnellement pour comprendre vos enjeux et imaginer l'événement qui marquera vos invités. Devis sous 48 h.",
+      "Confiez-nous votre projet et recevez une première orientation adaptée à vos objectifs, à votre effectif et à votre budget.",
     ctas: [
-      { _type: "cta", _key: "f1", label: "Réserver un appel", type: "calendly", variant: "primary" },
-      { _type: "cta", _key: "f2", label: "Décrire mon projet", type: "anchor", anchor: "contact", variant: "secondary" },
+      { _type: "cta", _key: "f1", label: "Demander une étude personnalisée", type: "anchor", anchor: "devis", variant: "primary" },
     ],
   },
+  // Bouton flottant désactivé sur la page Business (structure focalisée).
   stickyCta: {
     _type: "stickyCtaSection",
-    enabled: true,
+    enabled: false,
     label: "Devis sous 48 h",
     subLabel: "Facturation entreprise",
-    cta: { _type: "cta", label: "Réserver un appel", type: "calendly", variant: "primary" },
+    cta: { _type: "cta", label: "Demander une estimation", type: "anchor", anchor: "devis", variant: "primary" },
+  },
+  // ── Formulaire de qualification (un seul, en bas de page) ────────────────
+  qualificationForm: {
+    _type: "qualificationFormSection",
+    enabled: true,
+    eyebrow: "Demande d'étude",
+    title: "Décrivez votre _projet._",
+    intro:
+      "Renseignez les champs ci-dessous : plus votre brief est précis, plus notre première orientation sera juste. Les champs marqués d'une * sont obligatoires. Réponse sous 48 h.",
+    eventTypes: [
+      "Réunion / Séminaire",
+      "Afterwork / Cocktail",
+      "Soirée client / Ambiance Signature",
+      "Événement de fin d'année",
+      "Team building",
+      "Convention / Conférence",
+      "Autre",
+    ],
+    locationOptions: [
+      "À l'Espace Events (Émerainville)",
+      "Dans nos locaux",
+      "Lieu à rechercher",
+    ],
+    serviceOptions: [
+      "Salle / lieu",
+      "Traiteur",
+      "Technique (son, lumière)",
+      "Décoration",
+      "Animation / DJ",
+      "Team building",
+      "Photo / Vidéo",
+    ],
+    budgetRanges: [
+      "Moins de 5 000 €",
+      "5 000 – 10 000 €",
+      "10 000 – 20 000 €",
+      "20 000 – 50 000 €",
+      "Plus de 50 000 €",
+      "À définir ensemble",
+    ],
+    submitLabel: "Demander une étude personnalisée",
+    successTitle: "Merci !",
+    successMessage:
+      "Votre demande a bien été transmise. Aïssa Events revient vers vous pour préciser votre projet.",
+    consentText:
+      "J'accepte que mes données soient utilisées pour répondre à ma demande.",
   },
 };
 

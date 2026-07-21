@@ -1,5 +1,3 @@
-import { BOOKING_PATH } from "@/lib/booking/url";
-
 export type CtaShape = {
   label: string | null;
   type: "anchor" | "booking" | "calendly" | "external" | "form" | "internal" | null;
@@ -51,14 +49,14 @@ export function resolveCta(cta: CtaShape | null | undefined): ResolvedCta | null
   const baseExternal = { label: cta.label, external: true, variant };
 
   switch (cta.type) {
-    // `calendly` conservé pour rétro-compat des documents Sanity existants.
-    // Pointe désormais vers le scheduler natif interne `/reserver` (intercepté
-    // en modale côté client, vraie page en fallback).
+    // `booking`/`calendly` conservés pour rétro-compat des documents Sanity
+    // existants. Le scheduler de RDV natif a été retiré : ces CTAs pointent
+    // désormais vers le formulaire de contact.
     case "booking":
     case "calendly":
       return {
         label: cta.label,
-        href: BOOKING_PATH,
+        href: "/#contact",
         external: false,
         variant,
       };

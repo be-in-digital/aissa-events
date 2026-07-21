@@ -6,7 +6,6 @@ import { ArrowRight } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Eyebrow } from "./eyebrow";
 import { renderInlineItalic } from "@/lib/sanity/text";
-import { openBookingDialog } from "@/components/booking/booking-dialog";
 import { ParticulierContactForm } from "./particulier-contact-form";
 import { ProContactForm } from "./pro-contact-form";
 import type { HomePageQueryResult, SiteSettingsQueryResult } from "@/sanity.types";
@@ -143,16 +142,13 @@ export function ContactSection({
                 </p>
               )}
               {calendlyButtonLabel && (
-                <button
-                  type="button"
-                  onClick={() =>
-                    openBookingDialog({ source: "home", content: "contact-section" })
-                  }
+                <a
+                  href="#contact-panel-particulier"
                   className="group inline-flex w-full items-center justify-center gap-2 rounded-full bg-gold px-7 py-4 font-sans text-[12px] font-medium uppercase tracking-[0.2em] text-ink transition-all hover:-translate-y-0.5 active:translate-y-0 hover:bg-gold-soft"
                 >
                   {calendlyButtonLabel}
                   <ArrowRight className="size-4 transition-transform group-hover:translate-x-1" />
-                </button>
+                </a>
               )}
             </div>
 

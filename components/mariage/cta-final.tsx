@@ -5,7 +5,7 @@ import Link from "next/link";
 import { ArrowRight, Phone } from "lucide-react";
 import { renderInlineItalic } from "@/lib/sanity/text";
 import { resolveCta } from "@/lib/sanity/cta";
-import { buildBookingUrl } from "@/lib/booking/url";
+import { buildContactUrl } from "@/lib/contact/cta-url";
 import type { MariagePageQueryResult } from "@/sanity.types";
 
 type FinalCtaData = NonNullable<MariagePageQueryResult>["finalCta"];
@@ -17,7 +17,7 @@ const FALLBACK_DESCRIPTION =
 const FALLBACK_CTAS = [
   {
     label: "Prendre rendez-vous",
-    href: buildBookingUrl({ source: "mariage", content: "cta-final" }),
+    href: buildContactUrl({ source: "mariage", content: "cta-final" }),
     external: true,
     variant: "primary" as const,
   },

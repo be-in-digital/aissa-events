@@ -86,7 +86,13 @@ export async function POST(request: Request) {
   }
 
   for (const tag of tags) {
-    revalidateTag(tag, "max");
+    // `{ expire: 0 }` = expiration IMMÉDIATE : la prochaine visite recharge du
+    // frais (cache miss bloquant). Le précédent `"max"` ne marquait que
+    // « périmé » (stale-while-revalidate) → la 1re actualisation après
+    // publication servait encore l'ancien contenu, d'où le
+    // « actualiser, actualiser… ça met du temps ». Pattern recommandé par Next
+    // pour un webhook / service tiers (updateTag est réservé aux Server Actions).
+    revalidateTag(tag, { expire: 0 });
   }
 
   return NextResponse.json({

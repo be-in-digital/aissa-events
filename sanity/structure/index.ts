@@ -1,7 +1,7 @@
 import {
   HomeIcon,
   HeartFilledIcon,
-  CalendarIcon,
+  CaseIcon,
   PinIcon,
   ImagesIcon,
   DocumentTextIcon,
@@ -13,7 +13,6 @@ import {
   TagIcon,
   ClipboardIcon,
   RobotIcon,
-  ClockIcon,
 } from "@sanity/icons";
 import type { StructureResolver } from "sanity/structure";
 
@@ -28,8 +27,6 @@ const SINGLETON_TYPES = new Set<string>([
   "mentionsLegales",
   "politiqueConfidentialite",
   "agentSettings",
-  "availability",
-  "bookingSettings",
 ]);
 
 const HIDDEN_FROM_DEFAULT = new Set<string>([
@@ -40,8 +37,6 @@ const HIDDEN_FROM_DEFAULT = new Set<string>([
   "faqItem",
   "post",
   "category",
-  "booking",
-  "bookingType",
 ]);
 
 export const structure: StructureResolver = (S) =>
@@ -56,6 +51,8 @@ export const structure: StructureResolver = (S) =>
           S.list()
             .title("Pages du site")
             .items([
+              // Ordre calé sur le menu du site : Accueil, Espace Events,
+              // Entreprises, Mariage, Réalisations, Blog.
               S.listItem()
                 .title("Accueil")
                 .icon(HomeIcon)
@@ -67,26 +64,6 @@ export const structure: StructureResolver = (S) =>
                     .title("Page d'accueil"),
                 ),
               S.listItem()
-                .title("Mariage")
-                .icon(HeartFilledIcon)
-                .child(
-                  S.editor()
-                    .id("mariagePage")
-                    .schemaType("mariagePage")
-                    .documentId("mariagePage")
-                    .title("Page Mariage"),
-                ),
-              S.listItem()
-                .title("Événements pro")
-                .icon(CalendarIcon)
-                .child(
-                  S.editor()
-                    .id("evenementPage")
-                    .schemaType("evenementPage")
-                    .documentId("evenementPage")
-                    .title("Page Événements"),
-                ),
-              S.listItem()
                 .title("Espace Events")
                 .icon(PinIcon)
                 .child(
@@ -95,6 +72,26 @@ export const structure: StructureResolver = (S) =>
                     .schemaType("espaceEventsPage")
                     .documentId("espaceEventsPage")
                     .title("Page Espace Events"),
+                ),
+              S.listItem()
+                .title("Entreprises")
+                .icon(CaseIcon)
+                .child(
+                  S.editor()
+                    .id("evenementPage")
+                    .schemaType("evenementPage")
+                    .documentId("evenementPage")
+                    .title("Page Entreprises"),
+                ),
+              S.listItem()
+                .title("Mariage")
+                .icon(HeartFilledIcon)
+                .child(
+                  S.editor()
+                    .id("mariagePage")
+                    .schemaType("mariagePage")
+                    .documentId("mariagePage")
+                    .title("Page Mariage"),
                 ),
               S.listItem()
                 .title("Réalisations (page)")
@@ -236,46 +233,6 @@ export const structure: StructureResolver = (S) =>
             .schemaType("agentSettings")
             .documentId("agentSettings")
             .title("Assistante virtuelle"),
-        ),
-
-      S.listItem()
-        .title("Disponibilités (calendrier)")
-        .icon(CalendarIcon)
-        .child(
-          S.editor()
-            .id("availability")
-            .schemaType("availability")
-            .documentId("availability")
-            .title("Disponibilités (calendrier)"),
-        ),
-
-      S.listItem()
-        .title("Types de rendez-vous")
-        .icon(ClockIcon)
-        .child(
-          S.documentTypeList("bookingType")
-            .title("Types de rendez-vous")
-            .defaultOrdering([{ field: "order", direction: "asc" }]),
-        ),
-
-      S.listItem()
-        .title("Réservation — page de choix")
-        .icon(CogIcon)
-        .child(
-          S.editor()
-            .id("bookingSettings")
-            .schemaType("bookingSettings")
-            .documentId("bookingSettings")
-            .title("Réservation — page de choix"),
-        ),
-
-      S.listItem()
-        .title("Rendez-vous réservés")
-        .icon(CalendarIcon)
-        .child(
-          S.documentTypeList("booking")
-            .title("Rendez-vous réservés")
-            .defaultOrdering([{ field: "start", direction: "asc" }]),
         ),
 
       // Catch-all

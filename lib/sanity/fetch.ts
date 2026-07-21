@@ -1,7 +1,24 @@
+import { cacheLife } from "next/cache";
 import { cookies, draftMode } from "next/headers";
 import type { QueryParams } from "next-sanity";
 import type { LivePerspective } from "next-sanity/live";
 import { liveFetch, resolvePerspectiveFromCookies } from "./live";
+
+/**
+ * Filet de sécurité de fraîcheur (en secondes).
+ *
+ * next-sanity fixe en interne un `revalidate` d'UN AN (31 536 000 s) : il
+ * compte entièrement sur la purge à la demande (`<SanityLive />` + webhook
+ * `/api/revalidate`) pour rafraîchir. Si ces deux chemins ne se déclenchent
+ * pas, une modif publiée dans Sanity resterait invisible ~1 an → symptôme
+ * « actualiser, actualiser… ça met énormément de temps ».
+ *
+ * On raccourcit ce revalidate : au pire, une modif apparaît en ~1 min (SWR).
+ * La purge instantanée par tag (`cacheTag` → `revalidateTag`) reste prioritaire ;
+ * `cacheLife` ne fait que plafonner la péremption. Override explicitement
+ * supporté par next-sanity (« userland can still set a shorter revalidate time »).
+ */
+const SANITY_REVALIDATE_SECONDS = 60;
 
 type FetchOptions = {
   tags?: string[];
@@ -97,5 +114,9 @@ async function cachedFetch<T>({
     stega,
     tags: tags.length > 0 ? tags : undefined,
   });
+  // Appelé APRÈS liveFetch pour primer sur son `cacheLife({ revalidate: 1 an })`
+  // interne (cf. SANITY_REVALIDATE_SECONDS). `cacheTag` posé par liveFetch reste
+  // actif → la purge à la demande n'est pas affectée.
+  cacheLife({ revalidate: SANITY_REVALIDATE_SECONDS });
   return data as T;
 }

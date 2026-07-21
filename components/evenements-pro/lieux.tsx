@@ -3,7 +3,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import { MotionConfig, motion } from "motion/react";
-import { ArrowRight, Building2, Home } from "lucide-react";
+import { ArrowRight, Building2, Home, MapPin } from "lucide-react";
 import { Eyebrow } from "@/components/home/eyebrow";
 import { renderInlineItalic } from "@/lib/sanity/text";
 import { resolveCta } from "@/lib/sanity/cta";
@@ -12,7 +12,7 @@ import type { EvenementPageQueryResult } from "@/sanity.types";
 
 type LieuxData = NonNullable<EvenementPageQueryResult>["lieux"];
 
-const ICONS = [Home, Building2];
+const ICONS = [Home, Building2, MapPin];
 
 export function EvenementLieux({ data }: { data?: LieuxData }) {
   if (data?.enabled === false) return null;
@@ -68,9 +68,15 @@ export function EvenementLieux({ data }: { data?: LieuxData }) {
             )}
           </motion.div>
 
-          <div className="grid gap-6 lg:grid-cols-2">
+          <div
+            className={`grid gap-6 ${
+              items.length === 3
+                ? "sm:grid-cols-2 lg:grid-cols-3"
+                : "lg:grid-cols-2"
+            }`}
+          >
             {items.map((p, i) => {
-              const num = `Option ${String(i + 1).padStart(2, "0")}`;
+              const num = `Lieu ${String(i + 1).padStart(2, "0")}`;
               const ctaIsExternal = p.cta?.external ?? false;
               return (
                 <motion.article
