@@ -6,6 +6,7 @@ import { muxInput } from "sanity-plugin-mux-input";
 import { schemaTypes } from "./sanity/schemas";
 import { structure, SINGLETON_TYPES } from "./sanity/structure";
 import { generateArticleAction } from "./sanity/actions/generateArticleAction";
+import { dropboxAssetSource } from "./sanity/assetSources/dropbox";
 import { env } from "./env";
 
 const isDev = process.env.NODE_ENV === "development";
@@ -42,6 +43,15 @@ export default defineConfig({
       templates.filter(
         ({ schemaType }) => !SINGLETON_TYPES.has(schemaType),
       ),
+  },
+  form: {
+    // Ajoute l'onglet « Dropbox » au sélecteur d'image (à côté de « Upload »).
+    image: {
+      assetSources: (previousAssetSources) => [
+        ...previousAssetSources,
+        dropboxAssetSource,
+      ],
+    },
   },
   document: {
     actions: (input, context) => {
