@@ -1,7 +1,7 @@
 import {
   HomeIcon,
   HeartFilledIcon,
-  CalendarIcon,
+  CaseIcon,
   PinIcon,
   ImagesIcon,
   DocumentTextIcon,
@@ -51,6 +51,8 @@ export const structure: StructureResolver = (S) =>
           S.list()
             .title("Pages du site")
             .items([
+              // Ordre calé sur le menu du site : Accueil, Espace Events,
+              // Entreprises, Mariage, Réalisations, Blog.
               S.listItem()
                 .title("Accueil")
                 .icon(HomeIcon)
@@ -62,26 +64,6 @@ export const structure: StructureResolver = (S) =>
                     .title("Page d'accueil"),
                 ),
               S.listItem()
-                .title("Mariage")
-                .icon(HeartFilledIcon)
-                .child(
-                  S.editor()
-                    .id("mariagePage")
-                    .schemaType("mariagePage")
-                    .documentId("mariagePage")
-                    .title("Page Mariage"),
-                ),
-              S.listItem()
-                .title("Événements pro")
-                .icon(CalendarIcon)
-                .child(
-                  S.editor()
-                    .id("evenementPage")
-                    .schemaType("evenementPage")
-                    .documentId("evenementPage")
-                    .title("Page Événements"),
-                ),
-              S.listItem()
                 .title("Espace Events")
                 .icon(PinIcon)
                 .child(
@@ -90,6 +72,26 @@ export const structure: StructureResolver = (S) =>
                     .schemaType("espaceEventsPage")
                     .documentId("espaceEventsPage")
                     .title("Page Espace Events"),
+                ),
+              S.listItem()
+                .title("Entreprises")
+                .icon(CaseIcon)
+                .child(
+                  S.editor()
+                    .id("evenementPage")
+                    .schemaType("evenementPage")
+                    .documentId("evenementPage")
+                    .title("Page Entreprises"),
+                ),
+              S.listItem()
+                .title("Mariage")
+                .icon(HeartFilledIcon)
+                .child(
+                  S.editor()
+                    .id("mariagePage")
+                    .schemaType("mariagePage")
+                    .documentId("mariagePage")
+                    .title("Page Mariage"),
                 ),
               S.listItem()
                 .title("Réalisations (page)")
