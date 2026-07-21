@@ -1,7 +1,7 @@
 "use client";
 
 import { MotionConfig, motion } from "motion/react";
-import { Check, Star } from "lucide-react";
+import { Star } from "lucide-react";
 import { Eyebrow } from "@/components/home/eyebrow";
 import { resolveCta } from "@/lib/sanity/cta";
 import { renderInlineItalic } from "@/lib/sanity/text";
@@ -18,6 +18,7 @@ type Pack = {
   capacity: string;
   featured?: boolean;
   badge?: string;
+  idealFor: string[];
   features: string[];
   ctaLabel: string;
   ctaHref: string;
@@ -55,7 +56,7 @@ export function EvenementPacks({
         ? `?pack=${encodeURIComponent(p.title ?? "")}${quoteAnchor}`
         : (cta?.href ?? "#");
       return {
-        num: `Pack ${String(i + 1).padStart(2, "0")}`,
+        num: String(i + 1).padStart(2, "0"),
         name: p.title ?? "",
         tagline: p.tagline ?? "",
         priceLabel,
@@ -63,6 +64,7 @@ export function EvenementPacks({
         capacity: "",
         featured: p.featured ?? false,
         badge: p.featured ? featuredBadgeLabel : undefined,
+        idealFor: (p.idealFor ?? []).map((label) => label),
         features: (p.includedItems ?? []).map((label) => label),
         ctaLabel: cta?.label ?? "Demander une estimation",
         ctaHref,
@@ -139,12 +141,15 @@ export function EvenementPacks({
           )}
 
           <div
-            className={`mx-auto grid gap-6 ${
+            className={`mx-auto grid ${
               packs.length === 1
-                ? "max-w-[480px] grid-cols-1"
+                ? "max-w-[480px] grid-cols-1 gap-6"
                 : packs.length === 2
-                  ? "max-w-[860px] grid-cols-1 md:grid-cols-2"
-                  : "grid-cols-1 sm:grid-cols-2 lg:grid-cols-3"
+                  ? "max-w-[860px] grid-cols-1 gap-6 md:grid-cols-2"
+                  : packs.length === 4
+                    ? // Directive cliente : les quatre packs sur une seule ligne en desktop.
+                      "grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4"
+                    : "grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3"
             }`}
           >
             {packs.map((p, i) => (
@@ -173,7 +178,7 @@ export function EvenementPacks({
                 )}
 
                 <div
-                  className={`border-b px-9 pt-10 pb-7 ${
+                  className={`border-b px-7 pt-10 pb-6 ${
                     p.featured ? "border-cream/15" : "border-[var(--rule)]"
                   }`}
                 >
@@ -224,42 +229,47 @@ export function EvenementPacks({
                   )}
                 </div>
 
-                <div className="flex-1 px-9 py-8">
-                  <p
-                    className={`mb-4 border-b pb-2 font-mono text-[9px] uppercase tracking-[0.28em] ${
-                      p.featured
-                        ? "border-cream/20 text-gold-soft"
-                        : "border-[var(--rule)] text-bordeaux"
-                    }`}
-                  >
-                    — Ce qui est inclus
-                  </p>
-                  <ul>
-                    {p.features.map((f, idx) => (
-                      <li
-                        key={idx}
-                        className={`flex items-start gap-3 border-b py-2.5 text-[14px] leading-[1.5] last:border-b-0 ${
-                          p.featured
-                            ? "border-cream/10 text-cream/85"
-                            : "border-[var(--rule-soft)] text-ink-soft"
+                <div className="flex-1 space-y-6 px-7 py-7">
+                  {p.idealFor.length > 0 && (
+                    <div>
+                      <p
+                        className={`mb-2 font-mono text-[9px] uppercase tracking-[0.24em] ${
+                          p.featured ? "text-gold-soft" : "text-bordeaux"
                         }`}
                       >
-                        <span
-                          className={`mt-0.5 inline-flex size-4 flex-shrink-0 items-center justify-center rounded-full ${
-                            p.featured
-                              ? "bg-gold text-ink"
-                              : "bg-bordeaux text-cream"
-                          }`}
-                        >
-                          <Check className="size-2.5 stroke-[3]" />
-                        </span>
-                        {f}
-                      </li>
-                    ))}
-                  </ul>
+                        — Idéal pour
+                      </p>
+                      <p
+                        className={`text-[13.5px] leading-[1.55] ${
+                          p.featured ? "text-cream/85" : "text-ink-soft"
+                        }`}
+                      >
+                        {p.idealFor.join(" · ")}
+                      </p>
+                    </div>
+                  )}
+
+                  {p.features.length > 0 && (
+                    <div>
+                      <p
+                        className={`mb-2 font-mono text-[9px] uppercase tracking-[0.24em] ${
+                          p.featured ? "text-gold-soft" : "text-bordeaux"
+                        }`}
+                      >
+                        — Selon le projet
+                      </p>
+                      <p
+                        className={`text-[13.5px] leading-[1.55] ${
+                          p.featured ? "text-cream/85" : "text-ink-soft"
+                        }`}
+                      >
+                        {p.features.join(" · ")}
+                      </p>
+                    </div>
+                  )}
                 </div>
 
-                <div className="px-9 pb-9">
+                <div className="px-7 pb-8">
                   <a
                     href={p.ctaHref}
                     target={p.ctaExternal ? "_blank" : undefined}

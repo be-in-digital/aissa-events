@@ -76,11 +76,22 @@ export const pack = defineType({
       type: "imageWithAlt",
     }),
     defineField({
+      name: "idealFor",
+      title: "Idéal pour",
+      type: "array",
+      of: [{ type: "string" }],
+      options: { layout: "tags" },
+      description:
+        'Les occasions couvertes par le pack. Ex : "Réunions", "Formations", "Séminaires". Affiché sous « Idéal pour » sur la page Entreprises.',
+    }),
+    defineField({
       name: "includedItems",
       title: "Inclus dans le pack",
       type: "array",
       of: [{ type: "string" }],
       options: { layout: "tags" },
+      description:
+        "Les prestations mobilisées selon le projet. Affiché sous « Selon le projet » sur la page Entreprises.",
     }),
     defineField({
       name: "excludedItems",
