@@ -51,15 +51,17 @@ export function About({
   const eyebrow = data?.eyebrow;
   const title = data.title;
   const body = data?.body;
-  const founderImage = founder?.photo;
-  const imageUrl = founderImage?.asset
-    ? urlForImageString(founderImage, { width: 1200, quality: 85 })
-    : data?.image?.asset
-      ? urlForImageString(data.image, { width: 1200, quality: 85 })
-      : null;
+  // Priorité : champ Image de la section À propos (éditable depuis Accueil → §6)
+  // Secours : photo de la fondatrice dans Réglages → Fondatrice → Photo principale.
+  // (ordre inversé par rapport à l'ancien code qui ignorait silencieusement le champ section)
+  const sectionImage = data?.image?.asset ? data.image : null;
+  const founderImage = founder?.photo?.asset ? founder.photo : null;
+  const activeImage = sectionImage ?? founderImage;
+  const imageUrl = activeImage
+    ? urlForImageString(activeImage, { width: 1200, quality: 85 })
+    : null;
   const imageAlt =
-    founderImage?.alt ??
-    data?.image?.alt ??
+    activeImage?.alt ??
     (founder?.name ? `${founder.name}, fondatrice` : "");
   const signatureName = founder?.signatureName ?? founder?.name;
   const role = founder?.role;
