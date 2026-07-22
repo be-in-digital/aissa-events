@@ -237,7 +237,15 @@ export const aboutSection = defineType({
       validation: (Rule) => Rule.required(),
     }),
     defineField({ name: "body", type: "blockContent", title: "Texte" }),
-    defineField({ name: "image", type: "imageWithAlt", title: "Image" }),
+    defineField({
+      name: "image",
+      type: "imageWithAlt",
+      title: "Image",
+      description:
+        "⚠️ Sur la page d'accueil uniquement, c'est ce champ qui contrôle la photo affichée. " +
+        "Le nom, le rôle, la bio et la signature restent gérés dans " +
+        "Réglages du site → Fondatrice (ils sont partagés sur tout le site).",
+    }),
     defineField({
       name: "ctas",
       title: "Boutons (optionnels)",
