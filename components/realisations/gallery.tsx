@@ -13,6 +13,8 @@ import {
 import { Eyebrow } from "@/components/home/eyebrow";
 import { renderInlineItalic } from "@/lib/sanity/text";
 import { urlForImageString } from "@/lib/sanity/image";
+import { VideoThumbnail, VideoLightboxPlayer } from "./video-player";
+import type { VideoItem } from "./video-player";
 import type {
   RealisationsListQueryResult,
   RealisationsPageQueryResult,
@@ -33,10 +35,16 @@ const SPANS = [
   "lg:col-span-1",
 ];
 
+type MediaItem =
+  | { kind: "image"; src: string }
+  | { kind: "video"; video: VideoItem };
+
 type GalleryItem = {
   id: string;
   cover: string;
-  photos: string[];
+  media: MediaItem[];
+  /** Nombre total d'éléments media (pour le badge) */
+  mediaCount: number;
   title: string;
   tag: string;
   description: string;
@@ -73,22 +81,43 @@ export function RealisationsGallery({ data, realisations }: Props) {
   const items: GalleryItem[] = useMemo(() => {
     if (!realisations || realisations.length === 0) return [];
     return realisations.map((r, i) => {
-      const galleryPhotos = (r.gallery ?? [])
-        .map((g) =>
-          g?.asset ? urlForImageString(g, { width: 1600, quality: 85 }) : "",
-        )
-        .filter(Boolean);
       const cover = r.cover?.asset
         ? urlForImageString(r.cover, { width: 1200, quality: 85 })
         : "";
-      // Toutes les photos = cover (en premier) + gallery, dédoublonnées
-      const allPhotos = Array.from(new Set([cover, ...galleryPhotos])).filter(
-        Boolean,
-      );
+
+      // gallery[] est typé Any depuis Sanity (union imageWithAlt | realisationVideo)
+      // On cast explicitement pour accéder aux champs
+      const rawGallery = (r.gallery ?? []) as Array<Record<string, unknown>>;
+
+      const mediaItems: MediaItem[] = rawGallery
+        .map((g): MediaItem | null => {
+          if (!g) return null;
+          if (g._type === "realisationVideo") {
+            return { kind: "video", video: g as unknown as VideoItem };
+          }
+          // imageWithAlt (ou absence de _type = ancien format)
+          const imgUrl = (g as { asset?: unknown; alt?: string })?.asset
+            ? urlForImageString(g as Parameters<typeof urlForImageString>[0], { width: 1600, quality: 85 })
+            : "";
+          return imgUrl ? { kind: "image", src: imgUrl } : null;
+        })
+        .filter((m): m is MediaItem => m !== null);
+
+      // Cover en premier parmi les images
+      const allMedia: MediaItem[] = cover
+        ? [
+            { kind: "image", src: cover },
+            ...mediaItems.filter(
+              (m) => !(m.kind === "image" && m.src === cover),
+            ),
+          ]
+        : mediaItems;
+
       return {
         id: r._id,
         cover,
-        photos: allPhotos,
+        media: allMedia,
+        mediaCount: allMedia.length,
         title: r.shortTitle ?? r.title ?? "",
         tag: r.typeLabel ?? r.type ?? "",
         description: r.italicSubtitle ?? r.location ?? "",
@@ -119,15 +148,15 @@ export function RealisationsGallery({ data, realisations }: Props) {
     setActive(null);
   }, []);
 
-  const photos = item?.photos ?? [];
+  const media = item?.media ?? [];
   const lightboxNext = useCallback(() => {
-    if (lightbox === null || photos.length === 0) return;
-    setLightbox((lightbox + 1) % photos.length);
-  }, [lightbox, photos.length]);
+    if (lightbox === null || media.length === 0) return;
+    setLightbox((lightbox + 1) % media.length);
+  }, [lightbox, media.length]);
   const lightboxPrev = useCallback(() => {
-    if (lightbox === null || photos.length === 0) return;
-    setLightbox((lightbox - 1 + photos.length) % photos.length);
-  }, [lightbox, photos.length]);
+    if (lightbox === null || media.length === 0) return;
+    setLightbox((lightbox - 1 + media.length) % media.length);
+  }, [lightbox, media.length]);
 
   useEffect(() => {
     if (lightbox === null) return;
@@ -286,7 +315,7 @@ export function RealisationsGallery({ data, realisations }: Props) {
                     ease: [0.16, 1, 0.3, 1],
                   }}
                   className={`group relative overflow-hidden rounded-[20px] text-left focus:outline-none focus-visible:ring-2 focus-visible:ring-bordeaux focus-visible:ring-offset-2 focus-visible:ring-offset-cream ${span}`}
-                  aria-label={`Voir la galerie : ${it.title} (${it.photos.length} photos)`}
+                  aria-label={`Voir la galerie : ${it.title} (${it.mediaCount} éléments)`}
                 >
                   {it.cover && (
                     <Image
@@ -304,9 +333,9 @@ export function RealisationsGallery({ data, realisations }: Props) {
                   <div className="pointer-events-none absolute right-4 top-4 inline-flex size-10 items-center justify-center rounded-full bg-cream/90 text-ink opacity-0 backdrop-blur-sm transition-opacity duration-500 group-hover:opacity-100">
                     <Maximize2 className="size-4" />
                   </div>
-                  {it.photos.length > 1 && (
+                  {it.mediaCount > 1 && (
                     <div className="pointer-events-none absolute left-4 top-4 inline-flex items-center gap-1.5 rounded-full bg-ink/55 px-2.5 py-1 font-mono text-[10px] uppercase tracking-[0.18em] text-cream opacity-0 backdrop-blur-sm transition-opacity duration-500 group-hover:opacity-100">
-                      {it.photos.length} photos
+                      {it.mediaCount} éléments
                     </div>
                   )}
                   <div className="absolute inset-x-0 bottom-0 translate-y-3 p-6 text-cream opacity-0 transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:translate-y-0 group-hover:opacity-100">
@@ -375,26 +404,34 @@ export function RealisationsGallery({ data, realisations }: Props) {
 
               <div className="overflow-y-auto px-4 py-5 sm:px-6 sm:py-6">
                 <div className="grid grid-cols-2 gap-2 sm:grid-cols-3 sm:gap-3 lg:grid-cols-4">
-                  {item.photos.map((src, i) => (
-                    <button
-                      key={`${item.id}-${i}`}
-                      type="button"
-                      onClick={() => setLightbox(i)}
-                      className="group relative aspect-[4/5] overflow-hidden rounded-lg bg-ink/5 focus:outline-none focus-visible:ring-2 focus-visible:ring-bordeaux focus-visible:ring-offset-2 focus-visible:ring-offset-cream"
-                      aria-label={`Agrandir photo ${i + 1} sur ${item.photos.length}`}
-                    >
-                      <Image
-                        src={src}
-                        alt={`${item.title} — photo ${i + 1}`}
-                        fill
-                        sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
-                        className="object-cover transition-transform duration-500 ease-out group-hover:scale-[1.04]"
-                      />
-                      <div className="pointer-events-none absolute inset-0 bg-ink/0 transition-colors duration-300 group-hover:bg-ink/15" />
-                      <div className="pointer-events-none absolute right-2 top-2 inline-flex size-8 items-center justify-center rounded-full bg-cream/90 text-ink opacity-0 backdrop-blur-sm transition-opacity duration-300 group-hover:opacity-100">
-                        <Maximize2 className="size-3.5" />
-                      </div>
-                    </button>
+                  {item.media.map((m, i) => (
+                    <div key={`${item.id}-${i}`} className="aspect-[4/5]">
+                      {m.kind === "video" ? (
+                        <VideoThumbnail
+                          item={m.video}
+                          onClick={() => setLightbox(i)}
+                        />
+                      ) : (
+                        <button
+                          type="button"
+                          onClick={() => setLightbox(i)}
+                          className="group relative h-full w-full overflow-hidden rounded-lg bg-ink/5 focus:outline-none focus-visible:ring-2 focus-visible:ring-bordeaux focus-visible:ring-offset-2 focus-visible:ring-offset-cream"
+                          aria-label={`Agrandir élément ${i + 1} sur ${item.media.length}`}
+                        >
+                          <Image
+                            src={m.src}
+                            alt={`${item.title} — photo ${i + 1}`}
+                            fill
+                            sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
+                            className="object-cover transition-transform duration-500 ease-out group-hover:scale-[1.04]"
+                          />
+                          <div className="pointer-events-none absolute inset-0 bg-ink/0 transition-colors duration-300 group-hover:bg-ink/15" />
+                          <div className="pointer-events-none absolute right-2 top-2 inline-flex size-8 items-center justify-center rounded-full bg-cream/90 text-ink opacity-0 backdrop-blur-sm transition-opacity duration-300 group-hover:opacity-100">
+                            <Maximize2 className="size-3.5" />
+                          </div>
+                        </button>
+                      )}
+                    </div>
                   ))}
                 </div>
               </div>
@@ -414,10 +451,10 @@ export function RealisationsGallery({ data, realisations }: Props) {
           className="flex h-[100dvh] w-screen max-w-none items-center justify-center gap-0 border-0 bg-ink/95 p-0 ring-0 sm:rounded-none"
           showCloseButton={false}
         >
-          {item && lightbox !== null && photos[lightbox] && (
+          {item && lightbox !== null && media[lightbox] && (
             <>
               <DialogTitle className="sr-only">
-                {item.title} — photo {lightbox + 1} sur {photos.length}
+                {item.title} — élément {lightbox + 1} sur {media.length}
               </DialogTitle>
               <DialogDescription className="sr-only">
                 Visualiseur plein écran. Utilise les flèches du clavier pour
@@ -425,14 +462,20 @@ export function RealisationsGallery({ data, realisations }: Props) {
               </DialogDescription>
 
               <div className="relative flex h-full w-full items-center justify-center px-4 py-16 sm:px-16 sm:py-12">
-                <Image
-                  src={photos[lightbox]}
-                  alt={`${item.title} — photo ${lightbox + 1}`}
-                  fill
-                  sizes="100vw"
-                  className="object-contain"
-                  priority
-                />
+                {media[lightbox].kind === "video" ? (
+                  <div className="w-full max-w-4xl">
+                    <VideoLightboxPlayer item={media[lightbox].video} />
+                  </div>
+                ) : (
+                  <Image
+                    src={media[lightbox].src}
+                    alt={`${item.title} — photo ${lightbox + 1}`}
+                    fill
+                    sizes="100vw"
+                    className="object-contain"
+                    priority
+                  />
+                )}
               </div>
 
               <button
@@ -444,13 +487,13 @@ export function RealisationsGallery({ data, realisations }: Props) {
                 <X className="size-5" />
               </button>
 
-              {photos.length > 1 && (
+              {media.length > 1 && (
                 <>
                   <button
                     type="button"
                     onClick={lightboxPrev}
                     className="absolute left-2 top-1/2 inline-flex size-12 -translate-y-1/2 items-center justify-center rounded-full bg-cream/10 text-cream backdrop-blur transition hover:bg-cream/20 sm:left-6"
-                    aria-label="Photo précédente"
+                    aria-label="Élément précédent"
                   >
                     <ChevronLeft className="size-6" />
                   </button>
@@ -458,13 +501,13 @@ export function RealisationsGallery({ data, realisations }: Props) {
                     type="button"
                     onClick={lightboxNext}
                     className="absolute right-2 top-1/2 inline-flex size-12 -translate-y-1/2 items-center justify-center rounded-full bg-cream/10 text-cream backdrop-blur transition hover:bg-cream/20 sm:right-6"
-                    aria-label="Photo suivante"
+                    aria-label="Élément suivant"
                   >
                     <ChevronRight className="size-6" />
                   </button>
 
                   <div className="absolute bottom-5 left-1/2 -translate-x-1/2 rounded-full bg-ink/60 px-3 py-1 font-mono text-[11px] tabular-nums text-cream backdrop-blur">
-                    {lightbox + 1} / {photos.length}
+                    {lightbox + 1} / {media.length}
                   </div>
                 </>
               )}

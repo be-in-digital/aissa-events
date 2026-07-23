@@ -44,6 +44,7 @@ import { budgetSection } from "./objects/budget-section";
 import { pack } from "./documents/pack";
 import { service } from "./documents/service";
 import { realisation } from "./documents/realisation";
+import { realisationVideo } from "./objects/common";
 import { testimonial } from "./documents/testimonial";
 import { faqItem } from "./documents/faqItem";
 import { post } from "./documents/post";
@@ -106,6 +107,7 @@ export const schemaTypes: SchemaTypeDefinition[] = [
   pack,
   service,
   realisation,
+  realisationVideo,
   testimonial,
   faqItem,
   post,

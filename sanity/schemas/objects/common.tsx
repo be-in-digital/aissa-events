@@ -162,6 +162,75 @@ export const imageWithAlt = defineType({
   ],
 });
 
+export const realisationVideo = defineType({
+  name: "realisationVideo",
+  title: "Vidéo",
+  type: "object",
+  fields: [
+    defineField({
+      name: "videoType",
+      title: "Source de la vidéo",
+      type: "string",
+      options: {
+        list: [
+          { title: "📎 Lien URL (YouTube, Vimeo, MP4…)", value: "url" },
+          { title: "☁️ Upload Mux (fichier vidéo direct)", value: "mux" },
+        ],
+        layout: "radio",
+      },
+      initialValue: "url",
+      validation: (Rule) => Rule.required(),
+    }),
+    defineField({
+      name: "url",
+      title: "URL de la vidéo",
+      type: "url",
+      description:
+        "Lien YouTube (https://youtu.be/…), Vimeo (https://vimeo.com/…) ou fichier MP4 direct.",
+      hidden: ({ parent }) => parent?.videoType !== "url",
+      validation: (Rule) =>
+        Rule.uri({ scheme: ["http", "https"] }).custom((val, ctx) => {
+          const parent = ctx.parent as { videoType?: string } | undefined;
+          if (parent?.videoType === "url" && !val)
+            return "L'URL est obligatoire pour ce type de source.";
+          return true;
+        }),
+    }),
+    defineField({
+      name: "muxVideo",
+      title: "Vidéo Mux",
+      type: "mux.video",
+      description: "Uploader directement un fichier vidéo (MP4, MOV…).",
+      hidden: ({ parent }) => parent?.videoType !== "mux",
+    }),
+    defineField({
+      name: "poster",
+      title: "Image de couverture (thumbnail)",
+      type: "imageWithAlt",
+      description:
+        "Affichée dans la grille avant la lecture. Si vide, une miniature est générée automatiquement.",
+    }),
+    defineField({
+      name: "caption",
+      title: "Légende",
+      type: "string",
+    }),
+  ],
+  preview: {
+    select: {
+      type: "videoType",
+      url: "url",
+      poster: "poster",
+      caption: "caption",
+    },
+    prepare: ({ type, url, poster, caption }) => ({
+      title: caption ?? url ?? "Vidéo",
+      subtitle: type === "mux" ? "Upload Mux" : url ?? "URL",
+      media: poster,
+    }),
+  },
+});
+
 export const blockContent = defineType({
   name: "blockContent",
   title: "Contenu riche",

@@ -44,6 +44,21 @@ const nextConfig: NextConfig = {
   reactStrictMode: true,
   poweredByHeader: false,
   cacheComponents: true,
+  // PostHog — proxy inverse d'ingestion analytics (same-origin → compatible CSP
+  // stricte + résistant aux bloqueurs de pub). Voir instrumentation-client.ts.
+  skipTrailingSlashRedirect: true,
+  async rewrites() {
+    return [
+      {
+        source: "/ingest/static/:path*",
+        destination: "https://us-assets.i.posthog.com/static/:path*",
+      },
+      {
+        source: "/ingest/:path*",
+        destination: "https://us.i.posthog.com/:path*",
+      },
+    ];
+  },
   images: {
     remotePatterns: [
       {
