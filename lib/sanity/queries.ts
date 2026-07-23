@@ -14,7 +14,8 @@ const ctaFragment = /* groq */ `
 
 const imageFragment = /* groq */ `
   ...,
-  "alt": coalesce(alt, "")
+  "alt": coalesce(alt, ""),
+  asset->{ _id, _ref, url, metadata{ dimensions, lqip } }
 `;
 
 // ============================================================================
@@ -651,7 +652,24 @@ export const realisationBySlugQuery = defineQuery(`
     metaItems[]{ label, value },
     cover{ ${imageFragment} },
     moodBoard[]{ ${imageFragment} },
-    gallery[]{ ${imageFragment} },
+    gallery[]{
+      _type,
+      _key,
+      // image (imageWithAlt)
+      _type == "imageWithAlt" => {
+        asset->{ _id, url, metadata{ dimensions, lqip } },
+        alt,
+        caption
+      },
+      // video (realisationVideo)
+      _type == "realisationVideo" => {
+        videoType,
+        url,
+        "muxPlaybackId": muxVideo.asset->playbackId,
+        poster{ asset->{ _id, url, metadata{ dimensions, lqip } }, alt },
+        caption
+      }
+    },
     description,
     tags,
     "linkedTestimonial": linkedTestimonial->{ ${testimonialReference} },

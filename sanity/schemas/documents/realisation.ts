@@ -177,8 +177,12 @@ export const realisation = defineType({
       title: "Galerie complète (page détail)",
       type: "array",
       group: "media",
-      of: [{ type: "imageWithAlt" }],
+      of: [
+        { type: "imageWithAlt" },
+        { type: "realisationVideo" },
+      ],
       options: { layout: "grid" },
+      description: "Ajoutez des photos ou des vidéos (lien URL ou upload Mux).",
     }),
     defineField({
       name: "video",
