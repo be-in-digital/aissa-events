@@ -60,6 +60,10 @@ const nextConfig: NextConfig = {
     ];
   },
   images: {
+    // AVIF en priorité (nettement plus net à poids égal que WebP/JPEG) —
+    // corrige les images qui paraissaient adoucies après ré-optimisation.
+    formats: ["image/avif", "image/webp"],
+    qualities: [75, 90],
     remotePatterns: [
       {
         protocol: "https",

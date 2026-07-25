@@ -59,7 +59,7 @@ export function MariageCeremonies({ data }: { data?: CeremoniesData }) {
         description: item?.description ?? "",
         highlights: item?.highlights ?? [],
         image: item?.image?.asset
-          ? urlForImageString(item.image, { width: 900, quality: 85 })
+          ? urlForImageString(item.image, { width: 1600, quality: 90 })
           : null,
         imageAlt: item?.image?.alt || item?.title || "",
         accent: false,
@@ -138,7 +138,8 @@ export function MariageCeremonies({ data }: { data?: CeremoniesData }) {
                         src={c.image}
                         alt={c.imageAlt}
                         fill
-                        sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
+                        sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 50vw"
+                        quality={90}
                         className="object-cover transition-transform duration-[800ms] ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-[1.05]"
                         style={{
                           filter: "contrast(1.06) saturate(0.95) sepia(0.05)",

@@ -82,7 +82,7 @@ export function RealisationsGallery({ data, realisations }: Props) {
     if (!realisations || realisations.length === 0) return [];
     return realisations.map((r, i) => {
       const cover = r.cover?.asset
-        ? urlForImageString(r.cover, { width: 1200, quality: 85 })
+        ? urlForImageString(r.cover, { width: 1600, quality: 90 })
         : "";
 
       // gallery[] est typé Any depuis Sanity (union imageWithAlt | realisationVideo)
@@ -322,7 +322,8 @@ export function RealisationsGallery({ data, realisations }: Props) {
                       src={it.cover}
                       alt={it.title}
                       fill
-                      sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
+                      sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 50vw"
+                    quality={90}
                       className="object-cover transition-transform duration-[800ms] ease-out group-hover:scale-[1.05]"
                       style={{
                         filter: "contrast(1.06) saturate(0.95) sepia(0.05)",
