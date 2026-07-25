@@ -28,37 +28,37 @@ const ITEMS: Item[] = [
     className: "lg:col-span-2 lg:row-span-2",
   },
   {
-    src: "https://images.unsplash.com/photo-1464366400600-7168b8af9bc3?w=1400&q=85",
+    src: "https://images.unsplash.com/photo-1464366400600-7168b8af9bc3?w=1600&q=85",
     tag: "Soirée corporate",
     title: "Lancement de marque, énergie nocturne",
     className: "lg:col-span-2",
   },
   {
-    src: "https://images.unsplash.com/photo-1530103862676-de8c9debad1d?w=900&q=85",
+    src: "https://images.unsplash.com/photo-1530103862676-de8c9debad1d?w=1600&q=85",
     tag: "Espace Events",
     title: "Henné en petit comité, lumières dorées",
     className: "lg:col-span-1",
   },
   {
-    src: "https://images.unsplash.com/photo-1583939003579-730e3918a45a?w=900&q=85",
+    src: "https://images.unsplash.com/photo-1583939003579-730e3918a45a?w=1600&q=85",
     tag: "Mariage civil",
     title: "Bouquet maison, fleurs de saison",
     className: "lg:col-span-1",
   },
   {
-    src: "https://images.unsplash.com/photo-1519741497674-611481863552?w=1400&q=85",
+    src: "https://images.unsplash.com/photo-1519741497674-611481863552?w=1600&q=85",
     tag: "Réception",
     title: "Tablée d'honneur, nappage texturé",
     className: "lg:col-span-2",
   },
   {
-    src: "https://images.unsplash.com/photo-1511795409834-ef04bbd61622?w=900&q=85",
+    src: "https://images.unsplash.com/photo-1511795409834-ef04bbd61622?w=1600&q=85",
     tag: "After party",
     title: "Piste de danse, set live",
     className: "lg:col-span-1",
   },
   {
-    src: "https://images.unsplash.com/photo-1465495976277-4387d4b0b4c6?w=900&q=85",
+    src: "https://images.unsplash.com/photo-1465495976277-4387d4b0b4c6?w=1600&q=85",
     tag: "Anniversaire",
     title: "Décor floral suspendu",
     className: "lg:col-span-1",
@@ -113,7 +113,8 @@ export function Portfolio() {
                 src={it.src}
                 alt={it.title}
                 fill
-                sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
+                sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 50vw"
+                quality={90}
                 className="object-cover transition-transform duration-[800ms] ease-out group-hover:scale-[1.05]"
                 style={{
                   filter: "contrast(1.06) saturate(0.95) sepia(0.05)",
