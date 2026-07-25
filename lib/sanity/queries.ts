@@ -661,12 +661,16 @@ export const realisationBySlugQuery = defineQuery(`
         alt,
         caption
       },
-      // video (realisationVideo)
+      // image natif (anciens contenus)
+      _type == "image" => {
+        asset->{ _id, url, metadata{ dimensions, lqip } },
+      },
+      // vidéo
       _type == "realisationVideo" => {
         videoType,
-        url,
-        "muxPlaybackId": muxVideo.asset->playbackId,
-        poster{ asset->{ _id, url, metadata{ dimensions, lqip } }, alt },
+        videoUrl,
+        "muxAsset": muxAsset.asset->{ playbackId },
+        poster{ asset->{ _id, url, metadata{ dimensions, lqip } } },
         caption
       }
     },

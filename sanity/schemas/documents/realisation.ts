@@ -179,6 +179,7 @@ export const realisation = defineType({
       group: "media",
       of: [
         { type: "imageWithAlt" },
+        { type: "image" },
         { type: "realisationVideo" },
       ],
       options: { layout: "grid" },
